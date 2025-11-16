@@ -1,26 +1,60 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Add these */
+  --color-primary: var(--accent-primary);
+  --color-primary-foreground: var(--text-primary);
+  --color-background: var(--bg-primary);
+  --color-accent: var(--bg-tertiary);
+  --color-accent-foreground: var(--text-primary);
+  --color-destructive: #ef4444;
+  --color-ring: var(--accent-primary);
+  --color-border: var(--border-subtle);
+  --color-secondary: var(--bg-secondary);
+  --color-secondary-foreground: var(--text-primary);
+  --color-input: var(--bg-tertiary); /* lighter background for outline buttons */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --primary: var(--accent-primary);
+  --primary-foreground: var(--text-primary);
+
+  --radius: 0.625rem;
+  /* Backgrounds */
+  --bg-primary: #050610;
+  --bg-secondary: #12121c;
+  --bg-tertiary: #16172b;
+  --bg-card: #070a14;
+
+  /* Primary accent (blue-purple from buttons) */
+  --accent-primary: #3d45e4;
+  --accent-hover: #6b78ff;
+
+  /* Text */
+  --text-primary: #e0e1e4;
+  --text-secondary: #cccdd4;
+  --text-muted: #6b7280;
+
+  /* Borders & subtle elements */
+  --border-subtle: #121429;
+  --icon-inactive: #9da0c5;
+
+  --purple-primary: #281c57;
+}
+
+.dark {
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--bg-primary)] text-[var(--text-primary)];
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
