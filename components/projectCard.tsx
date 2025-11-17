@@ -2,10 +2,11 @@ import { Project } from "@/data/projects";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { techIcons } from "@/data/techIcons";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <div className="flex flex-col gap-2 h-72 bg-card rounded-lg p-4 border border-border">
+    <div className="flex flex-col gap-2 h-[330px] bg-card rounded-lg p-4 border border-border">
       <div className="flex gap-4">
         <Image
           src={project.image}
@@ -27,13 +28,21 @@ export default function ProjectCard({ project }: { project: Project }) {
       </div>
       <div className="flex gap-4 mt-2 justify-center items-center">
         {project.tags.map((tag) => {
-          const Icon = techIcons[tag.toLocaleLowerCase().replace(".", "")];
+          const Icon = techIcons[tag.toLowerCase().replace(".", "")];
           return Icon ? (
-            <Icon
-              key={tag}
-              size={28}
-              className="grayscale hover:grayscale-0 hover:scale-125 transition-all duration-300"
-            />
+            <Tooltip key={tag}>
+              <TooltipTrigger asChild>
+                <div className="cursor-pointer">
+                  <Icon size={28} className="grayscale hover:grayscale-0 hover:scale-125 transition-all duration-300" />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent
+                sideOffset={6}
+                className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-subtle)]"
+              >
+                {tag}
+              </TooltipContent>
+            </Tooltip>
           ) : null;
         })}
       </div>
