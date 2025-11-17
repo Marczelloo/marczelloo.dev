@@ -1,6 +1,9 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { DownloadIcon } from "./ui/icons/akar-icons-download";
+import Link from "next/link";
+import { GithubFillIcon } from "./ui/icons/akar-icons-github-fill";
+import { LinkedinFillIcon } from "./ui/icons/akar-icons-linkedin-fill";
 
 export default function Hero() {
   return (
@@ -27,7 +30,14 @@ export default function Hero() {
           Download CV
         </Button>
       </article>
-      <article></article>
+      <article className="flex items-center gap-4 ml-2">
+        <Link href={"https://github.com/Marczelloo"}>
+          <GithubFillIcon size={36} className="text-(--text-muted) hover:text-(--accent-primary) transition-colors" />
+        </Link>
+        <Link href={"https://linkedin.com/in/marczelloo"} className="ml-4">
+          <LinkedinFillIcon size={36} className="text-(--text-muted) hover:text-(--accent-primary) transition-colors" />
+        </Link>
+      </article>
     </section>
   );
 }
