@@ -37,6 +37,7 @@
   /* Primary accent (blue-purple from buttons) */
   --accent-primary: #3d45e4;
   --accent-hover: #6b78ff;
+  --accent-text: #525dd6;
 
   /* Text */
   --text-primary: #e0e1e4;

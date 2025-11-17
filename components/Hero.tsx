@@ -18,7 +18,7 @@ export default function Hero() {
         />
         <div className="flex flex-col justify-center gap-4">
           <h1 className="text-5xl ">Marczelloo</h1>
-          <p className="text-xl mt-2 text-(--text-secondary)">Junior Web Developer, Node.js & AI</p>
+          Full-Stack Developer | Next.js & Node.js
         </div>
       </article>
       <article className="flex gap-4">

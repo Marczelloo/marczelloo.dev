@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <div className="flex flex-col gap-2 h-[330px] bg-card rounded-lg p-4 border border-border">
+    <div className="flex flex-col gap-2 h-[330px] bg-card rounded-lg p-4 border border-border hover:scale-[1.01] transition-all duration-200">
       <div className="flex gap-4">
         <Image
           src={project.image}
@@ -36,10 +36,7 @@ export default function ProjectCard({ project }: { project: Project }) {
                   <Icon size={28} className="grayscale hover:grayscale-0 hover:scale-125 transition-all duration-300" />
                 </div>
               </TooltipTrigger>
-              <TooltipContent
-                sideOffset={6}
-                className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-subtle)]"
-              >
+              <TooltipContent sideOffset={6} className="bg-(--bg-tertiary) text-(--text-primary) border border-border">
                 {tag}
               </TooltipContent>
             </Tooltip>
