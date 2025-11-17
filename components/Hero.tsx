@@ -7,7 +7,7 @@ import { LinkedinFillIcon } from "./ui/icons/akar-icons-linkedin-fill";
 
 export default function Hero() {
   return (
-    <section id="Hero" className="flex flex-col gap-10">
+    <section id="Hero" className="flex flex-col gap-6">
       <article className="flex gap-6">
         <Image
           src="/avatar_nobg.png"

@@ -1,6 +1,7 @@
 import { Project } from "@/data/projects";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { techIcons } from "@/data/techIcons";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
@@ -15,7 +16,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         />
         <p className="text-3xl font-semibold"> {project.title} </p>
       </div>
-      <p className="text-(--text-secondary)"> {project.description} </p>
+      <p className="text-(--text-secondary) grow"> {project.description} </p>
       <div className="flex aling-center gap-4 justify-center mt-2">
         <Button variant={"outline"} size={"lg"} className="w-1/2">
           GitHub
@@ -23,6 +24,18 @@ export default function ProjectCard({ project }: { project: Project }) {
         <Button variant={"outline"} size={"lg"} className="w-1/2">
           Live Demo
         </Button>
+      </div>
+      <div className="flex gap-4 mt-2 justify-center items-center">
+        {project.tags.map((tag) => {
+          const Icon = techIcons[tag.toLocaleLowerCase().replace(".", "")];
+          return Icon ? (
+            <Icon
+              key={tag}
+              size={28}
+              className="grayscale hover:grayscale-0 hover:scale-125 transition-all duration-300"
+            />
+          ) : null;
+        })}
       </div>
     </div>
   );

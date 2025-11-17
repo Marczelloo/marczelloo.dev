@@ -16,7 +16,7 @@ export const projects: Project[] = [
     github: "https://github.com/Marczelloo/neobeat-buddy",
     liveDemo: "https://...",
     image: "/projects/neobeatbuddy.png",
-    tags: ["Discord.js", "Node.js", "MongoDB"],
+    tags: ["nodejs", "javascript", "discord", "lavalink"],
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ export const projects: Project[] = [
     github: "https://github.com/...",
     liveDemo: "https://...",
     image: "/projects/bookhaven.png",
-    tags: ["React", "Node.js", "PostgreSQL", "AI"],
+    tags: ["react", "nodejs", "postgresql", "ai"],
   },
   {
     id: 1,
