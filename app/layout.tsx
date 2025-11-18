@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Navbar from "@/components/navbar";
-import BlurBackground from "@/components/blurBackground";
-import Footer from "@/components/Footer";
+import { LayoutShell } from "./LayoutShell";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,7 +16,6 @@ export const metadata: Metadata = {
 // TODOLIST:
 // - add live demo links to projects where applicable
 // - optimize for mobile devices
-// - build 404 page
 // - add metadata tags for SEO and social media sharing
 // - implement theme toggle (light/dark mode)
 // - implement language switcher (PL/EN)
@@ -31,13 +28,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} antialiased grid grid-cols-[auto_1fr] h-screen`}>
-        <Navbar />
-        <main className="overflow-y-auto relative min-h-screen overflow-hidden pt-12 scroll-smooth">
-          <BlurBackground />
-          {children}
-          <Footer />
-        </main>
+      <body className={`${inter.variable} antialiased`}>
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );

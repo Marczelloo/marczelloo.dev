@@ -22,13 +22,35 @@ export default function Hero() {
         </div>
       </article>
       <article className="flex gap-4">
-        <Link href={"#Projects"}>
-          <Button size="lg" className="cursor-pointer">
+        <Link href="#Projects">
+          <Button
+            size="lg"
+            className="
+              cursor-pointer
+              bg-(--accent-primary)
+              hover:bg-(--accent-hover)
+              color-(--text-primary)
+              shadow-lg shadow-(--accent-primary)/35
+              border-0
+            "
+          >
             See My Projects
           </Button>
         </Link>
-        <Link href={"/lorem-ipsum.pdf"} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="lg" className="cursor-pointer">
+
+        <Link href="/lorem-ipsum.pdf" target="_blank" rel="noopener noreferrer">
+          <Button
+            variant="outline"
+            size="lg"
+            className="
+              cursor-pointer
+              border border-(--accent-primary)/85
+              text-(--accent-primary)
+              bg-transparent
+              hover:bg-(--accent-primary)/10
+              hover:color-(--text-primary)
+            "
+          >
             <DownloadIcon className="mr-2" />
             Download CV
           </Button>

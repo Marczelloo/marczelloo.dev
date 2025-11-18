@@ -24,30 +24,28 @@
 }
 
 :root {
-  --primary: var(--accent-primary);
-  --primary-foreground: var(--text-primary);
-
   --radius: 0.625rem;
-  /* Backgrounds */
-  --bg-primary: #050610;
-  --bg-secondary: #12121c;
-  --bg-tertiary: #16172b;
-  --bg-card: #070a14;
 
-  /* Primary accent (blue-purple from buttons) */
-  --accent-primary: #3d45e4;
-  --accent-hover: #6b78ff;
-  --accent-text: #525dd6;
+  /* Backgrounds (slightly more separation) */
+  --bg-primary: #03040b; /* a bit darker */
+  --bg-secondary: #090b18; /* used rarely, between primary & card */
+  --bg-tertiary: #13152a;
+  --bg-card: #0c1024; /* ~1–2 steps lighter than primary */
 
-  /* Text */
-  --text-primary: #e0e1e4;
-  --text-secondary: #cccdd4;
+  /* Accent (tiny nudge brighter for lines & buttons) */
+  --accent-primary: #4a54f0; /* was #3d45e4 */
+  --accent-hover: #747dff; /* was #6b78ff */
+  --accent-text: #6366f1;
+
+  /* Text (slightly clearer secondary) */
+  --text-primary: #e5e7eb;
+  --text-secondary: #c7cad6;
   --text-muted: #6b7280;
 
-  /* Borders & subtle elements */
-  --border-subtle: #121429;
-  --icon-inactive: #9da0c5;
+  /* Borders (a bit lighter so cards pop) */
+  --border-subtle: #252b45; /* was #121429 */
 
+  --icon-inactive: #9da0c5;
   --purple-primary: #281c57;
 }
 

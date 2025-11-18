@@ -35,10 +35,10 @@ export default function Navbar() {
   }, []);
 
   const navItems = [
-    { href: "#Hero", icon: HomeAlt1Icon, section: "Hero" },
-    { href: "#AboutMe", icon: PersonIcon, section: "AboutMe" },
-    { href: "#Projects", icon: FolderIcon, section: "Projects" },
-    { href: "#Contact", icon: EnvelopeIcon, section: "Contact" },
+    { href: "/#Hero", icon: HomeAlt1Icon, section: "Hero" },
+    { href: "/#AboutMe", icon: PersonIcon, section: "AboutMe" },
+    { href: "/#Projects", icon: FolderIcon, section: "Projects" },
+    { href: "/#Contact", icon: EnvelopeIcon, section: "Contact" },
   ];
 
   const scrollTo = (id: string) => {
@@ -57,6 +57,7 @@ export default function Navbar() {
           } hover:text-(--text-primary)`}
           onClick={(e) => {
             if (e.metaKey || e.ctrlKey || e.button === 1) return;
+            if (window.location.pathname !== "/") return;
             e.preventDefault();
             scrollTo(section);
           }}

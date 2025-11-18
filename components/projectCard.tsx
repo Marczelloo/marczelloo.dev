@@ -21,12 +21,20 @@ export default function ProjectCard({ project }: { project: Project }) {
       <p className="text-(--text-secondary) grow"> {project.description} </p>
       <div className="flex aling-center gap-4 justify-center mt-2">
         <Link href={project.github} target="_blank" className="w-1/2">
-          <Button variant={"outline"} size={"lg"} className="w-full">
+          <Button
+            size="sm"
+            className=" w-full cursor-pointer bg-(--accent-primary) hover:bg-(--accent-hover) color-(--text-primary) border-0 text-sm transition-all duration-200"
+          >
             GitHub
           </Button>
         </Link>
         <Link href={project.liveDemo ? project.liveDemo : "#"} target="_blank" className="w-1/2">
-          <Button variant={"outline"} size={"lg"} disabled={!project.liveDemo} className="w-full">
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={!project.liveDemo}
+            className="w-full cursor-pointer text-sm rounded-lg bg-(--accent-primary)/8 border border-(--accent-primary)/25 text-(--text-secondary) hover:bg-(--accent-primary)/18 hover:border-(--accent-primary)/40 hover:text-(--text-primary) disabled:bg-transparent disabled:border-white/5 disabled:text-(--text-muted) transition-all duration-200"
+          >
             Live Demo
           </Button>
         </Link>

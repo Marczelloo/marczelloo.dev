@@ -73,7 +73,12 @@ export default function Contact() {
             <div className="flex flex-col gap-4 md:flex-row md:items-center justify-between pt-2">
               <p className="text-sm text-(--text-secondary) font-semibold">
                 Need my CV?{" "}
-                <a href="/path/to/cv.pdf" className="text-(--accent-primary) font-semibold underline">
+                <a
+                  href="/lorem-ipsum.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-(--accent-primary) font-semibold underline"
+                >
                   Download here
                 </a>
               </p>
