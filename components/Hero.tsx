@@ -22,19 +22,23 @@ export default function Hero() {
         </div>
       </article>
       <article className="flex gap-4">
-        <Button size="lg" className="cursor-pointer">
-          See My Projects
-        </Button>
-        <Button variant="outline" size="lg" className="cursor-pointer">
-          <DownloadIcon className="mr-2" />
-          Download CV
-        </Button>
+        <Link href={"#Projects"}>
+          <Button size="lg" className="cursor-pointer">
+            See My Projects
+          </Button>
+        </Link>
+        <Link href={"/lorem-ipsum.pdf"} target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" size="lg" className="cursor-pointer">
+            <DownloadIcon className="mr-2" />
+            Download CV
+          </Button>
+        </Link>
       </article>
       <article className="flex items-center gap-4 ml-2">
-        <Link href={"https://github.com/Marczelloo"}>
+        <Link href={"https://github.com/Marczelloo"} target="_blank" rel="noopener noreferrer">
           <GithubFillIcon size={36} className="text-(--text-muted) hover:text-(--accent-primary) transition-colors" />
         </Link>
-        <Link href={"https://linkedin.com/in/marczelloo"} className="ml-4">
+        <Link href={"https://linkedin.com/in/marczelloo"} target="_blank" rel="noopener noreferrer" className="ml-4">
           <LinkedinFillIcon size={36} className="text-(--text-muted) hover:text-(--accent-primary) transition-colors" />
         </Link>
       </article>

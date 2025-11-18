@@ -14,8 +14,8 @@ export const projects: Project[] = [
     title: "NeoBeat Buddy",
     description:
       "A high-performance Discord music bot built with Discord.js, Lavalink and Poru — features slash-only controls, live equaliser presets, queue management, adaptive autoplay and a Docker-ready production stack.",
-    github: "https://github.com/Marczelloo/neobeat-buddy",
-    liveDemo: "https://...",
+    github: "https://github.com/Marczelloo/NeoBeat-Buddy",
+    liveDemo: "",
     image: "/projects/neobeatbuddy.png",
     tags: ["Node.js", "JavaScript", "Discord.js", "Lavalink"],
   },
@@ -24,8 +24,8 @@ export const projects: Project[] = [
     title: "BookHaven",
     description:
       "A full-stack online bookstore built with Node.js, Express and MongoDB. Features book browsing, multi-volume management, secure checkout logic and a clean MVC-style backend designed for easy expansion.",
-    github: "https://github.com/...",
-    liveDemo: "https://...",
+    github: "https://github.com/Marczelloo/BookHaven",
+    liveDemo: "",
     image: "/projects/bookhaven_.png",
     tags: ["Node.js", "JavaScript", "Express.js", "MongoDB", "EJS", "CSS"],
   },

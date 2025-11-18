@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { techIcons } from "@/data/techIcons";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import Link from "next/dist/client/link";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
@@ -19,12 +20,16 @@ export default function ProjectCard({ project }: { project: Project }) {
       </div>
       <p className="text-(--text-secondary) grow"> {project.description} </p>
       <div className="flex aling-center gap-4 justify-center mt-2">
-        <Button variant={"outline"} size={"lg"} className="w-1/2">
-          GitHub
-        </Button>
-        <Button variant={"outline"} size={"lg"} className="w-1/2">
-          Live Demo
-        </Button>
+        <Link href={project.github} target="_blank" className="w-1/2">
+          <Button variant={"outline"} size={"lg"} className="w-full">
+            GitHub
+          </Button>
+        </Link>
+        <Link href={project.liveDemo ? project.liveDemo : "#"} target="_blank" className="w-1/2">
+          <Button variant={"outline"} size={"lg"} disabled={!project.liveDemo} className="w-full">
+            Live Demo
+          </Button>
+        </Link>
       </div>
       <div className="flex gap-4 mt-2 justify-center items-center">
         {project.tags.map((tag) => {
