@@ -26,30 +26,49 @@
 :root {
   --radius: 0.625rem;
 
-  /* Backgrounds (slightly more separation) */
-  --bg-primary: #03040b; /* a bit darker */
-  --bg-secondary: #090b18; /* used rarely, between primary & card */
-  --bg-tertiary: #13152a;
-  --bg-card: #0c1024; /* ~1–2 steps lighter than primary */
+  /* Light mode */
+  --bg-primary: #f7f8ff;
+  --bg-secondary: #eef1ff;
+  --bg-tertiary: #e7eaff;
+  --bg-card: #ffffff;
 
-  /* Accent (tiny nudge brighter for lines & buttons) */
-  --accent-primary: #4a54f0; /* was #3d45e4 */
-  --accent-hover: #747dff; /* was #6b78ff */
+  --accent-primary: #4a54f0; /* same hue as dark */
+  --accent-hover: #3f49e9;
+  --accent-text: #4f46e5;
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+
+  --border-subtle: #d6daf3;
+
+  --icon-inactive: #94a3b8;
+  --purple-primary: #dcd3ff;
+
+  color-scheme: light;
+}
+
+.dark {
+  /* Dark mode (moved from previous :root) */
+  --bg-primary: #03040b;
+  --bg-secondary: #090b18;
+  --bg-tertiary: #13152a;
+  --bg-card: #0c1024;
+
+  --accent-primary: #4a54f0;
+  --accent-hover: #747dff;
   --accent-text: #6366f1;
 
-  /* Text (slightly clearer secondary) */
   --text-primary: #e5e7eb;
   --text-secondary: #c7cad6;
   --text-muted: #6b7280;
 
-  /* Borders (a bit lighter so cards pop) */
-  --border-subtle: #252b45; /* was #121429 */
+  --border-subtle: #252b45;
 
   --icon-inactive: #9da0c5;
   --purple-primary: #281c57;
-}
 
-.dark {
+  color-scheme: dark;
 }
 
 @layer base {
