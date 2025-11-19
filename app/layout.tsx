@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     description: "Portfolio of Marczelloo — full-stack developer specializing in Next.js, React, and Node.js.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-image_.jpg",
         width: 1200,
         height: 630,
         alt: "Marczelloo.dev — Portfolio",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Marczelloo — Full-Stack Developer",
     description: "Portfolio of Marczelloo — full-stack developer specializing in Next.js, React, and Node.js.",
-    images: ["/og-image.jpg"],
+    images: ["/og-image_.jpg"],
     site: "@marczelloo_", // optional
   },
   robots: {
@@ -99,6 +99,8 @@ export const viewport: Viewport = {
 // - optimize for mobile devices
 // - implement language switcher (PL/EN)
 // - refine animations and transitions for better UX
+// - fix scrolling to hero to scroll to top
+// - fix scrolling from see projects button setting domain to /#Projects
 
 export default function RootLayout({
   children,
