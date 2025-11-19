@@ -6,6 +6,7 @@ import { EnvelopeIcon } from "./ui/icons/akar-icons-envelope";
 import { FolderIcon } from "./ui/icons/akar-icons-folder";
 import { HomeAlt1Icon } from "./ui/icons/akar-icons-home-alt1";
 import { useEffect, useState } from "react";
+import { ThemeToggle } from "./theme-toggle";
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<"Hero" | "AboutMe" | "Projects" | "Contact">("Hero");
@@ -65,6 +66,7 @@ export default function Navbar() {
           <Icon size={28} />
         </Link>
       ))}
+      <ThemeToggle className="mt-auto" />
     </nav>
   );
 }
