@@ -48,7 +48,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="h-full bg-background flex flex-col gap-10 border-r-2 border-border px-6 py-8">
+    <nav className="hidden md:flex h-full bg-background flex-col gap-10 border-r-2 border-border px-6 py-8">
       {navItems.map(({ href, icon: Icon, section }) => (
         <Link
           key={section}

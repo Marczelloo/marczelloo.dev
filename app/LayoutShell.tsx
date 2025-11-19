@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/components/navbar";
 import BlurBackground from "@/components/blurBackground";
 import Footer from "@/components/Footer";
+import { MobileNavbar } from "@/components/MobileNavbar";
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -19,7 +20,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
     <div className="grid grid-cols-[auto_1fr] h-screen">
       <Navbar />
       <main className="overflow-y-auto relative min-h-screen scroll-smooth">
-        {/* This wrapper grows with content */}
+        <MobileNavbar />
         <div className="relative min-h-full pt-12">
           <BlurBackground />
           {children}

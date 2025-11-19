@@ -8,7 +8,7 @@ export default function About() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="max-w-4xl lg:col-span-2 text-(--text-secondary) text-sm md:text-base leading-relaxed space-y-5">
-          <p className="bg-(--bg-card)/80 border border-border rounded-xl px-5 py-4">
+          <p className="bg-card/80 border border-border rounded-xl px-5 py-4">
             I'm a full-stack developer currently studying at Uniwersytet Śląski w Katowicach, with over 5 years of
             programming experience and INF.03, INF.04 certifications. My journey started with a technical programming
             education and grew through self-taught exploration and hands-on projects.
@@ -19,7 +19,7 @@ export default function About() {
             exploring game development. The potential to create something useful and the satisfaction of seeing it come
             to life is what drives me.
           </p>
-          <p className="px-5 py-4 rounded-xl border border-border border-l-4 border-l-(--accent-primary) bg-(--bg-card)/80">
+          <p className="px-5 py-4 rounded-xl border border-border border-l-4 border-l-(--accent-primary) bg-card/80">
             Currently, I'm focused on deepening my expertise in Next.js and modern web technologies, while staying open
             to diverse opportunities in full-stack development.
           </p>

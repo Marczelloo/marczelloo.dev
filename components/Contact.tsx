@@ -11,7 +11,7 @@ export default function Contact() {
         <h2 className="text-3xl md:text-4xl font-semibold text-(--accent-text)">Contact</h2>
         <span className="hidden md:block h-px flex-1 bg-linear-to-r from-(--accent-text)/70 to-transparent" />
       </div>
-      <div className="grid grid-cols-[3fr_7fr] gap-12 justify-end">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,3fr)_minmax(0,7fr)] gap-8 lg:gap-12 justify-end">
         <div className="max-h-fit px-5 py-4 rounded-xl border border-border border-l-4 border-l-(--accent-primary) bg--card/80">
           <ul className="space-y-3">
             <li className="flex items-center gap-4">
@@ -47,7 +47,7 @@ export default function Contact() {
             </li>
           </ul>
         </div>
-        <div className="w-full max-w-3xl justify-self-end">
+        <div className="w-full max-w-3xl lg:max-w-none justify-self-end">
           <form className="border border-border bg-card rounded-xl p-6 md:p-8 shadow-lg shadow-black/30 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input

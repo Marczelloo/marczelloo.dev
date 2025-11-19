@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  // metadataBase: new URL("https://marczelloo.dev"),
+  metadataBase: new URL("https://marczelloo.dev"),
   title: {
     default: "Marczelloo — Full-Stack Developer",
     template: "%s | Marczelloo",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: "https://marczelloo-dev.vercel.app",
+    url: "https://marczelloo.dev",
     title: "Marczelloo — Full-Stack Developer",
     siteName: "marczelloo.dev",
     description: "Portfolio of Marczelloo — full-stack developer specializing in Next.js, React, and Node.js.",
@@ -101,6 +101,7 @@ export const viewport: Viewport = {
 // - refine animations and transitions for better UX
 // - fix scrolling to hero to scroll to top
 // - fix scrolling from see projects button setting domain to /#Projects
+// - test open graph and structured data when deployed on domain
 
 export default function RootLayout({
   children,

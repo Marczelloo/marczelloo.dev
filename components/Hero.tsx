@@ -8,7 +8,7 @@ import { LinkedinFillIcon } from "./ui/icons/akar-icons-linkedin-fill";
 export default function Hero() {
   return (
     <section id="Hero" className="flex flex-col gap-6">
-      <article className="flex gap-6">
+      <article className="flex flex-col items-center sm:flex-row sm:items-center gap-6 text-center sm:text-left">
         <Image
           src="/avatar_nobg.png"
           alt="Marczelloo Avatar"
@@ -16,16 +16,19 @@ export default function Hero() {
           height={150}
           className="rounded-full border-border border-2 bg-accent"
         />
-        <div className="flex flex-col justify-center gap-4">
-          <h1 className="text-5xl ">Marczelloo</h1>
-          Full-Stack Developer | Next.js & Node.js
+
+        <div className="flex flex-col justify-center gap-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl">Marczelloo</h1>
+          <p className="text-sm sm:text-base text-(--text-secondary)">Full-Stack Developer | Next.js &amp; Node.js</p>
         </div>
       </article>
-      <article className="flex gap-4">
-        <Link href="#Projects">
+
+      <article className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-center sm:justify-start">
+        <Link href="#Projects" className="w-full sm:w-auto">
           <Button
             size="lg"
             className="
+              w-full sm:w-auto
               cursor-pointer
               bg-(--accent-primary)
               hover:bg-(--accent-hover)
@@ -38,11 +41,12 @@ export default function Hero() {
           </Button>
         </Link>
 
-        <Link href="/lorem-ipsum.pdf" target="_blank" rel="noopener noreferrer">
+        <Link href="/lorem-ipsum.pdf" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
           <Button
             variant="outline"
             size="lg"
             className="
+              w-full sm:w-auto
               cursor-pointer
               border border-(--accent-primary)/85
               text-(--accent-primary)
@@ -56,11 +60,12 @@ export default function Hero() {
           </Button>
         </Link>
       </article>
-      <article className="flex items-center gap-4 ml-2">
-        <Link href={"https://github.com/Marczelloo"} target="_blank" rel="noopener noreferrer">
+
+      <article className="flex items-center gap-4 justify-center sm:justify-start mt-1">
+        <Link href="https://github.com/Marczelloo" target="_blank" rel="noopener noreferrer">
           <GithubFillIcon size={36} className="text-(--text-muted) hover:text-(--accent-primary) transition-colors" />
         </Link>
-        <Link href={"https://linkedin.com/in/marczelloo"} target="_blank" rel="noopener noreferrer" className="ml-4">
+        <Link href="https://linkedin.com/in/marczelloo" target="_blank" rel="noopener noreferrer" className="ml-2">
           <LinkedinFillIcon size={36} className="text-(--text-muted) hover:text-(--accent-primary) transition-colors" />
         </Link>
       </article>
