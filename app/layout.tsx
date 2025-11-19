@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://marczelloo.dev"),
+  // metadataBase: new URL("https://marczelloo.dev"),
   title: {
     default: "Marczelloo — Full-Stack Developer",
     template: "%s | Marczelloo",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: "https://marczelloo.dev",
+    url: "https://marczelloo-dev.vercel.app",
     title: "Marczelloo — Full-Stack Developer",
     siteName: "marczelloo.dev",
     description: "Portfolio of Marczelloo — full-stack developer specializing in Next.js, React, and Node.js.",
