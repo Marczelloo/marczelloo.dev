@@ -7,51 +7,25 @@ export default function About() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.9fr)] gap-10 items-start">
-        <div className="space-y-6 max-w-4xl text-(--text-secondary) text-sm md:text-base leading-relaxed">
-          <div className="space-y-5">
-            <p className="bg-card/80 border border-border rounded-xl px-5 py-4">
-              I'm a full-stack developer currently studying at University of Silesia in Katowice, with over 5 years of
-              programming experience and INF.03, INF.04 certifications. My journey started with a technical programming
-              education and grew through self-taught exploration and hands-on projects.
-            </p>
-            <p className="px-1">
-              I enjoy building web applications and bots, primarily working with the Next.js/T3 stack. While I'm
-              comfortable across the full stack, I love switching between different technologies - whether it's C++ or
-              exploring game development. The potential to create something useful and the satisfaction of seeing it
-              come to life is what drives me.
-            </p>
-            <p className="px-5 py-4 rounded-xl border border-border border-l-4 border-l-(--accent-primary) bg-card/80">
-              Currently, I'm focused on deepening my expertise in Next.js and modern web technologies, while staying
-              open to diverse opportunities in full-stack development.
-            </p>
-          </div>
-
-          <div className="p-6 bg-card rounded-xl border border-border h-fit shadow-lg shadow-black/30 space-y-4">
-            <h3 className="text-lg md:text-xl font-semibold text-(--text-primary)">Education & Certifications</h3>
-            <div className="h-px w-10 bg-(--accent-primary) rounded-full" />
-
-            <ul className="space-y-3 text-(--text-secondary) text-sm">
-              <li className="flex items-start gap-2">
-                <span className="text-(--accent-primary) mt-1">•</span>
-                <span>University of Silesia in Katowice - Computer Science</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-(--accent-primary) mt-1">•</span>
-                <span>Technical School - Computer Programming</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-(--accent-primary) mt-1">•</span>
-                <span>INF.03 - Web Application Development & DB Admin</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-(--accent-primary) mt-1">•</span>
-                <span>INF.04 - Software Development & App Design</span>
-              </li>
-            </ul>
-          </div>
+        <div className="space-y-5 text-(--text-secondary) text-sm md:text-base leading-relaxed lg:row-start-1 lg:col-start-1">
+          <p className="bg-card/80 border border-border rounded-xl px-5 py-4">
+            I'm a full-stack developer currently studying at University of Silesia in Katowice, with over 5 years of
+            programming experience and INF.03, INF.04 certifications. My journey started with a technical programming
+            education and grew through self-taught exploration and hands-on projects.
+          </p>
+          <p className="px-1">
+            I enjoy building web applications and bots, primarily working with the Next.js/T3 stack. While I'm
+            comfortable across the full stack, I love switching between different technologies - whether it's C++ or
+            exploring game development. The potential to create something useful and the satisfaction of seeing it come
+            to life is what drives me.
+          </p>
+          <p className="px-5 py-4 rounded-xl border border-border border-l-4 border-l-(--accent-primary) bg-card/80">
+            Currently, I'm focused on deepening my expertise in Next.js and modern web technologies, while staying open
+            to diverse opportunities in full-stack development.
+          </p>
         </div>
 
-        <div className="p-6 rounded-xl border border-border border-l-4 border-l-(--accent-primary) h-fit shadow-lg shadow-black/30 space-y-4">
+        <div className="p-6 rounded-xl border border-border border-l-4 border-l-(--accent-primary) h-fit shadow-lg shadow-black/30 space-y-4 lg:row-start-1 lg:row-span-2 lg:col-start-2">
           <h3 className="text-lg md:text-xl font-semibold text-(--text-primary)">Work Experience</h3>
           <span className="hidden md:block h-px flex-1 bg-linear-to-r from-(--accent-text)/70 to-transparent" />
 
@@ -105,6 +79,30 @@ export default function About() {
                 <li>Implemented backend logic integrated with WordPress to handle bookings and availability.</li>
                 <li>Ensured a smooth user experience across all steps of the reservation process.</li>
               </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div className="p-6 bg-card rounded-xl border border-border h-fit shadow-lg shadow-black/30 space-y-4 lg:row-start-2 lg:col-start-1">
+          <h3 className="text-lg md:text-xl font-semibold text-(--text-primary)">Education & Certifications</h3>
+          <div className="h-px w-10 bg-(--accent-primary) rounded-full" />
+
+          <ul className="space-y-3 text-(--text-secondary) text-sm">
+            <li className="flex items-start gap-2">
+              <span className="text-(--accent-primary) mt-1">•</span>
+              <span>University of Silesia in Katowice - Computer Science</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-(--accent-primary) mt-1">•</span>
+              <span>Technical School - Computer Programming</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-(--accent-primary) mt-1">•</span>
+              <span>INF.03 - Web Application Development & DB Admin</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-(--accent-primary) mt-1">•</span>
+              <span>INF.04 - Software Development & App Design</span>
             </li>
           </ul>
         </div>

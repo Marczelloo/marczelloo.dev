@@ -102,7 +102,7 @@ export const viewport: Viewport = {
 // - create view cv button and create cv page or something like this
 // - tweak blob animations for maybe some random movement, speeds etc.
 // - known issue with navbar icons highlighting when scolling which is really hard to tweak righ now
-// - improve about me layout on mobile
+// - add functionality to contact form (getform.io or similar service)
 
 export default function RootLayout({
   children,
