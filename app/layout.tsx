@@ -100,7 +100,6 @@ export const viewport: Viewport = {
 // - check icons highlighting on larger screens in navbar
 // - test open graph and structured data when deployed on domain
 // - change phone number to whatsapp number / link
-// - improve default buttons text color in light mode (currently black and its hard to read)
 // - create view cv button and create cv page or something like this
 
 export default function RootLayout({

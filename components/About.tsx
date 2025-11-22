@@ -9,7 +9,7 @@ export default function About() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="max-w-4xl lg:col-span-2 text-(--text-secondary) text-sm md:text-base leading-relaxed space-y-5">
           <p className="bg-card/80 border border-border rounded-xl px-5 py-4">
-            I'm a full-stack developer currently studying at Uniwersytet Śląski w Katowicach, with over 5 years of
+            I'm a full-stack developer currently studying at University of Silesia in Katowice, with over 5 years of
             programming experience and INF.03, INF.04 certifications. My journey started with a technical programming
             education and grew through self-taught exploration and hands-on projects.
           </p>
