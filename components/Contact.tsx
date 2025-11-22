@@ -11,7 +11,7 @@ export default function Contact() {
         <span className="hidden md:block h-px flex-1 bg-linear-to-r from-(--accent-text)/70 to-transparent" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,3fr)_minmax(0,7fr)] gap-8 lg:gap-12 justify-end">
-        <div className="max-h-fit px-5 py-4 rounded-xl border border-border border-l-4 border-l-(--accent-primary) bg--card/80">
+        <div className="max-h-fit px-5 py-4 rounded-xl border border-border border-l-4 border-l-(--accent-primary)">
           <ul className="space-y-3">
             <li className="flex items-center gap-4">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-(--accent-primary)/10 text-(--accent-primary)">

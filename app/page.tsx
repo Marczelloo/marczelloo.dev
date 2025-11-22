@@ -10,10 +10,10 @@ export default function Home() {
       <Reveal amount={0.25}>
         <Hero />
       </Reveal>
-      <Reveal delay={0.25} amount={0.5}>
+      <Reveal delay={0.25} amount={0.5} margin="-20% 0px -30% 0px">
         <AboutMe />
       </Reveal>
-      <Reveal amount={0.5}>
+      <Reveal amount={0.5} margin="-20% 0px -30% 0px">
         <Projects />
       </Reveal>
       <Reveal amount={0.4}>

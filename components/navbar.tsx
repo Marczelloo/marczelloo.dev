@@ -14,9 +14,12 @@ export default function Navbar() {
   const visibilityRef = useRef<Record<string, number>>({});
 
   useEffect(() => {
-    const sections = document.querySelectorAll<HTMLElement>("section[id]");
+    const scrollRoot = document.getElementById("scroll-root");
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
 
-    if (!sections.length) return;
+    if (!scrollRoot || !sections.length) return;
+
+    const visibility: Record<string, number> = {};
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -24,37 +27,52 @@ export default function Navbar() {
           const id = entry.target.id;
           if (!id) return;
 
-          visibilityRef.current[id] = entry.isIntersecting ? entry.intersectionRatio : 0;
+          visibility[id] = entry.isIntersecting ? entry.intersectionRatio : 0;
         });
 
-        const visibleEntries = Object.entries(visibilityRef.current).filter(([, ratio]) => ratio > 0.15);
+        // --- simple, predictable rules ---
 
-        if (!visibleEntries.length) {
-          if (window.scrollY < 200) {
-            setActiveSection("Hero");
-          }
+        const heroRatio = visibility["Hero"] ?? 0;
+        const contactRatio = visibility["Contact"] ?? 0;
+
+        // 1) While Hero is clearly visible in the scroll-root, keep Hero active
+        if (heroRatio > 0.75) {
+          setActiveSection((prev) => (prev === "Hero" ? prev : "Hero"));
           return;
         }
 
-        const [mostVisibleId] = visibleEntries.reduce(
-          (max, current) => (current[1] > max[1] ? current : max),
-          visibleEntries[0]
-        );
-
-        if (mostVisibleId) {
-          setActiveSection(mostVisibleId as "Hero" | "AboutMe" | "Projects" | "Contact");
+        // 2) If Contact is visible at all, prefer Contact
+        //    This makes the bottom of the page always highlight Contact
+        if (contactRatio > 0.75) {
+          setActiveSection((prev) => (prev === "Contact" ? prev : "Contact"));
+          return;
         }
+
+        // 3) Otherwise pick the section with the highest intersectionRatio
+        let bestId: "Hero" | "AboutMe" | "Projects" | "Contact" = "Hero";
+        let bestRatio = 0;
+
+        (["Hero", "AboutMe", "Projects"] as const).forEach((id) => {
+          const ratio = visibility[id] ?? 0;
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestId = id;
+          }
+        });
+
+        setActiveSection((prev) => (prev === bestId ? prev : bestId));
       },
       {
-        threshold: [0.2, 0.4, 0.6, 0.8],
-        rootMargin: "-80px 0px -40% 0px",
+        root: scrollRoot, // ← THIS is the key change
+        threshold: [0.1, 0.25, 0.5, 0.75], // a few useful steps
+        rootMargin: "0px 0px -10% 0px", // don't require full height
       }
     );
 
-    sections.forEach((section) => observer.observe(section));
+    sections.forEach((s) => observer.observe(s));
 
     return () => {
-      sections.forEach((section) => observer.unobserve(section));
+      sections.forEach((s) => observer.unobserve(s));
       observer.disconnect();
     };
   }, []);

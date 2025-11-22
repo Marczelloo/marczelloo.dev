@@ -19,7 +19,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="grid grid-cols-[auto_1fr] h-screen">
       <Navbar />
-      <main className="overflow-y-auto relative min-h-screen scroll-smooth">
+      <main id="scroll-root" className="overflow-y-auto relative min-h-screen scroll-smooth">
         <MobileNavbar />
         <div className="relative min-h-full pt-12 md:pt-0">
           <BlurBackground />

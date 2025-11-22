@@ -100,6 +100,9 @@ export const viewport: Viewport = {
 // - check icons highlighting on larger screens in navbar
 // - test open graph and structured data when deployed on domain
 // - create view cv button and create cv page or something like this
+// - tweak blob animations for maybe some random movement, speeds etc.
+// - known issue with navbar icons highlighting when scolling which is really hard to tweak righ now
+// - improve about me layout on mobile
 
 export default function RootLayout({
   children,
