@@ -7,7 +7,10 @@ import Link from "next/dist/client/link";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <div className="flex flex-col bg-card rounded-xl p-5 border border-border hover:scale-[1.01] transition-transform duration-200">
+    <div
+      className="flex flex-col bg-card rounded-xl p-5 border border-border transition-all duration-200
+    hover:-translate-y-1 hover:border-(--accent-primary)/40 hover:shadow-lg hover:shadow-(--accent-primary)/20"
+    >
       <div className="flex gap-4 mb-3">
         <Image
           src={project.image}

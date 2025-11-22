@@ -15,12 +15,15 @@ export default function Hero() {
           alt="Marczelloo Avatar"
           width={150}
           height={150}
-          className="rounded-full border-border border-2 bg-accent"
+          className="rounded-full border-border border-2 bg-accent animate-avatarFloat"
         />
 
         <div className="flex flex-col justify-center gap-2">
           <h1 className="text-3xl sm:text-4xl md:text-5xl">Marczelloo</h1>
           <p className="text-sm sm:text-base text-(--text-secondary)">Full-Stack Developer | Next.js &amp; Node.js</p>
+          <p className="text-sm sm:text-base text-(--text-secondary)">
+            Sosnowiec, Poland • Open to internships & junior opportunities
+          </p>
         </div>
       </article>
 
