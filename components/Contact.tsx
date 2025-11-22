@@ -1,7 +1,7 @@
-import { Button } from "./ui/button";
 import { DiscordIcon } from "./ui/icons/discord-icon";
 import { GmailIcon } from "./ui/icons/gmail-icon";
 import CopyToClipboard from "./copyToClipboards";
+import ContactForm from "./ContactForm";
 
 export default function Contact() {
   return (
@@ -35,47 +35,7 @@ export default function Contact() {
             </li>
           </ul>
         </div>
-        <div className="w-full max-w-3xl lg:max-w-none justify-self-end">
-          <form className="border border-border bg-card rounded-xl p-6 md:p-8 shadow-lg shadow-black/30 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <input
-                type="text"
-                placeholder="name"
-                className="w-full border-b border-border bg-card/80 px-4 py-3 focus:rounded-lg text-sm md:text-base outline-none focus:border-(--accent-primary) focus:ring-1 focus:ring-(--accent-primary)/60 transition-shadow duration-150"
-              />
-              <input
-                type="email"
-                placeholder="email"
-                className="w-full border-b border-border bg-card/80 px-4 py-3 text-sm md:text-base outline-none focus:rounded-lg focus:border-(--accent-primary) focus:ring-1 focus:ring-(--accent-primary)/60 transition-shadow duration-150"
-              />
-            </div>
-            <input
-              type="text"
-              placeholder="subject"
-              className="w-full border-b border-border bg-card/80 px-4 py-3 text-sm md:text-base outline-none focus:border-(--accent-primary) focus:rounded-lg focus:ring-1 focus:ring-(--accent-primary)/60 transition-shadow duration-150"
-            />
-            <textarea
-              placeholder="message"
-              className="w-full bg-card/80 px-4 py-3 text-sm md:text-base outline-none border border-border/80 rounded-lg min-h-32 max-h-60 resize-y focus:border-(--accent-primary) focus:ring-1 focus:ring-(--accent-primary)/60 transition-shadow duration-150"
-            />
-            <div className="flex flex-col gap-4 md:flex-row md:items-center justify-between pt-2">
-              <p className="text-sm text-(--text-secondary) font-semibold">
-                Need my CV?{" "}
-                <a
-                  href="/lorem-ipsum.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-(--accent-primary) font-semibold underline"
-                >
-                  Download here
-                </a>
-              </p>
-              <Button variant="default" size="lg" type="submit" className="cursor-pointer px-12">
-                Send
-              </Button>
-            </div>
-          </form>
-        </div>
+        <ContactForm />
       </div>
     </section>
   );

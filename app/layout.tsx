@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { LayoutShell } from "./LayoutShell";
 import { ThemeProvider } from "@/components/theme-provider";
 import Script from "next/script";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -102,7 +103,8 @@ export const viewport: Viewport = {
 // - create view cv button and create cv page or something like this
 // - tweak blob animations for maybe some random movement, speeds etc.
 // - known issue with navbar icons highlighting when scolling which is really hard to tweak righ now
-// - add functionality to contact form (getform.io or similar service)
+// - when domain is ready verify in resend and add to dns (additionaly discord webhook that sends messages to my discord)
+// - add spam protection to contact form (honeypot, character limits, rate limiting or captcha)
 
 export default function RootLayout({
   children,
@@ -133,7 +135,8 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <LayoutShell>{children}</LayoutShell>{" "}
+          <LayoutShell>{children}</LayoutShell>
+          <Toaster position="top-center" className="bg-accent" />
         </ThemeProvider>
       </body>
     </html>
