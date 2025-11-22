@@ -7,16 +7,16 @@ import { Reveal } from "@/components/Reveal";
 export default function Home() {
   return (
     <div className="flex flex-col gap-16 px-4 sm:px-6 md:px-10 lg:px-24 max-w-[1500px] mx-auto">
-      <Reveal>
+      <Reveal amount={0.25}>
         <Hero />
       </Reveal>
-      <Reveal delay={0.25}>
+      <Reveal delay={0.25} amount={0.5}>
         <AboutMe />
       </Reveal>
-      <Reveal>
+      <Reveal amount={0.5}>
         <Projects />
       </Reveal>
-      <Reveal>
+      <Reveal amount={0.4}>
         <Contact />
       </Reveal>
     </div>

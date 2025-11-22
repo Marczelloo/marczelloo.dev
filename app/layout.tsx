@@ -99,7 +99,6 @@ export const viewport: Viewport = {
 // - implement language switcher (PL/EN)
 // - check icons highlighting on larger screens in navbar
 // - test open graph and structured data when deployed on domain
-// - change phone number to whatsapp number / link
 // - create view cv button and create cv page or something like this
 
 export default function RootLayout({

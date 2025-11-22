@@ -1,7 +1,6 @@
 import { Button } from "./ui/button";
 import { DiscordIcon } from "./ui/icons/discord-icon";
 import { GmailIcon } from "./ui/icons/gmail-icon";
-import { PhoneSolidIcon } from "./ui/icons/heroicons-phone-solid";
 import CopyToClipboard from "./copyToClipboards";
 
 export default function Contact() {
@@ -33,17 +32,6 @@ export default function Contact() {
                 textToCopy="marczelloo"
                 className="hover:text-(--accent-primary) transition-colors cursor-pointer text-(--text-primary) font-medium"
               />
-            </li>
-            <li className="flex items-center gap-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-(--accent-primary)/10 text-(--accent-primary)">
-                <PhoneSolidIcon size={18} className="text-(--accent-primary)" />
-              </div>
-              <a
-                href="tel:+48 730 226 226"
-                className="hover:text-(--accent-primary) transition-colors cursor-pointer text-(--text-primary) font-medium"
-              >
-                +48 730 226 226
-              </a>
             </li>
           </ul>
         </div>

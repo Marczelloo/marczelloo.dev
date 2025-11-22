@@ -14,7 +14,9 @@ export default function Navbar() {
   const visibilityRef = useRef<Record<string, number>>({});
 
   useEffect(() => {
-    const sections = document.querySelectorAll("section[id]");
+    const sections = document.querySelectorAll<HTMLElement>("section[id]");
+
+    if (!sections.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -25,9 +27,14 @@ export default function Navbar() {
           visibilityRef.current[id] = entry.isIntersecting ? entry.intersectionRatio : 0;
         });
 
-        const visibleEntries = Object.entries(visibilityRef.current);
+        const visibleEntries = Object.entries(visibilityRef.current).filter(([, ratio]) => ratio > 0.15);
 
-        if (!visibleEntries.length) return;
+        if (!visibleEntries.length) {
+          if (window.scrollY < 200) {
+            setActiveSection("Hero");
+          }
+          return;
+        }
 
         const [mostVisibleId] = visibleEntries.reduce(
           (max, current) => (current[1] > max[1] ? current : max),
@@ -48,6 +55,7 @@ export default function Navbar() {
 
     return () => {
       sections.forEach((section) => observer.unobserve(section));
+      observer.disconnect();
     };
   }, []);
 
