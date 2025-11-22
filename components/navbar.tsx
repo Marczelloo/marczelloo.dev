@@ -1,15 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { PersonIcon } from "./ui/icons/akar-icons-person";
 import { EnvelopeIcon } from "./ui/icons/akar-icons-envelope";
 import { FolderIcon } from "./ui/icons/akar-icons-folder";
 import { HomeAlt1Icon } from "./ui/icons/akar-icons-home-alt1";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
+import ScrollLink from "./ScrollLink";
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<"Hero" | "AboutMe" | "Projects" | "Contact">("Hero");
+
+  const visibilityRef = useRef<Record<string, number>>({});
 
   useEffect(() => {
     const sections = document.querySelectorAll("section[id]");
@@ -17,14 +19,28 @@ export default function Navbar() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id as "Hero" | "AboutMe" | "Projects" | "Contact");
-          }
+          const id = entry.target.id;
+          if (!id) return;
+
+          visibilityRef.current[id] = entry.isIntersecting ? entry.intersectionRatio : 0;
         });
+
+        const visibleEntries = Object.entries(visibilityRef.current);
+
+        if (!visibleEntries.length) return;
+
+        const [mostVisibleId] = visibleEntries.reduce(
+          (max, current) => (current[1] > max[1] ? current : max),
+          visibleEntries[0]
+        );
+
+        if (mostVisibleId) {
+          setActiveSection(mostVisibleId as "Hero" | "AboutMe" | "Projects" | "Contact");
+        }
       },
       {
-        threshold: 0.3,
-        rootMargin: "-100px 0px -50% 0px",
+        threshold: [0.2, 0.4, 0.6, 0.8],
+        rootMargin: "-80px 0px -40% 0px",
       }
     );
 
@@ -35,36 +51,28 @@ export default function Navbar() {
     };
   }, []);
 
-  const navItems = [
-    { href: "/#Hero", icon: HomeAlt1Icon, section: "Hero" },
-    { href: "/#AboutMe", icon: PersonIcon, section: "AboutMe" },
-    { href: "/#Projects", icon: FolderIcon, section: "Projects" },
-    { href: "/#Contact", icon: EnvelopeIcon, section: "Contact" },
+  const navItems: {
+    icon: React.ComponentType<{ size: number }>;
+    section: "Hero" | "AboutMe" | "Projects" | "Contact";
+  }[] = [
+    { icon: HomeAlt1Icon, section: "Hero" },
+    { icon: PersonIcon, section: "AboutMe" },
+    { icon: FolderIcon, section: "Projects" },
+    { icon: EnvelopeIcon, section: "Contact" },
   ];
-
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    history.replaceState(null, "", location.pathname);
-  };
 
   return (
     <nav className="hidden md:flex h-full bg-background flex-col gap-10 border-r-2 border-border px-6 py-8">
-      {navItems.map(({ href, icon: Icon, section }) => (
-        <Link
+      {navItems.map(({ icon: Icon, section }) => (
+        <ScrollLink
           key={section}
-          href={href}
+          targetId={section}
           className={`transition-colors ${
             activeSection === section ? "text-(--accent-primary)" : "text-(--text-muted)"
           } hover:text-(--text-primary)`}
-          onClick={(e) => {
-            if (e.metaKey || e.ctrlKey || e.button === 1) return;
-            if (window.location.pathname !== "/") return;
-            e.preventDefault();
-            scrollTo(section);
-          }}
         >
           <Icon size={28} />
-        </Link>
+        </ScrollLink>
       ))}
       <ThemeToggle className="mt-auto" />
     </nav>

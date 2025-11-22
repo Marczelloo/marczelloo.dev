@@ -96,12 +96,13 @@ export const viewport: Viewport = {
 
 // TODOLIST:
 // - add live demo links to projects where applicable
-// - optimize for mobile devices
 // - implement language switcher (PL/EN)
 // - refine animations and transitions for better UX
-// - fix scrolling to hero to scroll to top
-// - fix scrolling from see projects button setting domain to /#Projects
+// - check icons highlighting on larger screens in navbar
 // - test open graph and structured data when deployed on domain
+// - change phone number to whatsapp number / link
+// - improve default buttons text color in light mode (currently black and its hard to read)
+//
 
 export default function RootLayout({
   children,

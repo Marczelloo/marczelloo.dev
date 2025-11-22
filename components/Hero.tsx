@@ -4,10 +4,11 @@ import { DownloadIcon } from "./ui/icons/akar-icons-download";
 import Link from "next/link";
 import { GithubFillIcon } from "./ui/icons/akar-icons-github-fill";
 import { LinkedinFillIcon } from "./ui/icons/akar-icons-linkedin-fill";
+import ScrollLink from "./ScrollLink";
 
 export default function Hero() {
   return (
-    <section id="Hero" className="flex flex-col gap-6">
+    <section id="Hero" className="flex flex-col gap-6 pt-12">
       <article className="flex flex-col items-center sm:flex-row sm:items-center gap-6 text-center sm:text-left">
         <Image
           src="/avatar_nobg.png"
@@ -24,22 +25,22 @@ export default function Hero() {
       </article>
 
       <article className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-center sm:justify-start">
-        <Link href="#Projects" className="w-full sm:w-auto">
+        <ScrollLink targetId="Projects">
           <Button
             size="lg"
             className="
-              w-full sm:w-auto
-              cursor-pointer
-              bg-(--accent-primary)
-              hover:bg-(--accent-hover)
-              color-(--text-primary)
-              shadow-lg shadow-(--accent-primary)/35
-              border-0
-            "
+                w-full sm:w-auto
+                cursor-pointer
+                bg-(--accent-primary)
+                hover:bg-(--accent-hover)
+                color-(--text-primary)
+                shadow-lg shadow-(--accent-primary)/35
+                border-0
+              "
           >
             See My Projects
           </Button>
-        </Link>
+        </ScrollLink>
 
         <Link href="/lorem-ipsum.pdf" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
           <Button

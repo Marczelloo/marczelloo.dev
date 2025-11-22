@@ -6,7 +6,7 @@ import CopyToClipboard from "./copyToClipboards";
 
 export default function Contact() {
   return (
-    <section id="Contact" className="w-full">
+    <section id="Contact" className="w-full scroll-mt-16 md:scroll-mt-8">
       <div className="flex items-center gap-4 mb-8">
         <h2 className="text-3xl md:text-4xl font-semibold text-(--accent-text)">Contact</h2>
         <span className="hidden md:block h-px flex-1 bg-linear-to-r from-(--accent-text)/70 to-transparent" />

@@ -21,7 +21,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
       <Navbar />
       <main className="overflow-y-auto relative min-h-screen scroll-smooth">
         <MobileNavbar />
-        <div className="relative min-h-full pt-12">
+        <div className="relative min-h-full pt-12 md:pt-0">
           <BlurBackground />
           {children}
           <Footer />
