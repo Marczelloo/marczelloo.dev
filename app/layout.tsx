@@ -98,13 +98,10 @@ export const viewport: Viewport = {
 // TODOLIST:
 // - add live demo links to projects where applicable
 // - implement language switcher (PL/EN)
-// - check icons highlighting on larger screens in navbar
 // - test open graph and structured data when deployed on domain
 // - create view cv button and create cv page or something like this
 // - tweak blob animations for maybe some random movement, speeds etc.
-// - known issue with navbar icons highlighting when scolling which is really hard to tweak righ now
 // - when domain is ready verify in resend and add to dns (additionaly discord webhook that sends messages to my discord)
-// - add spam protection to contact form (honeypot, character limits, rate limiting or captcha)
 
 export default function RootLayout({
   children,
@@ -136,7 +133,7 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LayoutShell>{children}</LayoutShell>
-          <Toaster position="top-center" className="bg-accent" />
+          <Toaster position="top-center" className="color-primary" />
         </ThemeProvider>
       </body>
     </html>

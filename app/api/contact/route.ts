@@ -6,10 +6,28 @@ const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL!;
 
 export async function POST(request: Request) {
   try {
-    const { name, email, subject, message } = await request.json();
+    const body = await request.json();
+
+    const name = String(body.name ?? "").trim();
+    const email = String(body.email ?? "").trim();
+    const subject = String(body.subject ?? "").trim();
+    const message = String(body.message ?? "").trim();
+    const company = String(body.company ?? "").trim();
+
+    if (company.length > 0) {
+      return NextResponse.json({ message: "OK" }, { status: 200 });
+    }
 
     if (!name || !email || !message) {
       return NextResponse.json({ error: "All fields are required." }, { status: 400 });
+    }
+
+    if (name.length > 100 || subject.length > 150 || message.length > 4000) {
+      return NextResponse.json({ error: "One of the fields is too long." }, { status: 400 });
+    }
+
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
     }
 
     await resend.emails.send({
@@ -28,27 +46,44 @@ export async function POST(request: Request) {
     });
 
     if (DISCORD_WEBHOOK_URL) {
-      await fetch(DISCORD_WEBHOOK_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          embeds: [
-            {
-              title: "📩 New portfolio message",
-              fields: [
-                { name: "Name", value: String(name), inline: true },
-                { name: "Email", varlue: String(email), inline: true },
-                { name: "Subject", value: subject ? String(subject) : "No subject", inline: false },
-                { name: "Message", value: String(message), inline: false },
-              ],
-              color: 5814783,
-              timestamp: new Date().toISOString(),
-            },
-          ],
-        }),
-      });
+      try {
+        console.log("Sending to Discord webhook…");
+
+        const resp = await fetch(DISCORD_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            embeds: [
+              {
+                title: "📩 New portfolio message",
+                fields: [
+                  { name: "Name", value: name || "—", inline: true },
+                  { name: "Email", value: email || "—", inline: true },
+                  { name: "Subject", value: subject || "No subject", inline: false },
+                  {
+                    name: "Message",
+                    value: message.slice(0, 1900) || "—",
+                    inline: false,
+                  },
+                ],
+                color: 5814783,
+                timestamp: new Date().toISOString(),
+              },
+            ],
+          }),
+        });
+
+        if (!resp.ok) {
+          const text = await resp.text();
+          console.error("Discord webhook responded with error:", resp.status, text);
+        } else {
+          console.log("Discord webhook sent OK:", resp.status);
+        }
+      } catch (err) {
+        console.error("Discord webhook failed:", err);
+      }
+    } else {
+      console.log("DISCORD_WEBHOOK_URL not set, skipping Discord");
     }
 
     return NextResponse.json({ message: "Message sent successfully." }, { status: 200 });

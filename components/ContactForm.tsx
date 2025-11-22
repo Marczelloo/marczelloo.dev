@@ -38,6 +38,7 @@ export default function ContactForm() {
         onSubmit={handleSubmit}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+          <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hidden" />
           <input
             type="text"
             placeholder="name"
