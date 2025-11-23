@@ -52,7 +52,10 @@ export default function ProjectCard({ project }: { project: Project }) {
             <Tooltip key={tag}>
               <TooltipTrigger asChild>
                 <div className="cursor-pointer">
-                  <Icon size={24} className="grayscale hover:grayscale-0 hover:scale-125 transition-all duration-300" />
+                  <Icon
+                    size={24}
+                    className="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 hover:scale-125 transition-all duration-300"
+                  />
                 </div>
               </TooltipTrigger>
               <TooltipContent sideOffset={6} className="bg-(--bg-tertiary) text-(--text-primary) border border-border">

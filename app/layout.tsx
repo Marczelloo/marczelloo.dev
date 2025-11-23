@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { LayoutShell } from "./LayoutShell";
 import { ThemeProvider } from "@/components/theme-provider";
 import Script from "next/script";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -100,7 +100,6 @@ export const viewport: Viewport = {
 // - implement language switcher (PL/EN)
 // - test open graph and structured data when deployed on domain
 // - create view cv button and create cv page or something like this
-// - tweak blob animations for maybe some random movement, speeds etc.
 // - when domain is ready verify in resend and add to dns (additionaly discord webhook that sends messages to my discord)
 
 export default function RootLayout({
@@ -121,9 +120,9 @@ export default function RootLayout({
               name: "Marczelloo",
               url: "https://marczelloo.dev",
               sameAs: [
-                "https://github.com/YOUR_GITHUB",
-                "https://linkedin.com/in/YOUR_LINKEDIN",
-                "https://twitter.com/YOUR_TWITTER_HANDLE",
+                "https://github.com/Marczelloo",
+                "https://linkedin.com/in/Marczelloo",
+                "https://twitter.com/Marczelloo_",
               ],
               jobTitle: "Full-Stack Developer",
             }),
@@ -133,7 +132,7 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LayoutShell>{children}</LayoutShell>
-          <Toaster position="top-center" className="color-primary" />
+          <Toaster position="top-center" expand toastOptions={{ duration: 3500 }} />
         </ThemeProvider>
       </body>
     </html>
