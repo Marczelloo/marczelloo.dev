@@ -9,8 +9,8 @@ export default function About() {
         <span className="hidden md:block h-px flex-1 bg-linear-to-r from-(--accent-text)/70 to-transparent" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.9fr)] gap-10 items-start">
-        <div className="space-y-5 text-(--text-secondary) text-sm md:text-base leading-relaxed lg:row-start-1 lg:col-start-1">
+      <div className="flex flex-col gap-10 lg:flex-row lg:items-start">
+        <div className="flex-1 space-y-5 text-(--text-secondary) text-sm md:text-base leading-relaxed">
           <p className="bg-card/80 border border-border rounded-xl px-5 py-4">
             I'm a full-stack developer currently studying at University of Silesia in Katowice, with over 5 years of
             programming experience and INF.03, INF.04 certifications. My journey started with a technical programming
@@ -26,9 +26,33 @@ export default function About() {
             Currently, I'm focused on deepening my expertise in Next.js and modern web technologies, while staying open
             to diverse opportunities in full-stack development.
           </p>
+
+          <div className="mt-4 p-6 bg-card rounded-xl border border-border h-fit shadow-lg shadow-black/30 space-y-4">
+            <h3 className="text-lg md:text-xl font-semibold text-(--text-primary)">Education &amp; Certifications</h3>
+            <div className="h-px w-10 bg-(--accent-primary) rounded-full" />
+
+            <ul className="space-y-3 text-(--text-secondary) text-sm">
+              <li className="flex items-start gap-2">
+                <span className="text-(--accent-primary) mt-1">•</span>
+                <span>University of Silesia in Katowice - Computer Science</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-(--accent-primary) mt-1">•</span>
+                <span>Technical School - Computer Programming</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-(--accent-primary) mt-1">•</span>
+                <span>INF.03 - Web Application Development &amp; DB Admin</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-(--accent-primary) mt-1">•</span>
+                <span>INF.04 - Software Development &amp; App Design</span>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <div className="p-6 rounded-xl border border-border border-l-4 border-l-(--accent-primary) h-fit shadow-lg shadow-black/30 space-y-4 lg:row-start-1 lg:row-span-2 lg:col-start-2">
+        <div className="lg:flex-[1.4] p-6 rounded-xl border border-border border-l-4 border-l-(--accent-primary) h-fit shadow-lg shadow-black/30 space-y-4">
           <h3 className="text-lg md:text-xl font-semibold text-(--text-primary)">Work Experience</h3>
           <span className="hidden md:block h-px flex-1 bg-linear-to-r from-(--accent-text)/70 to-transparent" />
 
@@ -51,33 +75,21 @@ export default function About() {
                   </ul>
                 </li>
 
+                {experience.liveDemo && (
+                  <a
+                    href={experience.liveDemo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 inline-flex items-center gap-1 text-sm text-(--accent-primary) hover:underline"
+                  >
+                    {experience.liveDemoText || "Live Demo"}
+                    <span aria-hidden>↗</span>
+                  </a>
+                )}
+
                 {index < experiences.length - 1 && <div className="h-px w-full bg-white/10 my-4" />}
               </React.Fragment>
             ))}
-          </ul>
-        </div>
-
-        <div className="p-6 bg-card rounded-xl border border-border h-fit shadow-lg shadow-black/30 space-y-4 lg:row-start-2 lg:col-start-1">
-          <h3 className="text-lg md:text-xl font-semibold text-(--text-primary)">Education & Certifications</h3>
-          <div className="h-px w-10 bg-(--accent-primary) rounded-full" />
-
-          <ul className="space-y-3 text-(--text-secondary) text-sm">
-            <li className="flex items-start gap-2">
-              <span className="text-(--accent-primary) mt-1">•</span>
-              <span>University of Silesia in Katowice - Computer Science</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-(--accent-primary) mt-1">•</span>
-              <span>Technical School - Computer Programming</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-(--accent-primary) mt-1">•</span>
-              <span>INF.03 - Web Application Development & DB Admin</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-(--accent-primary) mt-1">•</span>
-              <span>INF.04 - Software Development & App Design</span>
-            </li>
           </ul>
         </div>
       </div>

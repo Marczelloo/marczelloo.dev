@@ -6,6 +6,8 @@ export interface Experience {
   location: string;
   technologies: string[];
   responsibilities: string[];
+  liveDemo?: string;
+  liveDemoText?: string;
 }
 
 export const experiences: Experience[] = [
@@ -42,17 +44,20 @@ export const experiences: Experience[] = [
   },
   {
     id: 3,
-    position: "Full-Stack Developer (contract work)",
-    company: "D9 Space (RecodeIT)",
+    position: "Full-Stack Developer (Contract)",
+    company: "RecodeIT · D9 Space",
     dateRange: "2024",
     location: "Katowice, Poland",
     technologies: ["PHP", "WordPress (Custom Plugins & Backend Logic)"],
     responsibilities: [
-      "Designing and implementing the booking logic",
-      "Integrating the module with the client’s existing system",
-      "Preparing an administration interface for managing bookings",
-      "Implementing data validation and a simple reservation state flow",
-      "Tailoring the solution to specific business requirements",
+      "Worked as a contract full-stack developer at RecodeIT on the reservation system for d9space.com.",
+      "Designed and implemented the multi-step booking flow (date, space, layout, features, final submission).",
+      "Integrated the module with the client’s existing WordPress setup and admin tooling.",
+      "Implemented backend logic for bookings, availability and data validation.",
+      "Prepared an administration interface for managing bookings and reservations.",
+      "Tailored the solution to specific business requirements and workflows.",
     ],
+    liveDemo: "https://d9space.com/en/make-reservation/",
+    liveDemoText: "View live reservation system",
   },
 ];

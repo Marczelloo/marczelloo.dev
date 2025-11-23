@@ -17,6 +17,17 @@ export default function WorkExperienceCard({ experience }: { experience: Experie
           <li key={i}>{r}</li>
         ))}
       </ul>
+      {experience.liveDemo && (
+        <a
+          href={experience.liveDemo}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-flex items-center gap-1 text-xs text-(--accent-primary) hover:underline"
+        >
+          {experience.liveDemoText || "Live Demo"}
+          <span aria-hidden>↗</span>
+        </a>
+      )}
     </div>
   );
 }

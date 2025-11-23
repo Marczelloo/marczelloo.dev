@@ -99,8 +99,8 @@ export const viewport: Viewport = {
 // - add live demo links to projects where applicable
 // - implement language switcher (PL/EN)
 // - test open graph and structured data when deployed on domain
-// - create view cv button and create cv page or something like this
 // - when domain is ready verify in resend and add to dns (additionaly discord webhook that sends messages to my discord)
+// - improve cv file
 
 export default function RootLayout({
   children,
