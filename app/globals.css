@@ -108,6 +108,35 @@ button.bg-primary {
   animation: avatarFloat 4s ease-in-out infinite;
 }
 
+@media print {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+
+  .cv-print-container {
+    max-width: 100% !important;
+    padding: 0 16mm !important;
+  }
+
+  .cv-no-print {
+    display: none !important;
+  }
+
+  .cv-no-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .cv-page-break-before {
+    break-before: page;
+    page-break-before: always;
+  }
+}
+
 @layer base {
   body {
     @apply bg-[var(--bg-primary)] text-[var(--text-primary)];

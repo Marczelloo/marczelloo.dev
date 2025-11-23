@@ -67,7 +67,7 @@ export default function ContactForm() {
           <p className="text-sm text-(--text-secondary) font-semibold">
             Need my CV?{" "}
             <a
-              href="/lorem-ipsum.pdf"
+              href="/Marcel_Moskwa_CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="text-(--accent-primary) font-semibold underline"

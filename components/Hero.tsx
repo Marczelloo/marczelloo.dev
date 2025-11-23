@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { DownloadIcon } from "./ui/icons/akar-icons-download";
 import Link from "next/link";
 import { GithubFillIcon } from "./ui/icons/akar-icons-github-fill";
 import { LinkedinFillIcon } from "./ui/icons/akar-icons-linkedin-fill";
+import { FileText } from "lucide-react";
+
 import ScrollLink from "./ScrollLink";
 
 export default function Hero() {
@@ -45,7 +46,7 @@ export default function Hero() {
           </Button>
         </ScrollLink>
 
-        <Link href="/lorem-ipsum.pdf" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+        <Link href="/resume" className="w-full sm:w-auto">
           <Button
             variant="outline"
             size="lg"
@@ -59,8 +60,8 @@ export default function Hero() {
               hover:color-(--text-primary)
             "
           >
-            <DownloadIcon className="mr-2" />
-            Download CV
+            <FileText className="mr-2" />
+            View CV
           </Button>
         </Link>
       </article>
