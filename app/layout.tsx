@@ -101,6 +101,7 @@ export const viewport: Viewport = {
 // - test open graph and structured data when deployed on domain
 // - when domain is ready verify in resend and add to dns (additionaly discord webhook that sends messages to my discord)
 // - improve cv file
+// - fix links scrolling in mobile view
 
 export default function RootLayout({
   children,
