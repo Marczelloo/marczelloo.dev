@@ -11,7 +11,7 @@ export default function Home() {
         <Hero />
       </Reveal>
 
-      <Reveal delay={0.25} amount={0.2}>
+      <Reveal delay={0.25}>
         <AboutMe />
       </Reveal>
 
