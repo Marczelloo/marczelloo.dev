@@ -98,8 +98,7 @@ export const viewport: Viewport = {
 // TODOLIST:
 // - add live demo links to projects where applicable
 // - implement language switcher (PL/EN)
-// - test open graph and structured data when deployed on domain
-// - when domain is ready verify in resend and add to dns (additionaly discord webhook that sends messages to my discord)
+// - when domain is ready verify in resend and add to dns
 // - improve cv file
 // - fix links scrolling in mobile view
 
