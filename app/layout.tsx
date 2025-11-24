@@ -100,7 +100,6 @@ export const viewport: Viewport = {
 // - implement language switcher (PL/EN)
 // - when domain is ready verify in resend and add to dns
 // - improve cv file
-// - fix links scrolling in mobile view
 
 export default function RootLayout({
   children,
@@ -128,6 +127,11 @@ export default function RootLayout({
             }),
           }}
         />
+        <meta
+          name="description"
+          content="Full-Stack Developer specializing in Next.js, Node.js, T3 stack, and modern web technologies."
+        />
+        <link rel="canonical" href="https://marczelloo.dev" />
       </head>
       <body className={`${inter.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
