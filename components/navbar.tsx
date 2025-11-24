@@ -4,14 +4,12 @@ import { PersonIcon } from "./ui/icons/akar-icons-person";
 import { EnvelopeIcon } from "./ui/icons/akar-icons-envelope";
 import { FolderIcon } from "./ui/icons/akar-icons-folder";
 import { HomeAlt1Icon } from "./ui/icons/akar-icons-home-alt1";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
 import ScrollLink from "./ScrollLink";
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<"Hero" | "AboutMe" | "Projects" | "Contact">("Hero");
-
-  const visibilityRef = useRef<Record<string, number>>({});
 
   useEffect(() => {
     const scrollRoot = document.getElementById("scroll-root");
@@ -30,25 +28,19 @@ export default function Navbar() {
           visibility[id] = entry.isIntersecting ? entry.intersectionRatio : 0;
         });
 
-        // --- simple, predictable rules ---
-
         const heroRatio = visibility["Hero"] ?? 0;
         const contactRatio = visibility["Contact"] ?? 0;
 
-        // 1) While Hero is clearly visible in the scroll-root, keep Hero active
         if (heroRatio > 0.75) {
           setActiveSection((prev) => (prev === "Hero" ? prev : "Hero"));
           return;
         }
 
-        // 2) If Contact is visible at all, prefer Contact
-        //    This makes the bottom of the page always highlight Contact
         if (contactRatio > 0.75) {
           setActiveSection((prev) => (prev === "Contact" ? prev : "Contact"));
           return;
         }
 
-        // 3) Otherwise pick the section with the highest intersectionRatio
         let bestId: "Hero" | "AboutMe" | "Projects" | "Contact" = "Hero";
         let bestRatio = 0;
 
@@ -63,9 +55,9 @@ export default function Navbar() {
         setActiveSection((prev) => (prev === bestId ? prev : bestId));
       },
       {
-        root: scrollRoot, // ← THIS is the key change
-        threshold: [0.1, 0.25, 0.5, 0.75], // a few useful steps
-        rootMargin: "0px 0px -10% 0px", // don't require full height
+        root: scrollRoot,
+        threshold: [0.1, 0.25, 0.5, 0.75],
+        rootMargin: "0px 0px -10% 0px",
       }
     );
 

@@ -1,4 +1,9 @@
+# *
 User-agent: *
 Allow: /
 
+# Host
+Host: https://marczelloo.dev
+
+# Sitemaps
 Sitemap: https://marczelloo.dev/sitemap.xml
