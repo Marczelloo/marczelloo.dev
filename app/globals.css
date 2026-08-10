@@ -179,6 +179,11 @@ textarea {
     min-height: auto;
     padding-block: 6rem;
   }
+
+  #hero,
+  #hero .section-shell {
+    min-height: 100dvh;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
