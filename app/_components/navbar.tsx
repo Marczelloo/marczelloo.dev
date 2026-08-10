@@ -25,31 +25,45 @@ export default function Navbar() {
     const scrollRoot = document.getElementById("page-root");
     const sections = TABS.map((tab) => document.getElementById(tab.id)).filter(Boolean) as HTMLElement[];
     if (!scrollRoot || !sections.length) return;
+    const desktop = window.matchMedia("(min-width: 1024px)");
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.find((entry) => entry.isIntersecting);
-        if (!visible) return;
+    let observer: IntersectionObserver | null = null;
 
-        const scrollTarget = scrollTargetRef.current;
-        if (scrollTarget && visible.target.id !== scrollTarget) return;
+    const createObserver = () => {
+      observer?.disconnect();
+      observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries.find((entry) => entry.isIntersecting);
+          if (!visible) return;
 
-        if (scrollTarget === visible.target.id) {
-          scrollTargetRef.current = null;
-          if (unlockTimerRef.current !== null) {
-            window.clearTimeout(unlockTimerRef.current);
-            unlockTimerRef.current = null;
+          const scrollTarget = scrollTargetRef.current;
+          if (scrollTarget && visible.target.id !== scrollTarget) return;
+
+          if (scrollTarget === visible.target.id) {
+            scrollTargetRef.current = null;
+            if (unlockTimerRef.current !== null) {
+              window.clearTimeout(unlockTimerRef.current);
+              unlockTimerRef.current = null;
+            }
           }
-        }
 
-        setActive(visible.target.id);
-      },
-      { root: scrollRoot, rootMargin: "-48% 0px -48% 0px", threshold: 0 },
-    );
+          setActive(visible.target.id);
+        },
+        {
+          root: desktop.matches ? scrollRoot : null,
+          rootMargin: "-48% 0px -48% 0px",
+          threshold: 0,
+        },
+      );
 
-    sections.forEach((section) => observer.observe(section));
+      sections.forEach((section) => observer?.observe(section));
+    };
+
+    createObserver();
+    desktop.addEventListener("change", createObserver);
     return () => {
-      observer.disconnect();
+      observer?.disconnect();
+      desktop.removeEventListener("change", createObserver);
       if (unlockTimerRef.current !== null) window.clearTimeout(unlockTimerRef.current);
     };
   }, [isPortfolio]);
@@ -60,15 +74,20 @@ export default function Navbar() {
     const scrollRoot = document.getElementById("page-root");
     const section = document.getElementById(id);
     if (!scrollRoot || !section) return;
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
 
     if (unlockTimerRef.current !== null) window.clearTimeout(unlockTimerRef.current);
     scrollTargetRef.current = id;
     setActive(id);
 
-    scrollRoot.scrollTo({
-      top: section.offsetTop,
-      behavior: reduceMotion ? "auto" : "smooth",
-    });
+    const top = isDesktop ? section.offsetTop : section.getBoundingClientRect().top + window.scrollY;
+    const behavior = reduceMotion ? "auto" : "smooth";
+
+    if (isDesktop) {
+      scrollRoot.scrollTo({ top, behavior });
+    } else {
+      window.scrollTo({ top, behavior });
+    }
 
     unlockTimerRef.current = window.setTimeout(() => {
       scrollTargetRef.current = null;
