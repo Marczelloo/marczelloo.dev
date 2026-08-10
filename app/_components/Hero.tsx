@@ -38,7 +38,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.div
-            className="flex flex-col items-center"
+            className="flex w-full max-w-5xl flex-col items-center"
             initial={reduceMotion ? false : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.68, delay: reduceMotion ? 0 : 0.08, ease: [0.16, 1, 0.3, 1] }}
@@ -48,7 +48,7 @@ export default function Hero() {
             </p>
             <h1
               id="hero-title"
-              className="max-w-5xl text-balance text-[clamp(4rem,10vw,8.25rem)] font-extrabold leading-[0.84] tracking-[-0.04em] text-text-base"
+              className="w-full max-w-5xl whitespace-nowrap px-1 text-center text-balance text-[clamp(2.5rem,12.5vw,8.25rem)] font-extrabold leading-[0.84] tracking-[-0.05em] text-text-base sm:text-[clamp(4rem,10vw,8.25rem)] sm:tracking-[-0.04em]"
             >
               MARCZELLOO
             </h1>
