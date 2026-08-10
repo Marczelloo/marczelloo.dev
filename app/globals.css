@@ -177,7 +177,7 @@ textarea {
   .section-shell {
     width: min(100% - 2rem, 48rem);
     min-height: auto;
-    padding-block: 6rem;
+    padding-block: 4rem;
   }
 
   #hero,
