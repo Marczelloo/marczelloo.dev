@@ -1,0 +1,14 @@
+{
+  "name": "Marczelloo — Full-Stack Developer",
+  "short_name": "Marczelloo",
+  "description": "Portfolio of Marcel Moskwa, a full-stack developer working with AI agents.",
+  "start_url": "/classic",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#090912",
+  "theme_color": "#090912",
+  "icons": [
+    { "src": "/icons/classic/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/classic/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

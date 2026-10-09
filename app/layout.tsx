@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./_components/navbar";
 import PrivacyBanner from "./_components/PrivacyBanner";
 import { OriginTracker } from "./_components/BackLink";
+import { SITE, versionMetadata } from "./_data/seo";
 
 const manrope = Manrope({
   subsets: ["latin", "latin-ext"],
@@ -30,19 +31,26 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
+/**
+ * Shared defaults. The case board (/) and the classic portfolio (/classic) set their own
+ * title, share image, icons and manifest; the CV and privacy pages follow the classic look.
+ */
 export const metadata: Metadata = {
-  metadataBase: new URL("https://marczelloo.dev"),
+  ...versionMetadata("classic", {
+    description:
+      "Portfolio of Marcel Moskwa, a full-stack developer who builds with AI agents and builds tools for them: Agent Pets, MewBit, a self-hosted homelab and more.",
+  }),
+  metadataBase: new URL(SITE),
   title: {
     default: "Marczelloo - Full-Stack Developer",
     template: "%s | Marczelloo",
   },
-  description:
-    "Portfolio of Marcel Moskwa, a full-stack developer who builds with AI agents and builds tools for them: Agent Pets, MewBit, a self-hosted homelab and more.",
   keywords: [
     "Marczelloo",
     "Marcel Moskwa",
     "Portfolio",
     "Full-Stack Developer",
+    "AI agents",
     "Next.js",
     "React",
     "Node.js",
@@ -50,39 +58,9 @@ export const metadata: Metadata = {
     "Web Developer",
   ],
   applicationName: "marczelloo.dev",
-  authors: [{ name: "Marcel Moskwa", url: "https://marczelloo.dev" }],
+  authors: [{ name: "Marcel Moskwa", url: SITE }],
   creator: "Marcel Moskwa",
-  alternates: { canonical: "https://marczelloo.dev" },
-  openGraph: {
-    type: "website",
-    url: "https://marczelloo.dev",
-    title: "Marczelloo - Full-Stack Developer",
-    siteName: "marczelloo.dev",
-    description:
-      "Selected work of Marcel Moskwa, a full-stack developer working with AI agents.",
-    images: [
-      {
-        url: "/og-image_.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Marczelloo portfolio",
-      },
-    ],
-    locale: "en_US",
-    alternateLocale: ["pl_PL"],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Marczelloo - Full-Stack Developer",
-    description: "Selected work and experience of Marcel Moskwa.",
-    images: ["/og-image_.jpg"],
-  },
   robots: { index: true, follow: true },
-  icons: {
-    icon: [{ url: "/favicon.ico" }, { url: "/icon-512.png", sizes: "512x512", type: "image/png" }],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
-  },
-  manifest: "/site.webmanifest",
 };
 
 export const viewport: Viewport = {
@@ -104,7 +82,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               "@type": "Person",
               name: "Marcel Moskwa",
               alternateName: "Marczelloo",
-              url: "https://marczelloo.dev",
+              url: SITE,
               sameAs: [
                 "https://github.com/Marczelloo",
                 "https://linkedin.com/in/marczelloo",

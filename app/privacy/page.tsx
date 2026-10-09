@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import BackLink from "../_components/BackLink";
+import { versionMetadata } from "../_data/seo";
 import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
+  ...versionMetadata("classic", {
+    description: "Privacy policy for marczelloo.dev and how your data is handled.",
+    path: "/privacy",
+  }),
   title: "Privacy Policy",
-  description: "Privacy policy for marczelloo.dev and how your data is handled.",
 };
 
 export default function PrivacyPage() {
