@@ -419,10 +419,14 @@ function drawDossier(card: CaseCard, a: Assets, ctx: Ctx, w: number, h: number, 
     ctx.beginPath();
     ctx.rect(-pw / 2 + b, -ph / 2 + b, pw - b * 2, ph - b * 2);
     ctx.clip();
-    ctx.filter = "grayscale(1) contrast(1.2) brightness(0.92)";
-    const iw = pw - b * 2;
-    const ih = (img.height / img.width) * iw;
-    ctx.drawImage(img, -iw / 2, ph / 2 - b - ih * 0.98, iw, ih);
+    ctx.filter = "grayscale(1) contrast(1.1) brightness(0.95)";
+    // Cover-fit into the frame, anchored to the bottom so the shoulders stay in shot.
+    const fw = pw - b * 2;
+    const fh = ph - b * 2;
+    const k = Math.max(fw / img.width, fh / img.height);
+    const iw = img.width * k;
+    const ih = img.height * k;
+    ctx.drawImage(img, -iw / 2, fh / 2 - ih, iw, ih);
     ctx.filter = "none";
     ctx.restore();
   }

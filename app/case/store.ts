@@ -6,7 +6,7 @@ import type { Strike } from "./thunder";
 
 // Tiny shared store between the R3F scene and the HTML overlay.
 // Scene → overlay: loading progress, hovered card, lightning strikes.
-// Overlay → scene: mode changes (back / pick up / flip), sound toggle.
+// Overlay → scene: mode changes (back / pick up / flip), sound toggle and volume.
 
 export type CaseMode = "board" | "focus" | "inspect";
 
@@ -18,6 +18,8 @@ export type CaseState = {
   flipped: boolean;
   transcriptOpen: boolean;
   soundOn: boolean;
+  /** 0..1 slider position; audio.ts maps it to gain on a perceptual curve. */
+  volume: number;
   /** 0..1 asset loading progress. */
   progress: number;
   /** User dismissed the intro/loader screen. */
@@ -31,6 +33,7 @@ const initial: CaseState = {
   flipped: false,
   transcriptOpen: false,
   soundOn: false,
+  volume: 0.5,
   progress: 0,
   entered: false,
 };
@@ -77,7 +80,12 @@ export const caseActions = {
       return {};
     }),
   toggleTranscript: () => caseStore.set((s) => (isCard(s.activeId) ? { transcriptOpen: !s.transcriptOpen } : {})),
-  toggleSound: () => caseStore.set((s) => ({ soundOn: !s.soundOn })),
+  /** Unmuting at zero volume restores the default level instead of staying silent. */
+  toggleSound: () =>
+    caseStore.set((s) => (s.soundOn ? { soundOn: false } : { soundOn: true, volume: s.volume > 0 ? s.volume : initial.volume })),
+  /** Moving the slider while muted switches sound on; it is the user gesture the AudioContext needs. */
+  setVolume: (volume: number) =>
+    caseStore.set((s) => ({ volume, soundOn: s.soundOn || volume > 0 })),
 };
 
 // Dev-only handle for poking the scene from the console / automated checks.

@@ -109,55 +109,23 @@ function column(ctx: Ctx, words: string[], x: number, y: number, colW: number, s
   return i;
 }
 
-/** A night photo of a desk, printed as a coarse halftone screen. */
-function halftonePhoto(ctx: Ctx, x: number, y: number, pw: number, ph: number, r: Rng) {
+/** A surveillance photo, cover-fitted and printed as a coarse halftone screen. */
+function halftonePhoto(ctx: Ctx, x: number, y: number, pw: number, ph: number, photo: HTMLImageElement) {
   const { ctx: p } = canvas(pw, ph);
-  const bg = p.createLinearGradient(0, 0, 0, ph);
-  bg.addColorStop(0, "#4a4a4a");
-  bg.addColorStop(1, "#262626");
-  p.fillStyle = bg;
-  p.fillRect(0, 0, pw, ph);
-  // Blinds on the back wall.
-  for (let sy = ph * 0.05; sy < ph * 0.6; sy += ph * 0.06) {
-    p.fillStyle = "rgba(200,200,200,0.18)";
-    p.fillRect(pw * 0.04, sy, pw * 0.3, ph * 0.025);
-  }
-  const mx = pw * 0.56;
-  const my = ph * 0.2;
-  const mw = pw * 0.34;
-  const mh = ph * 0.4;
-  const glow = p.createRadialGradient(mx + mw / 2, my + mh / 2, 0, mx + mw / 2, my + mh / 2, pw * 0.5);
-  glow.addColorStop(0, "rgba(235,235,235,0.55)");
-  glow.addColorStop(1, "rgba(235,235,235,0)");
-  p.fillStyle = glow;
-  p.fillRect(0, 0, pw, ph);
-  p.fillStyle = "#ededed";
-  p.fillRect(mx, my, mw, mh);
-  p.fillStyle = "#777";
-  for (let i = 0; i < 9; i++) p.fillRect(mx + mw * (0.08 + (i % 3) * 0.05), my + mh * (0.1 + i * 0.09), mw * (0.25 + r() * 0.45), mh * 0.035);
-  p.fillStyle = "#1a1a1a";
-  p.fillRect(mx + mw * 0.45, my + mh, mw * 0.1, ph * 0.12);
-  p.fillRect(0, ph * 0.74, pw, ph * 0.26);
-  // The suspect, from behind, and a mug.
-  p.fillStyle = "#0e0e0e";
-  p.beginPath();
-  p.ellipse(pw * 0.36, ph * 0.98, pw * 0.21, ph * 0.36, 0, 0, Math.PI * 2);
-  p.fill();
-  p.beginPath();
-  p.arc(pw * 0.37, ph * 0.46, ph * 0.13, 0, Math.PI * 2);
-  p.fill();
-  p.fillStyle = "#bbb";
-  p.fillRect(pw * 0.8, ph * 0.66, pw * 0.05, ph * 0.09);
+  const k = Math.max(pw / photo.width, ph / photo.height);
+  // A night shot is mostly shadow; lift it hard so the dots keep the lit window readable.
+  p.filter = "grayscale(1) brightness(1.8) contrast(1.3)";
+  p.drawImage(photo, (pw - photo.width * k) / 2, (ph - photo.height * k) / 2, photo.width * k, photo.height * k);
 
   const data = p.getImageData(0, 0, pw, ph).data;
-  const cell = Math.max(3, pw / 110);
+  const cell = Math.max(3, pw / 170);
   ctx.save();
   ctx.fillStyle = "#1f1d1a";
   ctx.globalAlpha = 0.9;
   for (let cy = cell / 2; cy < ph; cy += cell) {
     for (let cx = cell / 2; cx < pw; cx += cell) {
       const k = (Math.floor(cy) * pw + Math.floor(cx)) * 4;
-      const lum = (data[k] * 0.3 + data[k + 1] * 0.59 + data[k + 2] * 0.11) / 255;
+      const lum = Math.sqrt((data[k] * 0.3 + data[k + 1] * 0.59 + data[k + 2] * 0.11) / 255);
       const rad = cell * 0.62 * Math.sqrt(1 - lum);
       if (rad < 0.3) continue;
       ctx.beginPath();
@@ -192,10 +160,10 @@ function drawNewspaper(ctx: Ctx, w: number, h: number, a: PropAssets, r: Rng) {
 
   const py = h * 0.29;
   const ph = h * 0.27;
-  halftonePhoto(ctx, m, py, Math.round(w - m * 2), Math.round(ph), r);
+  halftonePhoto(ctx, m, py, Math.round(w - m * 2), Math.round(ph), a.surveillance);
   ctx.font = `italic ${w * 0.03}px ${SERIF}`;
   ctx.fillStyle = "#3a3630";
-  ctx.fillText("The suspect’s desk, photographed at 3:12 a.m.", m, py + ph + h * 0.03);
+  ctx.fillText("The suspect at work, photographed at 3:12 a.m.", m, py + ph + h * 0.03);
 
   const colW = (w - m * 2 - w * 0.04) / 2;
   const top = py + ph + h * 0.075;
@@ -621,7 +589,7 @@ function drawTag(ctx: Ctx, w: number, h: number, a: PropAssets, r: Rng) {
   ctx.restore();
 }
 
-type PropAssets = { paper: HTMLImageElement; fonts: Fonts };
+type PropAssets = { paper: HTMLImageElement; surveillance: HTMLImageElement; fonts: Fonts };
 type Painter = (ctx: Ctx, w: number, h: number, a: PropAssets, r: Rng) => void;
 
 /** Canvas pixels per metre of prop. */
@@ -649,8 +617,12 @@ let cache: Promise<Record<PropName, THREE.CanvasTexture>> | null = null;
 /** Paints every prop face once; textures are shared for the page lifetime. */
 export function loadPropTextures(maxAnisotropy: number) {
   cache ??= (async () => {
-    const [fonts, paperScan] = await Promise.all([loadFonts(), loadImage("/case/tex/paper_diff.jpg")]);
-    const assets: PropAssets = { paper: paperScan, fonts };
+    const [fonts, paperScan, surveillance] = await Promise.all([
+      loadFonts(),
+      loadImage("/case/tex/paper_diff.jpg"),
+      loadImage("/case/surveillance.jpg"),
+    ]);
+    const assets: PropAssets = { paper: paperScan, surveillance, fonts };
     const out = {} as Record<PropName, THREE.CanvasTexture>;
     for (const [name, prop] of Object.entries(PROPS) as [PropName, (typeof PROPS)[PropName]][]) {
       const [w, h] = prop.size;

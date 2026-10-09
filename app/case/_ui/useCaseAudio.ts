@@ -7,6 +7,7 @@ import { CaseAudio } from "./audio";
 /** Wires the soundscape to the case store. Call once, in the overlay. */
 export function useCaseAudio(): void {
   const soundOn = useCase((s) => s.soundOn);
+  const volume = useCase((s) => s.volume);
   const mode = useCase((s) => s.mode);
   const flipped = useCase((s) => s.flipped);
 
@@ -24,6 +25,11 @@ export function useCaseAudio(): void {
       audioRef.current = null;
     };
   }, []);
+
+  // Volume first, so a toggle in the same render fades in to the new level.
+  useEffect(() => {
+    audioRef.current?.setVolume(volume);
+  }, [volume]);
 
   // Sound toggle. The click that flips `soundOn` is the user gesture that
   // allows the AudioContext to start.

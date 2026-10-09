@@ -63,7 +63,7 @@ export const CARDS: readonly CaseCard[] = [
       stamp: "CONFIDENTIAL",
       heading: "SUBJECT: MARCEL MOSKWA",
       subheading: "a.k.a. MARCZELLOO",
-      image: "/avatar_nobg.png",
+      image: "/case/subject-mugshot.jpg",
       lines: [
         "Occupation: Full-stack developer",
         "Status: CS student, Univ. of Silesia",

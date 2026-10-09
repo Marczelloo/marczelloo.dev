@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function CasePage() {
   return (
-    <main className={`${typewriter.variable} ${hand.variable} ${mono.variable} fixed inset-0 overflow-hidden bg-black`}>
+    <main className={`${typewriter.variable} ${hand.variable} ${mono.variable} case-root fixed inset-0 overflow-hidden bg-black`}>
       <CaseClient />
     </main>
   );

@@ -7,7 +7,8 @@ import { THUNDER, THUNDER_BY_ID, type Strike, type StrikeClass } from "../thunde
 type NoiseKind = "white" | "pink" | "brown";
 type WebkitWindow = Window & { webkitAudioContext?: typeof AudioContext };
 
-const MASTER_LEVEL = 0.5;
+const MASTER_LEVEL = 0.5; // gain at full volume
+const VOLUME_SMOOTHING = 0.05; // setTargetAtTime constant while the slider moves
 const RAIN_LEVEL = 0.3; // rain sits well under thunder
 const THUNDER_LEVEL = 1;
 const SFX_LEVEL = 0.7;
@@ -18,6 +19,8 @@ const CLASS_GAIN: Record<StrikeClass, number> = { close: 1, mid: 0.8, far: 0.62 
 
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+// Squared taper so the slider feels even to the ear; the default 0.5 sits ~12 dB under full.
+const volumeToGain = (volume: number) => MASTER_LEVEL * clamp(volume, 0, 1) ** 2;
 
 /**
  * Builds a mono noise buffer that loops without a click: the tail is
@@ -80,6 +83,7 @@ export class CaseAudio {
   private rumbleGain: GainNode | null = null;
 
   private enabled = false;
+  private volume = 0.5;
   private disposed = false;
   private tickTimer: number | null = null;
   private suspendTimer: number | null = null;
@@ -111,7 +115,7 @@ export class CaseAudio {
     const now = ctx.currentTime;
     master.gain.cancelScheduledValues(now);
     master.gain.setValueAtTime(master.gain.value, now);
-    master.gain.linearRampToValueAtTime(on ? MASTER_LEVEL : 0, now + FADE_SECONDS);
+    master.gain.linearRampToValueAtTime(on ? volumeToGain(this.volume) : 0, now + FADE_SECONDS);
 
     if (!on) {
       // Once silent, stop burning CPU on a running context.
@@ -122,6 +126,18 @@ export class CaseAudio {
         }
       }, FADE_SECONDS * 1000 + 100);
     }
+  }
+
+  /** 0..1 slider value. Applied smoothly while sound is on, remembered while it is off. */
+  setVolume(volume: number): void {
+    this.volume = clamp(volume, 0, 1);
+    const ctx = this.ctx;
+    const master = this.master;
+    if (!ctx || !master || !this.enabled || this.disposed) return;
+    const now = ctx.currentTime;
+    master.gain.cancelScheduledValues(now);
+    master.gain.setValueAtTime(master.gain.value, now);
+    master.gain.setTargetAtTime(volumeToGain(this.volume), now, VOLUME_SMOOTHING);
   }
 
   /**

@@ -1,9 +1,9 @@
 "use client";
 
-import { SpeakerSimpleHigh, SpeakerSimpleSlash, X } from "@phosphor-icons/react";
+import { SpeakerSimpleHigh, SpeakerSimpleLow, SpeakerSimpleSlash, X } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { CARDS, CASE_NUMBER, EXHIBITS, LINKS } from "../content";
 import type { CaseCard } from "../content";
 import { caseActions, caseStore, useCase } from "../store";
@@ -13,10 +13,6 @@ import { useCaseAudio } from "./useCaseAudio";
 
 const TYPEWRITER = "font-[family-name:var(--font-typewriter)]";
 const MONO = "font-[family-name:var(--font-mono-body)]";
-const FOCUS_RING =
-  "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d8cfbf] focus-visible:rounded-[1px]";
-const INK_FOCUS_RING =
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d1a16] focus-visible:rounded-[1px]";
 const SHADOW = "[text-shadow:0_1px_2px_rgba(0,0,0,0.95),0_0_10px_rgba(0,0,0,0.85)]";
 
 function svgNoise(svg: string): string {
@@ -33,7 +29,25 @@ const PAPER_NOISE = svgNoise(
   "<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .26 0 0 0 0 .14 0.7 0 0 0 -0.22'/></filter><rect width='100%' height='100%' filter='url(#n)'/></svg>",
 );
 
+// Focus rings, selection and scrollbars. globals.css styles these for the
+// portfolio as unlayered rules, which beat Tailwind's layered utilities, so the
+// case board overrides them here (also unlayered, scoped to .case-root).
 const CSS = `
+.case-root { scrollbar-color: rgba(216, 207, 191, 0.35) transparent }
+.case-root :focus-visible { outline: 2px solid #d8cfbf; outline-offset: 4px; border-radius: 1px }
+.case-root [tabindex="-1"]:focus-visible { outline: none }
+.case-root ::selection { background: rgba(163, 53, 43, 0.6); color: #ece4d4 }
+.case-root .case-ink { scrollbar-color: rgba(29, 26, 22, 0.4) transparent }
+.case-root .case-ink :focus-visible { outline-color: #1d1a16; outline-offset: 2px }
+.case-root .case-ink ::selection { background: rgba(163, 53, 43, 0.25); color: #1d1a16 }
+.case-range { appearance: none; -webkit-appearance: none; background: transparent; cursor: pointer; height: 24px }
+.case-range::-webkit-slider-runnable-track { height: 1px; background: linear-gradient(to right, #a3352b var(--fill), rgba(216, 207, 191, 0.3) var(--fill)) }
+.case-range::-webkit-slider-thumb { -webkit-appearance: none; width: 9px; height: 9px; margin-top: -4px; border: 0; border-radius: 0; background: #d8cfbf; box-shadow: 0 0 6px rgba(0, 0, 0, 0.9) }
+.case-range::-moz-range-track { height: 1px; background: rgba(216, 207, 191, 0.3) }
+.case-range::-moz-range-progress { height: 1px; background: #a3352b }
+.case-range::-moz-range-thumb { width: 9px; height: 9px; border: 0; border-radius: 0; background: #d8cfbf; box-shadow: 0 0 6px rgba(0, 0, 0, 0.9) }
+.case-range:hover::-webkit-slider-thumb, .case-range:focus-visible::-webkit-slider-thumb { background: #ece4d4 }
+.case-range:hover::-moz-range-thumb, .case-range:focus-visible::-moz-range-thumb { background: #ece4d4 }
 @keyframes case-fade-in { from { opacity: 0 } to { opacity: 1 } }
 @keyframes case-panel-x { from { opacity: 0; transform: translateX(28px) } to { opacity: 1; transform: none } }
 @keyframes case-panel-y { from { opacity: 0; transform: translateY(28px) } to { opacity: 1; transform: none } }
@@ -185,7 +199,7 @@ function Intro() {
               ref={buttonRef}
               type="button"
               onClick={() => caseStore.set({ entered: true })}
-              className={`border border-[#d8cfbf]/60 px-6 py-3 text-sm tracking-[0.25em] text-[#ece4d4] uppercase transition-colors duration-200 hover:border-[#d8cfbf] hover:bg-[#d8cfbf] hover:text-[#050506] motion-reduce:transition-none ${FOCUS_RING}`}
+              className="border border-[#d8cfbf]/60 px-6 py-3 text-sm tracking-[0.25em] text-[#ece4d4] uppercase transition-colors duration-200 hover:border-[#d8cfbf] hover:bg-[#d8cfbf] hover:text-[#050506] motion-reduce:transition-none"
             >
               Open the case file
             </button>
@@ -216,7 +230,7 @@ function Intro() {
         <p>Sound available — off by default</p>
         <TextLink
           href={LINKS.classic}
-          className={`py-1 text-xs tracking-[0.1em] text-[#d8cfbf]/80 underline-offset-4 hover:text-[#ece4d4] hover:underline ${FOCUS_RING}`}
+          className="py-1 text-xs tracking-[0.1em] text-[#d8cfbf]/80 underline-offset-4 hover:text-[#ece4d4] hover:underline"
         >
           Prefer the classic portfolio →
         </TextLink>
@@ -236,7 +250,10 @@ const HUD_LINKS: readonly { label: string; href: string }[] = [
 
 function Hud() {
   const soundOn = useCase((s) => s.soundOn);
-  const Icon = soundOn ? SpeakerSimpleHigh : SpeakerSimpleSlash;
+  const volume = useCase((s) => s.volume);
+  const audible = soundOn && volume > 0;
+  const Icon = !audible ? SpeakerSimpleSlash : volume < 0.5 ? SpeakerSimpleLow : SpeakerSimpleHigh;
+  const pct = Math.round(volume * 100);
 
   return (
     <header
@@ -248,21 +265,36 @@ function Hud() {
           <TextLink
             key={l.label}
             href={l.href}
-            className={`py-1.5 text-[11px] tracking-[0.18em] uppercase underline-offset-[6px] decoration-1 hover:text-[#ece4d4] hover:underline sm:text-xs ${FOCUS_RING}`}
+            className="py-1.5 text-[11px] tracking-[0.18em] uppercase underline-offset-[6px] decoration-1 hover:text-[#ece4d4] hover:underline sm:text-xs"
           >
             {l.label}
           </TextLink>
         ))}
-        <button
-          type="button"
-          aria-pressed={soundOn}
-          aria-label="Sound"
-          title={soundOn ? "Sound on" : "Sound off"}
-          onClick={caseActions.toggleSound}
-          className={`-m-1.5 p-2 hover:text-[#ece4d4] ${FOCUS_RING}`}
-        >
-          <Icon size={18} weight="regular" aria-hidden="true" />
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            aria-pressed={soundOn}
+            aria-label="Sound"
+            title={soundOn ? "Sound on" : "Sound off"}
+            onClick={caseActions.toggleSound}
+            className="-m-1.5 p-2 hover:text-[#ece4d4]"
+          >
+            <Icon size={18} weight="regular" aria-hidden="true" />
+          </button>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            step={1}
+            value={pct}
+            onChange={(e) => caseActions.setVolume(Number(e.target.value) / 100)}
+            aria-label="Volume"
+            aria-valuetext={`${pct}%`}
+            title={`Volume ${pct}%`}
+            className={`case-range w-20 transition-opacity duration-200 motion-reduce:transition-none sm:w-24 ${soundOn ? "opacity-100" : "opacity-45 hover:opacity-80"}`}
+            style={{ "--fill": `${pct}%` } as CSSProperties}
+          />
+        </div>
       </nav>
     </header>
   );
@@ -289,7 +321,7 @@ function HintButton({
       onClick={onClick}
       aria-keyshortcuts={shortcut}
       aria-expanded={expanded}
-      className={`pointer-events-auto inline-flex items-center gap-2 px-1.5 py-2 underline-offset-[6px] decoration-1 hover:text-[#ece4d4] hover:underline ${FOCUS_RING}`}
+      className="pointer-events-auto inline-flex items-center gap-2 px-1.5 py-2 underline-offset-[6px] decoration-1 hover:text-[#ece4d4] hover:underline"
     >
       <Key>{keycap}</Key>
       <span>{label}</span>
@@ -374,7 +406,7 @@ function TranscriptPanel({ card }: { card: CaseCard }) {
       role="dialog"
       aria-modal="false"
       aria-labelledby={headingId}
-      className={`case-panel pointer-events-auto absolute right-0 bottom-0 left-0 z-20 max-h-[78dvh] overflow-y-auto overscroll-contain border-t border-[#1d1a16]/25 bg-[#ece4d4] text-[#1d1a16] shadow-[0_-8px_40px_rgba(0,0,0,0.65)] sm:top-0 sm:left-auto sm:max-h-none sm:w-[min(480px,92vw)] sm:border-t-0 sm:border-l sm:shadow-[-8px_0_40px_rgba(0,0,0,0.65)] ${MONO}`}
+      className={`case-panel case-ink pointer-events-auto absolute right-0 bottom-0 left-0 z-20 max-h-[78dvh] overflow-y-auto overscroll-contain border-t border-[#1d1a16]/25 bg-[#ece4d4] text-[#1d1a16] shadow-[0_-8px_40px_rgba(0,0,0,0.65)] sm:top-0 sm:left-auto sm:max-h-none sm:w-[min(480px,92vw)] sm:border-t-0 sm:border-l sm:shadow-[-8px_0_40px_rgba(0,0,0,0.65)] ${MONO}`}
       style={{ backgroundImage: PAPER_NOISE }}
     >
       <div className="relative px-6 pt-6 pb-10 sm:px-9 sm:pt-9">
@@ -382,7 +414,7 @@ function TranscriptPanel({ card }: { card: CaseCard }) {
           type="button"
           onClick={caseActions.toggleTranscript}
           aria-label="Close transcript"
-          className={`absolute top-3 right-3 p-2 text-[#1d1a16]/70 hover:text-[#1d1a16] sm:top-5 sm:right-5 ${INK_FOCUS_RING}`}
+          className="absolute top-3 right-3 p-2 text-[#1d1a16]/70 hover:text-[#1d1a16] sm:top-5 sm:right-5"
         >
           <X size={20} aria-hidden="true" />
         </button>
@@ -432,7 +464,7 @@ function TranscriptPanel({ card }: { card: CaseCard }) {
                 <li key={link.href}>
                   <TextLink
                     href={link.href}
-                    className={`font-bold underline decoration-[#a3352b] decoration-2 underline-offset-4 hover:text-[#a3352b] ${INK_FOCUS_RING}`}
+                    className="font-bold underline decoration-[#a3352b] decoration-2 underline-offset-4 hover:text-[#a3352b]"
                   >
                     {link.label}
                   </TextLink>
