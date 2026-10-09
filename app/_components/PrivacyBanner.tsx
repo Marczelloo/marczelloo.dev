@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ShieldCheck } from "@phosphor-icons/react";
 
@@ -10,12 +11,14 @@ const STORAGE_KEY = "privacy-acknowledged";
 export default function PrivacyBanner() {
   const [visible, setVisible] = useState(false);
   const reduceMotion = useReducedMotion();
+  // The case board is a full-screen scene with its own HUD; the notice waits for the regular pages.
+  const immersive = usePathname()?.startsWith("/case") ?? false;
 
   useEffect(() => {
-    if (localStorage.getItem(STORAGE_KEY)) return;
+    if (immersive || localStorage.getItem(STORAGE_KEY)) return;
     const timer = window.setTimeout(() => setVisible(true), 1200);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [immersive]);
 
   const dismiss = () => {
     localStorage.setItem(STORAGE_KEY, "1");
@@ -24,7 +27,7 @@ export default function PrivacyBanner() {
 
   return (
     <AnimatePresence>
-      {visible && (
+      {visible && !immersive && (
         <motion.aside
           aria-label="Privacy notice"
           initial={reduceMotion ? false : { y: 24, opacity: 0 }}
