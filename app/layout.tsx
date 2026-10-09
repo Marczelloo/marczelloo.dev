@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, JetBrains_Mono, Manrope, Sora } from "next/font/go
 import "./globals.css";
 import Navbar from "./_components/navbar";
 import PrivacyBanner from "./_components/PrivacyBanner";
+import { OriginTracker } from "./_components/BackLink";
 
 const manrope = Manrope({
   subsets: ["latin", "latin-ext"],
@@ -117,6 +118,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {children}
         <Navbar />
         <PrivacyBanner />
+        <OriginTracker />
       </body>
     </html>
   );

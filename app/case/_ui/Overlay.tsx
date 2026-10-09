@@ -240,6 +240,16 @@ function Intro() {
 
       <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-[11px] tracking-[0.15em] text-[#d8cfbf]/55">
         <p>Sound available — off by default</p>
+        {/* Stands in for the site's privacy banner, which stays off this full-screen scene. */}
+        <p>
+          No tracking cookies ·{" "}
+          <TextLink
+            href={LINKS.privacy}
+            className="underline decoration-[#d8cfbf]/30 underline-offset-4 transition-colors hover:text-[#ece4d4] hover:decoration-[#ece4d4] motion-reduce:transition-none"
+          >
+            Privacy policy
+          </TextLink>
+        </p>
       </div>
     </div>
   );

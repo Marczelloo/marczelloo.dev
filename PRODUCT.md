@@ -55,7 +55,7 @@ Project tiers on the Work section:
 ## Evidence on Hand
 
 - Project screenshots under `public/projects/` (webp).
-- Avatar under `public/avatar.png` (the original illustration, upscaled 4x, unchanged).
+- Avatar under `public/avatar-cutout.png`: the original illustration, upscaled 4x on its own colour palette (crisp flat edges) and cropped to the figure, so the hero frame can let the head break out of the top.
 - Confirmed paid client work: RecodeIT / D9 Space, August-September 2024.
 - Confirmed internships: RecodeIT in May 2024 and Hurtopony in May 2023.
 - Confirmed education: University of Silesia computer science degree from October 2025, planned completion in 2029; programming technician education completed in 2025 with INF.03 and INF.04 certifications.

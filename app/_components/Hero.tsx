@@ -49,18 +49,20 @@ export default function Hero() {
         </div>
 
         <div className="order-1 mx-auto w-full max-w-[19rem] sm:max-w-[23rem] lg:order-2 lg:mr-0 lg:max-w-[28rem]">
-          {/* The frame clips the portrait on three sides only, so the head and the duck climb out of the top. */}
-          <div className="relative mt-[38%] aspect-[5/4] lg:mt-0 rounded-[1.75rem] bg-violet">
+          {/* The frame clips the portrait on three sides only: the frame's top edge sits at the mouth,
+              so the whole head and the duck climb out of it. The portrait is a little wider than the
+              frame and the sides are clipped back to the frame's edges. */}
+          <div className="relative mt-[62%] aspect-[3/2] rounded-[1.75rem] bg-violet">
             <div
-              className="absolute inset-x-0 bottom-0 h-[150%]"
-              style={{ clipPath: "inset(-50% 0 0 0 round 0 0 1.75rem 1.75rem)" }}
+              className="absolute -inset-x-[5%] bottom-0 h-[190%]"
+              style={{ clipPath: "inset(-60% 4.55% 0 4.55% round 0 0 1.75rem 1.75rem)" }}
             >
               <Image
-                src="/avatar.png"
+                src="/avatar-cutout.png"
                 alt="Illustrated avatar of Marcel: curly brown hair, a black hoodie with a heart and a small white duck on his head"
                 fill
                 priority
-                sizes="(max-width: 640px) 19rem, (max-width: 1024px) 23rem, 28rem"
+                sizes="(max-width: 640px) 21rem, (max-width: 1024px) 26rem, 31rem"
                 className="object-contain object-bottom"
               />
             </div>

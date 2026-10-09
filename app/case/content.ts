@@ -49,6 +49,7 @@ export const CASE_NUMBER = "CASE Nº 0425-MM";
 export const LINKS = {
   cv: "/cv",
   classic: "/classic",
+  privacy: "/privacy",
   github: "https://github.com/Marczelloo",
   linkedin: "https://linkedin.com/in/marczelloo",
   email: "mailto:moskwamarcel@gmail.com",

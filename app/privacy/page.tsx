@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import BackLink from "../_components/BackLink";
 import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
@@ -12,14 +12,11 @@ export default function PrivacyPage() {
     <main className="min-h-[100dvh] bg-bg-900 text-text-base px-4 py-16 sm:px-6 sm:py-24">
       <article className="mx-auto max-w-2xl">
         {/* Back link */}
-        <Link
-          href="/"
+        <BackLink
           className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider
                      text-text-mute transition-colors hover:text-primary-300 mb-10"
-        >
-          <ArrowLeft size={15} weight="bold" />
-          Back to portfolio
-        </Link>
+          icon={<ArrowLeft size={15} weight="bold" aria-hidden="true" />}
+        />
 
         {/* Header */}
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-text-base mb-3">Privacy Policy</h1>

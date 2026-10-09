@@ -6,6 +6,8 @@ import { petFor, type SceneKey } from "@pets/stage/sceneFor";
 import type { Agent, Look } from "@pets/types";
 
 const HIP_L = { ikL: 1, hxL: -47, hyL: -25 };
+/** Seconds between hearts in the love pose; also one full sway. */
+const LOVE_BEAT = 0.9;
 const hold = (base: Record<string, unknown>, onStart?: (c: Pet) => void): Scene => ({
   base,
   acts: [["poses for the portfolio", 99, () => ({}), onStart]],
@@ -17,11 +19,32 @@ Object.assign(SCENES, {
   pf_perchL: hold({ sit: 1, swing: 1, look: -0.2, th: -0.25 }),
   pf_hi: hold({ armR: 2.3, oscR: 0.55, _f: 11, ...HIP_L, look: 0, ex: -0.2, happy: 0.6 }),
   pf_cheer: hold({ armL: 2.6, armR: 2.6, oscL: 0.2, oscR: 0.2, _f: 7, happy: 1, look: -0.3 }),
-  pf_love: hold({ happy: 1, look: -0.4, ikL: 1, hxL: -14, hyL: -40, ikR: 1, hxR: 14, hyR: -40 }, (c) =>
-    [[-10, -104, 13], [14, -126, 10]].forEach(([hx, hy, s]) =>
-      c.parts.push({ t: "♥", x: hx, y: hy, vx: 0, vy: 0, life: 0, max: 99, s, col: "clay" }),
-    ),
-  ),
+  // Hands at the chest, a gentle sway, and a new heart floating up every beat.
+  pf_love: {
+    base: { happy: 1, look: -0.4, ikL: 1, hxL: -14, hyL: -40, ikR: 1, hxR: 14, hyR: -40 },
+    acts: [
+      [
+        "sends hearts",
+        LOVE_BEAT,
+        (a: number) => {
+          const s = Math.sin((a / LOVE_BEAT) * Math.PI * 2);
+          return { tilt: 0.07 * s, hyL: -40 - 3 * s, hyR: -40 + 3 * s };
+        },
+        (c) =>
+          c.parts.push({
+            t: "♥",
+            x: -8 + Math.random() * 16,
+            y: -92,
+            vx: (Math.random() - 0.5) * 24,
+            vy: -34,
+            life: 0,
+            max: 1.6,
+            s: 10 + Math.random() * 5,
+            col: "clay",
+          }),
+      ],
+    ],
+  },
 } satisfies Record<string, Scene>);
 
 export type PerchSpot = {

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import BackLink from "../_components/BackLink";
 import { ArrowLeft, Printer } from "@phosphor-icons/react";
 
 import { PROJECTS as ALL_PROJECTS } from "../_data/projects";
@@ -80,13 +80,10 @@ export default function CVPage() {
   return (
     <div className="grain min-h-[100dvh] bg-ink text-paper print:bg-white">
       <div className="mx-auto flex w-full max-w-[62rem] items-center justify-between gap-4 px-4 pb-6 pt-5 print:hidden sm:px-6 sm:pt-8">
-        <Link
-          href="/"
+        <BackLink
           className="flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-paper-mute transition hover:text-paper"
-        >
-          <ArrowLeft size={16} weight="bold" aria-hidden="true" />
-          Portfolio
-        </Link>
+          icon={<ArrowLeft size={16} weight="bold" aria-hidden="true" />}
+        />
         <button
           type="button"
           onClick={() => window.print()}
