@@ -17,14 +17,14 @@ const PERSONAL = {
 };
 
 const PROFILE =
-  "Full-stack developer i student informatyki na Uniwersytecie Śląskim. Mam za sobą dwie praktyki, płatny projekt dla klienta i własne, publicznie dostępne produkty: Agent Pets (Rust/Tauri, wydania na GitHubie), bota muzycznego MewBit oraz panel do homelabu na Raspberry Pi. Na co dzień pracuję z agentami AI w nadzorowanym procesie: planuję, deleguję implementację (Claude Code, Codex), robię review i weryfikuję wyniki, a do tego procesu buduję własne narzędzia.";
+  "Full-stack developer i student informatyki na Uniwersytecie Śląskim. Mam za sobą dwie praktyki, płatny projekt dla klienta i własne, publicznie dostępne produkty: Agent Pets (Rust/Tauri, wydania na GitHubie), bota muzycznego MewBit oraz panel do homelabu na Raspberry Pi. Na co dzień pracuję z agentami AI w nadzorowanym procesie: planuję, deleguję implementację (Claude Code, Codex), a wyniki sprawdzam przez review innych agentów i własne testy. Do tego procesu buduję też własne narzędzia.";
 
 const SKILLS = [
-  ["Frontend", "TypeScript, JavaScript, React, Next.js, Tailwind CSS, HTML, CSS"],
-  ["Backend i dane", "Node.js, Fastify, Express, PHP, REST API, SQL, PostgreSQL, MySQL, MongoDB, Oracle SQL"],
-  ["Desktop i inne języki", "Rust (Tauri 2), C++, C#, Java (podstawy)"],
-  ["Infrastruktura", "Docker, Docker Compose, Git, Linux / Raspberry Pi, Cloudflare Tunnel, Portainer"],
-  ["Praca z AI", "Claude Code, Codex, opencode, MCP; planowanie, delegowanie zadań agentom, code review i weryfikacja wyników"],
+  ["Główne technologie", "TypeScript, JavaScript, React, Next.js, Node.js, SQL / PostgreSQL, Git"],
+  ["Używane w projektach", "Tailwind CSS, Fastify, Express, PHP, MySQL, MongoDB, Rust (Tauri 2), REST API"],
+  ["Ze szkoły i studiów", "C++, C#, Java, Oracle SQL"],
+  ["Infrastruktura", "Docker, Docker Compose, Linux / Raspberry Pi, Cloudflare Tunnel, Portainer"],
+  ["Praca z AI", "Claude Code, Codex, opencode, MCP; planowanie zadań, delegowanie ich agentom, review przez agentów i testowanie wyników"],
 ] as const;
 
 const EXPERIENCE = [
@@ -68,13 +68,6 @@ const CV_PROJECTS = ["agent-pets", "mewbit", "dashboard", "atlashub", "agent-rou
       meta: `${href.replace(/^https:\/\//, "")} | ${project.stack.slice(0, 3).join(", ")}`,
       description: project.summaryPl!,
     };
-  })
-  .concat({
-    name: "NAD STRONĄ",
-    href: "https://nadstrona.pl",
-    meta: "nadstrona.pl | własne studio stron",
-    description:
-      "Jednoosobowe studio, które założyłem dla małych i lokalnych firm: proste strony, landing page, redesigny i małe aplikacje webowe. Określiłem ofertę i proces realizacji, a stronę studia i dema zbudowałem z agentami AI, odpowiadając za wymagania i kontrolę jakości.",
   });
 
 const CONSENT =
@@ -240,9 +233,6 @@ export default function CVPage() {
           </footer>
         </article>
 
-        <p className="mx-auto mt-5 max-w-[62rem] px-1 font-mono text-xs uppercase tracking-[0.16em] text-paper-mute print:hidden">
-          A4 · jedna strona · ten sam układ na ekranie i w druku
-        </p>
       </main>
     </div>
   );

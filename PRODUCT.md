@@ -20,7 +20,7 @@ Success means a recruiter remembers the site, understands his fit within a few m
 
 ## Positioning
 
-"Full-stack developer · AI-agent orchestration." Marcel plans the work, makes the architecture calls, delegates well-specified implementation to Claude and Codex agents (through his own Agent Router MCP), reviews every diff, and self-hosts what he ships on a Raspberry Pi behind Cloudflare Tunnel. This is backed by a computer science degree in progress, a technician diploma, internships, and one paid client project.
+"Full-stack developer · AI-agent orchestration." Marcel plans the work, makes the architecture calls, delegates well-specified implementation to Claude and Codex agents (through his own Agent Router MCP), has other agents review the changes, reads their findings and tests the result, and self-hosts what he ships on a Raspberry Pi behind Cloudflare Tunnel. This is backed by a computer science degree in progress, a technician diploma, internships, and one paid client project.
 
 ## Operating Context
 
@@ -55,8 +55,7 @@ Project tiers on the Work section:
 ## Evidence on Hand
 
 - Project screenshots under `public/projects/` (webp).
-- Avatar under `public/avatar-hd.webp`.
-- Live data from GitHub for hero stats (`app/_data/github.ts`).
+- Avatar under `public/avatar.png` (the original illustration, upscaled 4x, unchanged).
 - Confirmed paid client work: RecodeIT / D9 Space, August-September 2024.
 - Confirmed internships: RecodeIT in May 2024 and Hurtopony in May 2023.
 - Confirmed education: University of Silesia computer science degree from October 2025, planned completion in 2029; programming technician education completed in 2025 with INF.03 and INF.04 certifications.

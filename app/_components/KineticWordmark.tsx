@@ -14,37 +14,59 @@ export default function KineticWordmark({ text }: { text: string }) {
     if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const letters = Array.from(root.querySelectorAll<HTMLSpanElement>("[data-letter]"));
+    // Letter centres as a fraction of the row width, measured once at rest. Measuring every frame would
+    // feed the animation its own layout changes and make the letters jitter.
+    let rest: number[] = [];
+    const measure = () => {
+      const rootBox = root.getBoundingClientRect();
+      rest = letters.map((el) => {
+        const box = el.getBoundingClientRect();
+        return (box.left + box.width / 2 - rootBox.left) / (rootBox.width || 1);
+      });
+    };
+    measure();
+    // The display font may arrive after mount and change the letter widths.
+    document.fonts?.ready.then(measure);
     const current = letters.map(() => 0);
+    let targetX: number | null = null;
     let pointerX: number | null = null;
     let raf = 0;
+    let last = performance.now();
     let visible = true;
 
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType === "mouse") pointerX = e.clientX;
+      if (e.pointerType !== "mouse") return;
+      const box = root.getBoundingClientRect();
+      targetX = (e.clientX - box.left) / (box.width || 1);
+      if (pointerX === null) pointerX = targetX;
     };
     const onLeave = () => {
-      pointerX = null;
+      targetX = null;
     };
 
     const frame = (t: number) => {
       raf = requestAnimationFrame(frame);
+      const dt = Math.min(t - last, 64);
+      last = t;
       if (!visible) return;
-      const width = root.clientWidth || 1;
-      // Read every position before writing any style, so the browser lays out once per frame.
-      const centers = letters.map((el) => {
-        const box = el.getBoundingClientRect();
-        return box.left + box.width / 2;
-      });
+      // Frame-rate independent easing: the pointer glides, the letters follow a little behind it.
+      const glide = 1 - Math.exp(-dt / 90);
+      const follow = 1 - Math.exp(-dt / 140);
+      if (targetX !== null && pointerX !== null) pointerX += (targetX - pointerX) * glide;
+      else if (targetX === null) pointerX = null;
+
       letters.forEach((el, i) => {
-        const center = centers[i];
-        // 0 = resting heavy letter, 1 = fully thinned and widened
-        const target =
-          pointerX === null
-            ? 0.5 + 0.5 * Math.sin(t / 900 - i * 0.55) - 0.55
-            : Math.max(0, 1 - Math.abs(center - pointerX) / (width * 0.16));
-        current[i] += (Math.max(0, target) - current[i]) * 0.12;
+        let target: number;
+        if (pointerX === null) {
+          target = Math.max(0, 0.5 + 0.5 * Math.sin(t / 900 - i * 0.55) - 0.55);
+        } else {
+          // Cosine falloff: no sharp peak under the cursor, no hard edge at the end of its reach.
+          const d = Math.min(1, Math.abs(rest[i] - pointerX) / 0.2);
+          target = 0.5 + 0.5 * Math.cos(Math.PI * d);
+        }
+        current[i] += (target - current[i]) * follow;
         const k = current[i];
-        el.style.fontVariationSettings = `"wght" ${Math.round(800 - k * 560)}, "wdth" ${Math.round(75 + k * 25)}`;
+        el.style.fontVariationSettings = `"wght" ${(800 - k * 560).toFixed(1)}, "wdth" ${(75 + k * 25).toFixed(2)}`;
       });
     };
 

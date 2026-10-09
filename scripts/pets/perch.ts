@@ -1,6 +1,6 @@
 // A few Agent Pets sitting on the top edge of the Agent Pets poster.
 // Built into public/pets/perch.js by build.mjs; the page imports it lazily and owns the canvas.
-import { SCENES, type Pet, type Scene } from "@pets/renderer";
+import { SCENES, setScene, type Pet, type Scene } from "@pets/renderer";
 import { PetPainter } from "@pets/renderer/painter";
 import { petFor, type SceneKey } from "@pets/stage/sceneFor";
 import type { Agent, Look } from "@pets/types";
@@ -48,10 +48,8 @@ export function mountPerch(canvas: HTMLCanvasElement, spots: PerchSpot[], opts: 
   if (!ctx) return { react() {}, destroy() {} };
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const painters = spots.map((s) => ({
-    rest: new PetPainter(petFor({ agent: s.agent, agent_name: s.name ?? null }, s.rest as SceneKey)),
-    react: new PetPainter(petFor({ agent: s.agent, agent_name: s.name ?? null }, s.react as SceneKey)),
-  }));
+  // One pet per spot: switching scenes on the same pet lets its springs carry it from one pose to the next.
+  const painters = spots.map((s) => new PetPainter(petFor({ agent: s.agent, agent_name: s.name ?? null }, s.rest as SceneKey)));
 
   let excited = false;
   let visible = true;
@@ -79,7 +77,7 @@ export function mountPerch(canvas: HTMLCanvasElement, spots: PerchSpot[], opts: 
     // A standing pet is roughly 80 renderer units tall.
     const u = opts.size / 80;
     painters.forEach((p, i) =>
-      (excited ? p.react : p.rest).frame(ctx, {
+      p.frame(ctx, {
         dt,
         t0: now / 1000,
         X: spots[i].at * width,
@@ -116,7 +114,19 @@ export function mountPerch(canvas: HTMLCanvasElement, spots: PerchSpot[], opts: 
 
   return {
     react(on: boolean) {
+      if (on === excited) return;
       excited = on;
+      painters.forEach((p, i) => {
+        // Hearts from the love pose float off instead of staying behind on the sitting pet.
+        if (!on) p.pet.parts.forEach((q: { t?: string; life: number; max: number; vy?: number }) => {
+          if (q.t === "♥") {
+            q.vy = -40;
+            q.life = 0;
+            q.max = 0.7;
+          }
+        });
+        setScene(p.pet, on ? spots[i].react : spots[i].rest);
+      });
       if (reduced) draw(performance.now());
     },
     destroy() {

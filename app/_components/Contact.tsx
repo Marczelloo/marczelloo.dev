@@ -77,18 +77,6 @@ export default function Contact() {
             <p className="mt-8 max-w-[32rem] text-lg leading-relaxed text-paper-mute">
               Open to full-stack roles, internships and freelance projects. Send the context and I will reply directly.
             </p>
-            <p className="mt-4 max-w-[32rem] leading-relaxed text-paper-mute">
-              Need a website for a small business? That runs through{" "}
-              <a
-                href="https://nadstrona.pl"
-                target="_blank"
-                rel="noreferrer"
-                className="font-semibold text-paper underline decoration-violet decoration-2 underline-offset-4 transition hover:decoration-lime"
-              >
-                NAD STRONĄ
-              </a>
-              , my own web studio.
-            </p>
 
             <ul className="mt-10 flex flex-wrap gap-2.5">
               {SOCIAL_LINKS.map((social) => {

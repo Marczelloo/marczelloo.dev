@@ -135,8 +135,9 @@ function AgentPetsPoster() {
           <Image
             src="/projects/agent-pets-settings.webp"
             alt=""
-            width={1400}
-            height={933}
+            width={1800}
+            height={1200}
+            quality={90}
             sizes="(min-width: 1024px) 34rem, 80vw"
             className="absolute left-[8%] top-[14%] w-[78%] rotate-[4deg] rounded-2xl shadow-[0_30px_60px_-20px_rgba(43,38,34,0.45)] lg:left-[18%] lg:top-[16%]"
           />
@@ -145,6 +146,7 @@ function AgentPetsPoster() {
             alt="The Agent Pets panel listing three coding sessions with their pets, tasks and status"
             width={800}
             height={1000}
+            quality={90}
             sizes="(min-width: 1024px) 18rem, 50vw"
             className="absolute bottom-[-12%] left-[6%] w-[46%] -rotate-[3deg] rounded-2xl shadow-[0_30px_60px_-15px_rgba(43,38,34,0.55)] lg:bottom-[8%] lg:left-[4%] lg:w-[44%]"
           />
@@ -153,6 +155,7 @@ function AgentPetsPoster() {
             alt=""
             width={900}
             height={104}
+            quality={90}
             sizes="(min-width: 1024px) 30rem, 70vw"
             className="absolute bottom-[6%] right-[-6%] w-[70%] rounded-xl shadow-[0_20px_40px_-15px_rgba(43,38,34,0.5)] max-lg:hidden"
           />
@@ -179,7 +182,8 @@ function MewBitPoster() {
             src="/projects/mewbit-stage.webp"
             alt=""
             fill
-            sizes="100vw"
+            quality={90}
+            sizes="(min-width: 1024px) 90rem, 100vw"
             className="object-cover opacity-80"
           />
           <div className="absolute inset-0 bg-gradient-to-l from-[#07060f] via-[#07060f]/85 to-transparent max-lg:bg-gradient-to-b" />
@@ -196,6 +200,7 @@ function MewBitPoster() {
             src="/projects/mewbit-character.webp"
             alt=""
             fill
+            quality={90}
             sizes="(min-width: 1024px) 40rem, 90vw"
             className="object-contain object-bottom"
           />
@@ -225,10 +230,11 @@ function DashboardPoster() {
             </div>
             <Image
               src="/projects/marczelloo_dashboard.webp"
-              alt="Marczelloo Dashboard overview with project, service and uptime counts, recent deployments and quick actions"
-              width={1600}
-              height={761}
-              sizes="(min-width: 1024px) 50rem, 120vw"
+              alt="Marczelloo Dashboard overview: domains, incidents, deploys and Pi health, project pipelines with uptime bars, activity and tasks"
+              width={2400}
+              height={1383}
+              quality={90}
+              sizes="(min-width: 1024px) 64rem, 150vw"
             />
           </div>
         </div>
@@ -237,10 +243,10 @@ function DashboardPoster() {
   );
 }
 
-function NotableCard({ project, visual }: { project: Project; visual: ReactNode }) {
+function NotableCard({ project, visual, background }: { project: Project; visual: ReactNode; background?: string }) {
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-[1.5rem] border border-paper/10 bg-ink-2">
-      <div className="relative aspect-[16/9] overflow-hidden" style={{ background: project.accent }}>
+      <div className="relative aspect-[16/9] overflow-hidden" style={{ background: background ?? project.accent }}>
         {visual}
       </div>
       <div className="flex flex-1 flex-col gap-4 p-6 sm:p-8">
@@ -302,15 +308,24 @@ export default function Work() {
         <div className="mt-28 grid gap-6 lg:mt-36 lg:grid-cols-2">
           <NotableCard
             project={bySlug("atlashub")}
+            background="radial-gradient(100% 90% at 85% 0%, #2a5fa8 0%, #12233f 55%, #0b1424 100%)"
             visual={
-              <Image
-                src="/projects/atlashub.webp"
-                alt="AtlasHub landing page: Your own Supabase-like backend"
-                width={1600}
-                height={763}
-                sizes="(min-width: 1024px) 44rem, 100vw"
-                className="absolute left-[8%] top-[12%] w-[100%] rounded-tl-xl shadow-[0_30px_60px_-20px_rgba(0,0,0,0.7)] transition-transform duration-500 group-hover:-translate-y-1.5"
-              />
+              <div className="absolute inset-x-[7%] top-[11%] overflow-hidden rounded-xl border border-white/15 bg-[#151515] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.8)] transition-transform duration-500 group-hover:-translate-y-1.5">
+                <div className="flex items-center gap-1.5 border-b border-white/10 px-3 py-2">
+                  <span className="size-2 rounded-full bg-white/20" />
+                  <span className="size-2 rounded-full bg-white/20" />
+                  <span className="size-2 rounded-full bg-[#60a5fa]" />
+                  <span className="ml-2 truncate font-mono text-[0.65rem] text-white/50">admin-atlashub.marczelloo.dev</span>
+                </div>
+                <Image
+                  src="/projects/atlashub.webp"
+                  alt="AtlasHub dashboard overview: project, user, file and API key counts, a 30-day activity chart and storage by project"
+                  width={2400}
+                  height={1433}
+                  quality={90}
+                  sizes="(min-width: 1024px) 40rem, 90vw"
+                />
+              </div>
             }
           />
           <NotableCard

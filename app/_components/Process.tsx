@@ -2,31 +2,23 @@ const STEPS = [
   {
     n: "01",
     name: "Plan",
-    text: "I read the problem with Claude Code, make the architecture calls and write the task down so an agent can't misread it.",
+    text: "I work out what to build with Claude Code, make the architecture calls and write each task down with a goal, the files it touches and how to tell it's done.",
   },
   {
     n: "02",
     name: "Delegate",
-    text: "Well-specified work goes to Sonnet subagents or to Codex through Agent Router MCP, my own server that checks quota and isolates risky work in git worktrees.",
+    text: "Implementation goes to Sonnet subagents or to Codex through Agent Router MCP, my own server that checks quota, picks the model and isolates risky work in git worktrees.",
   },
   {
     n: "03",
     name: "Review",
-    text: "Every diff gets read before it lands. A second model reviews the critical parts, tests run, and anything off goes back with notes.",
+    text: "Separate review agents go through the changes. I read their findings and each agent's summary, and anything that looks off goes back with notes.",
   },
   {
     n: "04",
-    name: "Ship",
-    text: "Docker Compose on a Raspberry Pi at home, deployed from my own dashboard and served through Cloudflare Tunnel.",
+    name: "Test & ship",
+    text: "I run it and click through it myself, then deploy with Docker Compose to a Raspberry Pi at home, served through Cloudflare Tunnel.",
   },
-] as const;
-
-const TOOLBOX = [
-  ["Frontend", ["TypeScript", "JavaScript", "React", "Next.js", "Tailwind CSS", "HTML", "CSS"]],
-  ["Backend & data", ["Node.js", "Fastify", "Express", "PHP", "REST API", "SQL", "PostgreSQL", "MySQL", "MongoDB", "Oracle SQL"]],
-  ["Desktop & other languages", ["Rust (Tauri 2)", "C++", "C#", "Java (basics)"]],
-  ["Infrastructure", ["Docker", "Docker Compose", "Git", "Linux / Raspberry Pi", "Cloudflare Tunnel", "Portainer"]],
-  ["AI workflow", ["Claude Code", "Codex", "opencode", "MCP", "Planning", "Delegating tasks to agents", "Code review", "Verifying results"]],
 ] as const;
 
 export default function Process() {
@@ -37,14 +29,14 @@ export default function Process() {
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.18em] text-violet-hot">03 / Process</p>
             <h2 id="process-title" className="mt-4 font-display text-[clamp(3rem,9vw,8.5rem)] font-extrabold leading-[0.85] tracking-[-0.045em]">
-              I plan. Agents type.
+              I plan. Agents build.
               <br />
-              <span className="text-violet">I review every line.</span>
+              <span className="text-violet">I check what ships.</span>
             </h2>
           </div>
           <p className="leading-relaxed text-paper-mute">
-            I work with AI agents in a supervised loop, and I build the tools that loop runs on. Here is how a piece of work
-            moves from idea to a running service.
+            I don&apos;t read every line an agent writes. I set the task, read the agents&apos; summaries and what the review agents
+            found, test the result myself and decide what ships.
           </p>
         </header>
 
@@ -71,26 +63,6 @@ export default function Process() {
             </li>
           ))}
         </ol>
-
-        <div className="mt-24 grid gap-8 lg:mt-32 lg:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] lg:gap-4">
-          <h3 className="font-mono text-xs uppercase tracking-[0.16em] text-paper-mute">Toolbox</h3>
-          <dl className="border-t border-paper/10">
-            {TOOLBOX.map(([group, items]) => (
-              <div key={group} className="grid gap-3 border-b border-paper/10 py-6 md:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] md:gap-6">
-                <dt className="font-display text-xl font-bold tracking-[-0.02em]">{group}</dt>
-                <dd>
-                  <ul className="flex flex-wrap gap-1.5">
-                    {items.map((item) => (
-                      <li key={item} className="rounded-full border border-paper/15 px-3 py-1 font-mono text-xs text-paper/80">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
       </div>
     </section>
   );

@@ -70,6 +70,7 @@ export const PROJECTS: Project[] = [
     ],
     stack: ["Node.js", "discord.js", "Lavalink", "React", "Docker"],
     github: "https://github.com/Marczelloo/MewBit",
+    live: "https://mewbit.marczelloo.dev",
     image: "/projects/mewbit.png",
     imageAlt: "MewBit cover art with the bot's character",
     accent: "#f472b6",
