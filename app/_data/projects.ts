@@ -22,8 +22,6 @@ export type Project = {
   stack: string[];
   github?: string;
   live?: string;
-  image?: string;
-  imageAlt?: string;
   /** Poster colour world, independent from the site's own palette. */
   accent?: string;
 };
@@ -48,8 +46,6 @@ export const PROJECTS: Project[] = [
     stack: ["Rust", "Tauri 2", "TypeScript", "Canvas 2D", "Win32"],
     github: "https://github.com/Marczelloo/agent-pets",
     live: "https://agent-pets.marczelloo.dev",
-    image: "/projects/agent-pets.png",
-    imageAlt: "Agent Pets banner with nine pets perched on the wordmark above a Windows 11 taskbar",
     accent: "#d97757",
   },
   {
@@ -71,8 +67,6 @@ export const PROJECTS: Project[] = [
     stack: ["Node.js", "discord.js", "Lavalink", "React", "Docker"],
     github: "https://github.com/Marczelloo/MewBit",
     live: "https://mewbit.marczelloo.dev",
-    image: "/projects/mewbit.png",
-    imageAlt: "MewBit cover art with the bot's character",
     accent: "#f472b6",
   },
   {
@@ -94,8 +88,6 @@ export const PROJECTS: Project[] = [
     stack: ["Next.js", "TypeScript", "Docker", "Portainer API", "Cloudflare Tunnel"],
     github: "https://github.com/Marczelloo/Marczelloo-dashboard",
     live: "https://demo-dashboard.marczelloo.dev/projects",
-    image: "/projects/marczelloo_dashboard.png",
-    imageAlt: "Marczelloo Dashboard project list with deploy and uptime status",
     accent: "#4ade80",
   },
   {
@@ -111,8 +103,6 @@ export const PROJECTS: Project[] = [
     stack: ["Fastify", "Next.js", "PostgreSQL", "MinIO", "Docker"],
     github: "https://github.com/Marczelloo/atlashub",
     live: "https://admin-atlashub.marczelloo.dev/landing",
-    image: "/projects/atlashub.png",
-    imageAlt: "AtlasHub admin dashboard",
     accent: "#60a5fa",
   },
   {
@@ -162,7 +152,6 @@ export const PROJECTS: Project[] = [
     stack: ["Node.js", "Express", "MongoDB"],
     github: "https://github.com/Marczelloo/BookHaven",
     live: "https://bookhaven.marczelloo.dev",
-    image: "/projects/bookhaven.png",
   },
   {
     slug: "casino-simulator",
