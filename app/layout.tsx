@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Sora } from "next/font/google";
+import { Bricolage_Grotesque, JetBrains_Mono, Manrope, Sora } from "next/font/google";
 import "./globals.css";
 import Navbar from "./_components/navbar";
 import PrivacyBanner from "./_components/PrivacyBanner";
@@ -16,6 +16,19 @@ const sora = Sora({
   display: "swap",
 });
 
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-bricolage",
+  axes: ["wdth", "opsz"],
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://marczelloo.dev"),
   title: {
@@ -23,7 +36,7 @@ export const metadata: Metadata = {
     template: "%s | Marczelloo",
   },
   description:
-    "Portfolio of Marcel Moskwa, a junior full-stack developer building practical web applications with Next.js, TypeScript, PHP, and SQL.",
+    "Portfolio of Marcel Moskwa, a full-stack developer who builds with AI agents and builds tools for them: Agent Pets, MewBit, a self-hosted homelab and more.",
   keywords: [
     "Marczelloo",
     "Marcel Moskwa",
@@ -45,7 +58,7 @@ export const metadata: Metadata = {
     title: "Marczelloo - Full-Stack Developer",
     siteName: "marczelloo.dev",
     description:
-      "Selected work and experience of Marcel Moskwa, a junior full-stack developer.",
+      "Selected work of Marcel Moskwa, a full-stack developer working with AI agents.",
     images: [
       {
         url: "/og-image_.jpg",
@@ -95,12 +108,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 "https://github.com/Marczelloo",
                 "https://linkedin.com/in/marczelloo",
               ],
-              jobTitle: "Junior Full-Stack Developer",
+              jobTitle: "Full-Stack Developer",
             }),
           }}
         />
       </head>
-      <body className={`${manrope.variable} ${sora.variable}`}>
+      <body className={`${manrope.variable} ${sora.variable} ${bricolage.variable} ${mono.variable}`}>
         {children}
         <Navbar />
         <PrivacyBanner />

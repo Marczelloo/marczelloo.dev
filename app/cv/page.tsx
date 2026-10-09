@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { ArrowLeft, Printer } from "@phosphor-icons/react";
 
+import { PROJECTS as ALL_PROJECTS } from "../_data/projects";
+
 const PERSONAL = {
   name: "Marcel Moskwa",
-  role: "Student informatyki | Junior Web / Software Developer",
+  role: "Full-stack developer · praca z agentami AI",
   phone: "730 226 226",
   email: "moskwamarcel@gmail.com",
   location: "Sosnowiec, Polska",
@@ -15,13 +17,14 @@ const PERSONAL = {
 };
 
 const PROFILE =
-  "Student informatyki z wykształceniem technicznym oraz pierwszym doświadczeniem zdobytym podczas dwóch praktyk i płatnego projektu dla klienta. Tworzę aplikacje webowe, pracuję z bazami danych i rozwijam projekty full-stack w JavaScript, TypeScript, PHP i SQL. Interesuję się także Javą, automatyzacją procesów oraz praktycznym wykorzystaniem agentów AI do planowania, implementacji i rozwiązywania problemów.";
+  "Full-stack developer i student informatyki na Uniwersytecie Śląskim. Mam za sobą dwie praktyki, płatny projekt dla klienta i własne, publicznie dostępne produkty: Agent Pets (Rust/Tauri, wydania na GitHubie), bota muzycznego MewBit oraz panel do homelabu na Raspberry Pi. Na co dzień pracuję z agentami AI w nadzorowanym procesie: planuję, deleguję implementację (Claude Code, Codex), robię review i weryfikuję wyniki, a do tego procesu buduję własne narzędzia.";
 
 const SKILLS = [
-  ["Frontend", "HTML, CSS, JavaScript, TypeScript, React, Next.js, Tailwind CSS"],
-  ["Backend i bazy danych", "PHP, Node.js (podstawy), SQL, MySQL, PostgreSQL, MongoDB, Oracle SQL"],
-  ["Pozostałe", "Java (podstawy), Git, REST API, WordPress, Docker (podstawy), IntelliJ IDEA, VS Code"],
-  ["AI i produktywność", "ChatGPT, Gemini, Perplexity, OpenCode, Codex; planowanie, delegowanie zadań agentom i weryfikacja wyników"],
+  ["Frontend", "TypeScript, JavaScript, React, Next.js, Tailwind CSS, HTML, CSS"],
+  ["Backend i dane", "Node.js, Fastify, Express, PHP, REST API, SQL, PostgreSQL, MySQL, MongoDB, Oracle SQL"],
+  ["Desktop i inne języki", "Rust (Tauri 2), C++, C#, Java (podstawy)"],
+  ["Infrastruktura", "Docker, Docker Compose, Git, Linux / Raspberry Pi, Cloudflare Tunnel, Portainer"],
+  ["Praca z AI", "Claude Code, Codex, opencode, MCP; planowanie, delegowanie zadań agentom, code review i weryfikacja wyników"],
 ] as const;
 
 const EXPERIENCE = [
@@ -55,36 +58,16 @@ const EXPERIENCE = [
   },
 ] as const;
 
-const PROJECTS = [
-  {
-    name: "Marczelloo Dashboard",
-    meta: "demo-dashboard.marczelloo.dev/projects | 2026",
-    href: "https://demo-dashboard.marczelloo.dev/projects",
-    description:
-      "Panel do zarządzania projektami, statusami i usługami, z integracją GitHub, automatycznymi wdrożeniami oraz monitoringiem Raspberry Pi i kontenerów Docker.",
-  },
-  {
-    name: "NAD STRONĄ",
-    meta: "nadstrona.pl | 2026",
-    href: "https://nadstrona.pl",
-    description:
-      "Własne studio stron internetowych dla lokalnych firm. Określiłem ofertę, strukturę, kierunek UX i proces realizacji, a stronę oraz dema stworzyłem i wdrożyłem z szerokim wykorzystaniem agentów AI, odpowiadając za wymagania i weryfikację jakości.",
-  },
-  {
-    name: "BookHaven",
-    meta: "bookhaven.marczelloo.dev | Node.js, Express, MongoDB",
-    href: "https://bookhaven.marczelloo.dev",
-    description:
-      "Wdrożone demo aplikacji e-commerce z katalogiem książek, wyszukiwaniem, kontami użytkowników, listą życzeń i koszykiem.",
-  },
-  {
-    name: "NeoBeat Buddy",
-    meta: "github.com/Marczelloo/NeoBeat-Buddy | Node.js, Discord.js, Docker",
-    href: "https://github.com/Marczelloo/NeoBeat-Buddy",
-    description:
-      "Bot muzyczny na Discorda z komendami slash, kolejką odtwarzania, presetami equalizera i konfiguracją wdrożenia w Dockerze.",
-  },
-] as const;
+const CV_PROJECTS = ["agent-pets", "mewbit", "dashboard", "atlashub", "agent-router-mcp"].map((slug) => {
+  const project = ALL_PROJECTS.find((p) => p.slug === slug)!;
+  const href = project.live ?? project.github!;
+  return {
+    name: project.name,
+    href,
+    meta: `${href.replace(/^https:\/\//, "")} | ${project.stack.slice(0, 3).join(", ")}`,
+    description: project.summaryPl!,
+  };
+});
 
 const CONSENT =
   "Wyrażam zgodę na przetwarzanie moich danych osobowych zawartych w CV na potrzeby obecnego oraz przyszłych procesów rekrutacyjnych zgodnie z obowiązującymi przepisami o ochronie danych osobowych.";
@@ -130,7 +113,7 @@ export default function CVPage() {
                 </p>
               </div>
               <p className="max-w-[24rem] text-sm leading-relaxed text-text-mute md:text-right print:max-w-[58mm] print:text-[7.2pt] print:leading-[1.3] print:text-[#50545a] print:text-right">
-                Full-stack development, aplikacje webowe i praktyczne wdrożenia.
+                Aplikacje webowe, narzędzia dla agentów AI i self-hosting.
               </p>
             </div>
             <div className="mt-7 grid gap-x-5 gap-y-2 border-t border-border-subtle pt-5 text-xs text-text-soft sm:grid-cols-2 lg:grid-cols-3 print:mt-[3mm] print:grid-cols-3 print:gap-x-[3mm] print:gap-y-[0.8mm] print:border-[#d7d9dd] print:pt-[2.4mm] print:text-[6.8pt] print:text-[#303030]">
@@ -173,7 +156,7 @@ export default function CVPage() {
 
               <CVSection number="03" title="Wybrane projekty">
                 <div className="divide-y divide-border-subtle print:divide-[#d7d9dd]">
-                  {PROJECTS.map((project) => (
+                  {CV_PROJECTS.map((project) => (
                     <article key={project.name} className="py-4 first:pt-0 last:pb-0 print:py-[1.8mm]">
                       <h3 className="font-display text-sm font-semibold text-text-base print:text-[8pt] print:text-black">
                         {project.name}

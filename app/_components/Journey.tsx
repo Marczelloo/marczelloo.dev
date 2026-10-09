@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Briefcase, GraduationCap } from "@phosphor-icons/react";
+import { Plus } from "@phosphor-icons/react";
 
 const TIMELINE = [
   {
@@ -83,109 +82,104 @@ const TIMELINE = [
 ] as const;
 
 export default function Journey() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const reduceMotion = useReducedMotion();
-  const activeItem = TIMELINE[activeIndex];
+  const [activeId, setActiveId] = useState<string | null>(TIMELINE[0].id);
 
   return (
-    <section id="journey" className="section" aria-labelledby="journey-title">
-      <div className="section-shell grid content-center gap-12 lg:grid-cols-12 lg:gap-16">
-        <div className="lg:col-span-5">
-          <motion.h2
-            id="journey-title"
-            className="font-display max-w-lg text-4xl font-semibold tracking-[-0.045em] text-text-base sm:text-5xl"
-            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          >
-            From technical school to shipped software.
-          </motion.h2>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-text-soft">
+    <section id="journey" aria-labelledby="journey-title" className="relative bg-ink py-24 text-paper sm:py-32">
+      <div className="mx-auto w-full max-w-[96rem] px-4 sm:px-8">
+        <header className="mb-20 grid gap-6 lg:mb-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:items-end">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-violet-hot">04 / Journey</p>
+            <h2 id="journey-title" className="mt-4 font-display text-[clamp(3rem,9vw,8.5rem)] font-extrabold leading-[0.85] tracking-[-0.045em]">
+              From technical school
+              <br />
+              <span className="text-violet">to shipped software.</span>
+            </h2>
+          </div>
+          <p className="leading-relaxed text-paper-mute">
             A path built through formal education, real company data, team delivery, and independent products.
           </p>
+        </header>
 
-          <div className="mt-9 grid gap-1" aria-label="Experience timeline">
-            {TIMELINE.map((item, index) => {
-              const isActive = index === activeIndex;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  aria-pressed={isActive}
-                  onClick={() => setActiveIndex(index)}
-                  className={`group grid min-h-14 grid-cols-[7.5rem_1fr] items-center gap-4 rounded-[10px] px-3 text-left transition active:translate-y-px sm:grid-cols-[9rem_1fr] ${
-                    isActive
-                      ? "bg-surface-800 text-text-base"
-                      : "text-text-mute hover:bg-surface-900 hover:text-text-soft"
+        <ol className="border-t border-paper/15">
+          {TIMELINE.map((item) => {
+            const open = item.id === activeId;
+            return (
+              <li key={item.id} className="border-b border-paper/15">
+                <h3>
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-controls={`journey-${item.id}`}
+                    onClick={() => setActiveId(open ? null : item.id)}
+                    className="group relative grid w-full gap-x-8 gap-y-2 py-7 pr-14 text-left lg:pr-0 transition-colors hover:bg-paper/[0.03] focus-visible:outline-violet-hot lg:grid-cols-[minmax(0,14rem)_minmax(0,1fr)_auto] lg:items-baseline lg:py-9"
+                  >
+                    <span className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.16em] text-paper-mute">
+                      <span
+                        aria-hidden="true"
+                        className={`size-2 rounded-full transition-colors ${open ? "bg-lime" : "bg-paper/25 group-hover:bg-paper/60"}`}
+                      />
+                      {item.period}
+                    </span>
+                    <span>
+                      <span className="block font-display text-[clamp(1.75rem,4vw,3.25rem)] font-extrabold leading-[0.95] tracking-[-0.035em]">
+                        {item.title}
+                      </span>
+                      <span className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-base text-paper-mute">
+                        {item.place}
+                        <span className="rounded-full border border-paper/20 px-3 py-0.5 font-mono text-xs uppercase tracking-[0.12em] text-paper/80">
+                          {item.type}
+                        </span>
+                      </span>
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="absolute right-0 top-7 flex size-11 items-center justify-center rounded-full border border-paper/25 transition-colors group-hover:border-paper lg:static lg:self-center"
+                    >
+                      <Plus size={18} weight="bold" className={`transition-transform duration-300 motion-reduce:transition-none ${open ? "rotate-45" : ""}`} />
+                    </span>
+                  </button>
+                </h3>
+
+                <div
+                  id={`journey-${item.id}`}
+                  role="region"
+                  aria-label={`${item.title}, details`}
+                  inert={!open}
+                  className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none ${
+                    open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                   }`}
                 >
-                  <span className={`text-xs font-semibold ${isActive ? "text-primary-300" : "text-text-mute"}`}>
-                    {item.period}
-                  </span>
-                  <span className="truncate text-sm font-semibold sm:text-base">{item.title}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="relative self-center lg:col-span-7">
-          <div className="absolute inset-x-5 -bottom-4 top-4 rounded-[18px] border border-border-subtle bg-surface-900/40" />
-          <div className="absolute inset-x-2.5 -bottom-2 top-2 rounded-[18px] border border-border-subtle bg-surface-900/70" />
-
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.article
-              id="journey-panel"
-              aria-live="polite"
-              key={activeItem.id}
-              className="surface relative min-h-[29rem] p-6 sm:p-8 lg:p-10"
-              initial={reduceMotion ? false : { opacity: 0, y: 22, rotate: 0.6 }}
-              animate={{ opacity: 1, y: 0, rotate: 0 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -18, rotate: -0.5 }}
-              transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="flex items-start justify-between gap-5">
-                <div>
-                  <p className="flex items-center gap-2 text-sm font-semibold text-primary-300">
-                    {activeItem.type === "Education" ? (
-                      <GraduationCap size={19} weight="duotone" />
-                    ) : (
-                      <Briefcase size={19} weight="duotone" />
-                    )}
-                    {activeItem.type}
-                  </p>
-                  <h3 className="font-display mt-5 text-3xl font-semibold tracking-[-0.035em] text-text-base sm:text-4xl">
-                    {activeItem.title}
-                  </h3>
-                  <p className="mt-2 text-base font-medium text-text-soft">{activeItem.place}</p>
+                  <div className="overflow-hidden">
+                    <div className="grid gap-8 pb-10 lg:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] lg:gap-x-8 lg:pb-12">
+                      <div className="hidden lg:block" aria-hidden="true" />
+                      <div className="grid gap-8 lg:grid-cols-2">
+                        <p className="max-w-[34rem] text-lg leading-relaxed">{item.summary}</p>
+                        <div>
+                          <ul className="grid gap-3 text-paper-mute">
+                            {item.details.map((detail) => (
+                              <li key={detail} className="flex gap-3 leading-relaxed">
+                                <span className="mt-[0.7em] h-px w-4 shrink-0 bg-violet" aria-hidden="true" />
+                                {detail}
+                              </li>
+                            ))}
+                          </ul>
+                          <ul className="mt-6 flex flex-wrap gap-1.5" aria-label="Keywords">
+                            {item.stack.map((s) => (
+                              <li key={s} className="rounded-full border border-paper/15 px-3 py-1 font-mono text-xs text-paper/80">
+                                {s}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <span className="shrink-0 text-right text-xs font-semibold text-text-mute sm:text-sm">
-                  {activeItem.period}
-                </span>
-              </div>
-
-              <p className="mt-7 max-w-2xl text-base leading-relaxed text-text-soft">{activeItem.summary}</p>
-
-              <ul className="mt-7 grid gap-3 border-t border-border-subtle pt-6">
-                {activeItem.details.map((detail) => (
-                  <li key={detail} className="grid grid-cols-[1.25rem_1fr] gap-2 text-sm leading-relaxed text-text-soft">
-                    <span aria-hidden="true" className="font-semibold text-primary-400">+</span>
-                    <span>{detail}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2">
-                {activeItem.stack.map((item) => (
-                  <span key={item} className="text-xs font-semibold text-text-mute">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </motion.article>
-          </AnimatePresence>
-        </div>
+              </li>
+            );
+          })}
+        </ol>
       </div>
     </section>
   );

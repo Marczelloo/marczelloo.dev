@@ -1,18 +1,19 @@
 import Hero from "./_components/Hero";
+import Work from "./_components/Work";
+import Process from "./_components/Process";
 import Journey from "./_components/Journey";
-import Craft from "./_components/Craft";
-import About from "./_components/About";
 import Contact from "./_components/Contact";
-import SectionScrollController from "./_components/SectionScrollController";
+import { getLiveStats } from "./_data/github";
 
-export default function Home() {
+export default async function Home() {
+  const stats = await getLiveStats();
+
   return (
-    <main className="main-scroll" id="page-root">
-      <SectionScrollController />
-      <Hero />
+    <main className="grain" id="page-root">
+      <Hero stats={stats} />
+      <Work />
+      <Process />
       <Journey />
-      <Craft />
-      <About />
       <Contact />
     </main>
   );

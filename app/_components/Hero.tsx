@@ -1,84 +1,101 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowDownRight, FileArrowDown } from "@phosphor-icons/react";
+import { ArrowDownRight, FileText } from "@phosphor-icons/react/dist/ssr";
+import type { LiveStats } from "../_data/github";
+import KineticWordmark from "./KineticWordmark";
 
-export default function Hero() {
-  const reduceMotion = useReducedMotion();
+const dateFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" });
 
-  const scrollToCraft = () => {
-    document.getElementById("craft")?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
-  };
+export default function Hero({ stats }: { stats: LiveStats }) {
+  const ticker = [
+    `Agent Pets ${stats.agentPetsVersion} shipped ${dateFmt.format(new Date(stats.agentPetsReleasedAt))}`,
+    `${stats.agentPetsDownloads} downloads of Agent Pets`,
+    "MewBit: 78 slash commands and an AI DJ",
+    "Homelab on a Raspberry Pi, deployed from my own dashboard",
+    "Claude plans, Codex executes, I review",
+    `${stats.publicRepos} public repositories`,
+    "Computer science at the University of Silesia",
+  ];
 
   return (
-    <section id="hero" className="section" aria-labelledby="hero-title">
-      <div className="section-shell flex items-center justify-center pb-28 pt-20 lg:pb-24">
-        <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
-          <motion.div
-            className="relative mb-9 size-32 sm:size-36 lg:size-40"
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.88, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.62, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="absolute inset-[-10px] rounded-full border border-primary-400/20" />
-            <div className="absolute inset-[-4px] rounded-full bg-primary-400/10 blur-xl" />
-            <div className="relative size-full overflow-hidden rounded-full border border-primary-300/50 bg-surface-900 shadow-[0_22px_70px_-34px_rgba(171,139,255,0.9)]">
-              <div className="absolute inset-2 rounded-full bg-[radial-gradient(circle_at_50%_30%,rgba(167,139,250,0.28),rgba(18,17,30,0.9)_72%)]" />
+    <section id="hero" aria-labelledby="hero-title" className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-ink text-paper">
+      <div className="mx-auto flex w-full max-w-[96rem] items-center justify-between px-4 pt-5 font-mono text-xs uppercase tracking-[0.18em] text-paper-mute sm:px-8">
+        <span>Marcel Moskwa · Sosnowiec, PL</span>
+        <span className="hidden sm:inline">Portfolio · 2026</span>
+      </div>
+
+      <div className="mt-6 sm:mt-8">
+        <KineticWordmark text="MARCZELLOO" />
+      </div>
+
+      <div className="relative mx-auto grid w-full max-w-[96rem] flex-1 items-end gap-10 px-4 pb-10 pt-8 sm:px-8 lg:-mt-[9vw] lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:pt-0">
+        <div className="order-2 max-w-[44rem] lg:order-1 lg:pb-2">
+          <p className="mb-5 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-violet-hot">
+            <span className="size-2 rounded-full bg-lime" aria-hidden="true" />
+            Full-stack developer · AI-agent workflow
+          </p>
+          <h1 id="hero-title" className="font-display text-[clamp(2.4rem,5.4vw,4.9rem)] font-bold leading-[0.95] tracking-[-0.035em]">
+            <span className="sr-only">Marczelloo. </span>
+            I build with AI agents, and build the tools they run on.
+          </h1>
+          <p className="mt-6 max-w-[34rem] text-base leading-relaxed text-paper-mute sm:text-lg">
+            Web apps, a desktop app in Rust, a Discord bot and a homelab I deploy to myself. I plan the work, hand
+            the typing to agents, and review every line that ships.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a
+              href="#work"
+              className="group inline-flex min-h-12 items-center gap-2.5 rounded-full bg-paper px-6 font-semibold text-ink transition hover:bg-lime active:translate-y-px"
+            >
+              See the work
+              <ArrowDownRight size={18} weight="bold" className="transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
+            </a>
+            <Link
+              href="/cv"
+              className="inline-flex min-h-12 items-center gap-2.5 rounded-full border border-paper/25 px-6 font-semibold transition hover:border-paper active:translate-y-px"
+            >
+              <FileText size={18} weight="bold" />
+              CV
+            </Link>
+          </div>
+        </div>
+
+        <figure className="order-1 mx-auto w-full max-w-[19rem] sm:max-w-[23rem] lg:order-2 lg:mr-0 lg:max-w-[28rem]">
+          {/* The frame clips the portrait on three sides only, so the head and the duck climb out of the top. */}
+          <div className="relative mt-[38%] aspect-[5/4] lg:mt-0 rounded-[1.75rem] bg-violet">
+            <div
+              className="absolute inset-x-0 bottom-0 h-[150%]"
+              style={{ clipPath: "inset(-50% 0 0 0 round 0 0 1.75rem 1.75rem)" }}
+            >
               <Image
-                src="/avatar_nobg.png"
-                alt="Illustrated portrait of Marcel Moskwa"
+                src="/avatar-hd.webp"
+                alt="Illustrated portrait of Marcel: curly brown hair, black hoodie and a small white duck sitting on his head"
                 fill
                 priority
-                sizes="(max-width: 640px) 128px, (max-width: 1024px) 144px, 160px"
-                className="relative z-10 object-contain object-bottom p-2"
+                sizes="(max-width: 640px) 19rem, (max-width: 1024px) 23rem, 28rem"
+                className="object-contain object-bottom"
               />
             </div>
-          </motion.div>
+          </div>
+          <figcaption className="mt-3 flex justify-between font-mono text-xs uppercase tracking-[0.16em] text-paper-mute">
+            <span>Fig. 01</span>
+            <span>Developer, with duck</span>
+          </figcaption>
+        </figure>
+      </div>
 
-          <motion.div
-            className="flex w-full max-w-5xl flex-col items-center"
-            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.68, delay: reduceMotion ? 0 : 0.08, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-primary-300">
-              Junior full-stack developer
-            </p>
-            <h1
-              id="hero-title"
-              className="w-full max-w-5xl whitespace-nowrap px-1 text-center text-balance text-[clamp(2.5rem,12.5vw,8.25rem)] font-extrabold leading-[0.84] tracking-[-0.05em] text-text-base sm:text-[clamp(4rem,10vw,8.25rem)] sm:tracking-[-0.04em]"
-            >
-              MARCZELLOO
-            </h1>
-
-            <p className="mt-7 max-w-2xl text-balance text-base leading-relaxed text-text-soft sm:text-lg lg:text-xl">
-              Junior full-stack developer turning practical ideas into reliable web products.
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={scrollToCraft}
-                className="group inline-flex min-h-12 items-center gap-2.5 rounded-[10px] bg-primary-400 px-5 py-3 font-semibold text-[#13101d] transition hover:bg-primary-300 active:translate-y-px"
-              >
-                View projects
-                <ArrowDownRight
-                  size={19}
-                  weight="bold"
-                  className="transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
-                />
-              </button>
-              <Link
-                href="/cv"
-                className="inline-flex min-h-12 items-center gap-2.5 rounded-[10px] border border-border-strong bg-surface-900 px-5 py-3 font-semibold text-text-base transition hover:border-primary-500 hover:bg-surface-800 active:translate-y-px"
-              >
-                <FileArrowDown size={19} weight="bold" />
-                View CV
-              </Link>
-            </div>
-          </motion.div>
+      <div className="relative border-y border-paper/10 bg-ink-2 py-3 font-mono text-xs uppercase tracking-[0.14em] text-paper/80" aria-label="Recent facts">
+        <div className="marquee-track flex w-max">
+          {[0, 1].map((copy) => (
+            <ul key={copy} className="flex shrink-0" aria-hidden={copy === 1 || undefined}>
+              {ticker.map((item) => (
+                <li key={item} className="flex items-center gap-6 pr-6 whitespace-nowrap">
+                  <span>{item}</span>
+                  <span className="size-1.5 rounded-full bg-lime" aria-hidden="true" />
+                </li>
+              ))}
+            </ul>
+          ))}
         </div>
       </div>
     </section>

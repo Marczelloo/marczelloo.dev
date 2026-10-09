@@ -34,34 +34,23 @@ export default function PrivacyBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 16, opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-20 left-4 right-4 z-[60] mx-auto max-w-lg print:hidden"
+          className="fixed bottom-4 left-4 right-4 z-[60] max-w-sm print:hidden sm:right-auto"
         >
-          <div className="surface bg-surface-900 p-5 sm:p-6">
-            <div className="flex items-start gap-3">
-              <ShieldCheck size={22} weight="duotone" className="mt-0.5 shrink-0 text-primary-300" />
-              <div className="min-w-0 flex-1">
-                <p className="font-semibold text-text-base">Your privacy matters</p>
-                <p className="mt-1 text-sm leading-relaxed text-text-soft">
-                  This site uses no tracking cookies. The contact form collects your name, email, and message. Read the{" "}
-                  <Link
-                    href="/privacy"
-                    className="text-primary-300 underline decoration-primary-700 underline-offset-4 hover:text-primary-400"
-                  >
-                    privacy policy
-                  </Link>
-                  .
-                </p>
-              </div>
-            </div>
-            <div className="mt-4 flex justify-end">
-              <button
-                type="button"
-                onClick={dismiss}
-                className="min-h-11 rounded-[10px] bg-primary-400 px-4 py-2 text-sm font-semibold text-[#15111f] transition hover:bg-primary-300 active:translate-y-px"
-              >
-                Got it
-              </button>
-            </div>
+          <div className="flex items-start gap-3 rounded-2xl border border-paper/15 bg-ink-2/95 p-4 text-paper shadow-2xl backdrop-blur-xl">
+            <ShieldCheck size={20} weight="duotone" className="mt-0.5 shrink-0 text-lime" />
+            <p className="min-w-0 flex-1 text-sm leading-relaxed text-paper-mute">
+              No tracking cookies. The contact form only keeps your name, e-mail and message.{" "}
+              <Link href="/privacy" className="text-paper underline decoration-paper/30 underline-offset-4 hover:decoration-lime">
+                Privacy policy
+              </Link>
+            </p>
+            <button
+              type="button"
+              onClick={dismiss}
+              className="min-h-11 shrink-0 rounded-full bg-paper px-4 text-sm font-semibold text-ink transition hover:bg-lime active:translate-y-px"
+            >
+              OK
+            </button>
           </div>
         </motion.aside>
       )}
