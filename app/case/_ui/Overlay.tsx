@@ -1,6 +1,7 @@
 "use client";
 
 import { SpeakerSimpleHigh, SpeakerSimpleLow, SpeakerSimpleSlash, X } from "@phosphor-icons/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import type { CSSProperties, ReactNode } from "react";
@@ -450,6 +451,19 @@ function TranscriptPanel({ card }: { card: CaseCard }) {
         >
           {transcript.heading}
         </h2>
+
+        {transcript.figure ? (
+          <figure className="mt-5 rotate-[0.4deg] bg-[#f7f3ea] p-2 pb-3 shadow-[0_2px_10px_rgba(29,26,22,0.25)]">
+            <Image
+              src={transcript.figure.src}
+              alt={transcript.figure.alt}
+              width={transcript.figure.width}
+              height={transcript.figure.height}
+              sizes="(min-width: 640px) 410px, 92vw"
+              className="block h-auto w-full bg-[#07060f]"
+            />
+          </figure>
+        ) : null}
 
         {transcript.intro ? <p className="mt-4 text-base leading-[1.6]">{transcript.intro}</p> : null}
 

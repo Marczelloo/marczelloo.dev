@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import type { CardKind, CaseCard } from "../content";
+import { PHOTO_BORDER, type CardKind, type CaseCard } from "../content";
 
 // World layout in metres. The back wall is the z = 0 plane and the room opens
 // toward +z where the camera stands. The window sits in the right wall
@@ -100,7 +100,9 @@ export const CAMERA = {
 export const CARD_SIZE: Record<CardKind, readonly [number, number]> = {
   dossier: [0.42, 0.56],
   sheet: [0.4, 0.52],
-  polaroid: [0.24, 0.29],
+  report: [0.3, 0.4],
+  /** Photos take their size from the print (see photoSize in content.ts); this is only a fallback. */
+  photo: [0.24, 0.3],
   index: [0.36, 0.22],
   manila: [0.34, 0.24],
   note: [0.13, 0.13],
@@ -108,6 +110,11 @@ export const CARD_SIZE: Record<CardKind, readonly [number, number]> = {
 };
 
 const DEG = Math.PI / 180;
+
+/** Size of a card in metres: its own when it has one (photos follow their print), else its kind's. */
+export function cardSize(card: CaseCard): readonly [number, number] {
+  return card.size ?? CARD_SIZE[card.kind];
+}
 
 /** World position of a card's centre when pinned to the board. */
 export function cardBoardPosition(card: CaseCard, index: number, out = new THREE.Vector3()) {
@@ -120,8 +127,8 @@ export function cardBoardPosition(card: CaseCard, index: number, out = new THREE
 
 /** World position of the pin holding a card (top centre, rotated by tilt). */
 export function cardPinPosition(card: CaseCard, index: number, out = new THREE.Vector3()) {
-  const [, h] = CARD_SIZE[card.kind];
-  const inset = card.kind === "note" ? 0.018 : card.kind === "polaroid" ? 0.014 : 0.024;
+  const [, h] = cardSize(card);
+  const inset = card.kind === "note" ? 0.018 : card.kind === "photo" ? PHOTO_BORDER.top / 2 : 0.024;
   const a = card.tilt * DEG;
   const ly = h / 2 - inset;
   cardBoardPosition(card, index, out);

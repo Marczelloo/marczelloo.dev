@@ -3,7 +3,7 @@
 
 import { PROJECTS } from "../_data/projects";
 
-export type CardKind = "dossier" | "sheet" | "polaroid" | "index" | "manila" | "note" | "cv";
+export type CardKind = "dossier" | "sheet" | "report" | "photo" | "index" | "manila" | "note" | "cv";
 
 export type TranscriptSection = {
   label?: string;
@@ -22,6 +22,8 @@ export type CaseCard = {
   position: readonly [number, number];
   /** Rotation around the board normal, degrees. */
   tilt: number;
+  /** Size in metres when it differs from the kind's default; photos follow their print's aspect. */
+  size?: readonly [number, number];
   /** Face content drawn on the 3D paper. */
   face: {
     stamp?: string;
@@ -41,8 +43,27 @@ export type CaseCard = {
     intro?: string;
     sections: readonly TranscriptSection[];
     links?: readonly CaseLink[];
+    /** A picture shown whole at the top of the transcript. */
+    figure?: { src: string; alt: string; width: number; height: number };
   };
 };
+
+/** White border of a photo print in metres: the top holds the pin, the bottom the caption. */
+export const PHOTO_BORDER = { side: 0.013, top: 0.03, bottom: 0.052 } as const;
+
+/** Card size for a print whose picture is `width` metres wide, so the picture is never cropped. */
+function photoSize(width: number, image: { width: number; height: number }): readonly [number, number] {
+  const h = (width * image.height) / image.width;
+  return [width + PHOTO_BORDER.side * 2, h + PHOTO_BORDER.top + PHOTO_BORDER.bottom];
+}
+
+const IMAGES = {
+  petsPanel: { src: "/projects/agent-pets-panel.webp", width: 800, height: 1000 },
+  petsSettings: { src: "/projects/agent-pets-settings.webp", width: 1800, height: 1200 },
+  mewbitCharacter: { src: "/projects/mewbit-character.webp", width: 1024, height: 1024 },
+  mewbitStage: { src: "/projects/mewbit-stage.webp", width: 1500, height: 600 },
+  dashboard: { src: "/projects/marczelloo_dashboard.webp", width: 2400, height: 1383 },
+} as const;
 
 export const CASE_NUMBER = "CASE Nº 0425-MM";
 
@@ -55,14 +76,83 @@ export const LINKS = {
   email: "mailto:moskwamarcel@gmail.com",
 } as const;
 
-/** Transcript for a project exhibit, built from the same data the classic portfolio uses. */
-function exhibitTranscript(slug: string, letter: string): CaseCard["transcript"] {
-  const p = PROJECTS.find((project) => project.slug === slug)!;
+const project = (slug: string) => PROJECTS.find((p) => p.slug === slug)!;
+
+/** Live site and repository of a project, as transcript links. */
+function projectLinks(slug: string): CaseLink[] {
+  const p = project(slug);
+  return [...(p.live ? [{ label: "Open it", href: p.live }] : []), ...(p.github ? [{ label: "GitHub", href: p.github }] : [])];
+}
+
+/**
+ * The typed report that opens each exhibit, built from the same data the classic
+ * portfolio uses: tagline, the highlights as findings and the stack.
+ */
+function report(slug: string, letter: string, position: readonly [number, number], tilt: number): CaseCard {
+  const p = project(slug);
   return {
-    heading: `Exhibit ${letter} — ${p.name}`,
-    intro: `${p.tagline} ${p.summary}`,
-    sections: [...(p.highlights ? [{ label: "Evidence", items: p.highlights }] : []), { label: "Stack", items: p.stack }],
-    links: [...(p.live ? [{ label: "Open it", href: p.live }] : []), ...(p.github ? [{ label: "GitHub", href: p.github }] : [])],
+    id: slug,
+    kind: "report",
+    title: `Exhibit ${letter} — ${p.name}`,
+    position,
+    tilt,
+    face: {
+      stamp: `EXHIBIT ${letter}`,
+      heading: p.name.toUpperCase(),
+      subheading: p.tagline,
+      lines: [...(p.highlights ?? []), `STACK: ${p.stack.join(", ")}`],
+      caption: p.live ? p.live.replace(/^https:\/\//, "").replace(/\/.*$/, "") : undefined,
+    },
+    back: {
+      heading: `EXHIBIT ${letter}`,
+      lines: ["Photos pinned below.", "Live site and code:", "open the transcript (T)."],
+    },
+    transcript: {
+      heading: `Exhibit ${letter} — ${p.name}`,
+      intro: `${p.tagline} ${p.summary}`,
+      sections: [...(p.highlights ? [{ label: "Findings", items: p.highlights }] : []), { label: "Stack", items: p.stack }],
+      links: projectLinks(slug),
+    },
+  };
+}
+
+type Photo = {
+  id: string;
+  /** Exhibit number written on the print, e.g. "A-1". */
+  label: string;
+  image: { src: string; width: number; height: number };
+  alt: string;
+  /** Handwritten under the picture. */
+  caption: string;
+  /** Typed on the sticker on the back. */
+  back: readonly string[];
+  /** What the transcript says about the picture. */
+  about: string;
+  /** Picture width on the board, metres. */
+  width: number;
+  position: readonly [number, number];
+  tilt: number;
+};
+
+/** A photo print of a project, sized to the picture so nothing is cut off. */
+function photo(slug: string, p: Photo): CaseCard {
+  const name = project(slug).name;
+  return {
+    id: p.id,
+    kind: "photo",
+    title: `Exhibit ${p.label} — ${name}`,
+    position: p.position,
+    tilt: p.tilt,
+    size: photoSize(p.width, p.image),
+    face: { heading: `EXHIBIT ${p.label}`, image: p.image.src, caption: p.caption },
+    back: { heading: `EXHIBIT ${p.label}`, lines: p.back },
+    transcript: {
+      heading: `Exhibit ${p.label} — ${name}`,
+      figure: { ...p.image, alt: p.alt },
+      intro: p.about,
+      sections: [],
+      links: projectLinks(slug),
+    },
   };
 }
 
@@ -110,7 +200,6 @@ export const CARDS: readonly CaseCard[] = [
             "Agent Pets: animated pets on the Windows taskbar that show what coding agents are doing",
             "MewBit: a self-hosted Discord music bot with a shared player inside the voice channel",
             "Marczelloo Dashboard: the control panel for a Raspberry Pi homelab",
-            "Agent Router MCP: the server that hands work from Claude to Codex, with guardrails",
           ],
         },
         { label: "Record", items: ["2 software internships", "1 paid client project", "C1 English (University of Silesia exam, 2026)"] },
@@ -180,86 +269,114 @@ export const CARDS: readonly CaseCard[] = [
       ],
     },
   },
-  {
-    id: "agent-pets",
-    kind: "polaroid",
-    title: "Exhibit A — Agent Pets",
-    position: [0.72, 0.42],
-    tilt: 4,
-    face: { heading: "EXHIBIT A", image: "/projects/agent-pets-panel.webp", caption: "Agent Pets" },
-    back: {
-      heading: "EXHIBIT A - AGENT PETS",
-      lines: [
-        "Every coding-agent session gets a pet",
-        "on the Windows 11 taskbar. It codes,",
-        "reads, waves when the agent needs you",
-        "and naps when it is idle.",
-        "",
-        "Stack: Rust, Tauri 2, TypeScript",
-      ],
-    },
-    transcript: exhibitTranscript("agent-pets", "A"),
-  },
-  {
-    id: "mewbit",
-    kind: "polaroid",
-    title: "Exhibit B — MewBit",
-    position: [1.12, 0.02],
-    tilt: -5,
-    face: { heading: "EXHIBIT B", image: "/projects/mewbit-character.webp", caption: "MewBit" },
-    back: {
-      heading: "EXHIBIT B - MEWBIT",
-      lines: [
-        "Self-hosted Discord music bot with a",
-        "shared player inside the voice channel,",
-        "a 15-band EQ, synced lyrics and an",
-        "AI DJ checked against real tracks.",
-        "",
-        "Stack: Node.js, Lavalink, React",
-      ],
-    },
-    transcript: exhibitTranscript("mewbit", "B"),
-  },
-  {
-    id: "dashboard",
-    kind: "polaroid",
-    title: "Exhibit C — Marczelloo Dashboard",
-    position: [0.62, -0.38],
+  // Exhibit A: Agent Pets. Report on top, the panel and the settings window below.
+  report("agent-pets", "A", [0.38, 0.47], 1.5),
+  photo("agent-pets", {
+    id: "agent-pets-panel",
+    label: "A-1",
+    image: IMAGES.petsPanel,
+    alt: "Agent Pets panel listing coding-agent sessions, each with its pet and what it is doing right now",
+    caption: "every session, live",
+    back: ["The panel: one row per", "agent session, its pet,", "task and progress."],
+    about:
+      "The Agent Pets panel. Every running session of Claude Code, Codex, opencode and the other supported agents gets a row with its pet, the current task, progress and how long ago it last did something. Subagents and stalled work show up under their parent session.",
+    width: 0.22,
+    position: [0.37, 0.05],
     tilt: -2,
-    face: { heading: "EXHIBIT C", image: "/projects/marczelloo_dashboard.webp", caption: "Dashboard" },
-    back: {
-      heading: "EXHIBIT C - DASHBOARD",
-      lines: [
-        "Control panel for a Raspberry Pi",
-        "homelab: deploys from GitHub, Docker",
-        "containers via Portainer, uptime",
-        "checks with Discord alerts.",
-        "",
-        "Stack: Next.js, Docker, Portainer",
-      ],
-    },
-    transcript: exhibitTranscript("dashboard", "C"),
-  },
+  }),
+  photo("agent-pets", {
+    id: "agent-pets-settings",
+    label: "A-2",
+    image: IMAGES.petsSettings,
+    alt: "Agent Pets settings window on the Look page, previewing a pet at its desk and the states it can show",
+    caption: "nine pets, twelve states",
+    back: ["Settings, Look page:", "pick a pet per agent and", "preview every state."],
+    about:
+      "The settings window on its Look page: a pet for each agent, a live preview at the desk, and every work state, status and reaction the renderer can draw. Taskbar, notifications and limits are set up on the pages next to it.",
+    width: 0.3,
+    position: [0.39, -0.46],
+    tilt: 1.5,
+  }),
+
+  // Exhibit B: MewBit.
+  report("mewbit", "B", [0.76, 0.46], -1.5),
+  photo("mewbit", {
+    id: "mewbit-character",
+    label: "B-1",
+    image: IMAGES.mewbitCharacter,
+    alt: "MewBit, the bot's character: a girl with cat ears and headphones",
+    caption: "the face of the bot",
+    back: ["MewBit's character,", "used on the player", "and the website."],
+    about:
+      "MewBit's character. She fronts the bot on its website, in the Discord Activity and on the player embed, the three surfaces that share one playback state.",
+    width: 0.24,
+    position: [0.76, 0.05],
+    tilt: 2.5,
+  }),
+  photo("mewbit", {
+    id: "mewbit-stage",
+    label: "B-2",
+    image: IMAGES.mewbitStage,
+    alt: "MewBit stage art: a pink and blue audio waveform on a dark background",
+    caption: "FLAC, 15-band EQ",
+    back: ["Stage art from the", "MewBit website."],
+    about:
+      "The stage art from MewBit's website. Behind it: Lavalink v4 playback with FLAC, a fifteen-band equalizer, loudness matched across providers and synced lyrics.",
+    width: 0.31,
+    position: [0.77, -0.42],
+    tilt: -1.5,
+  }),
+
+  // Exhibit C: Marczelloo Dashboard.
+  report("dashboard", "C", [1.12, 0.47], 2),
+  photo("dashboard", {
+    id: "dashboard-overview",
+    label: "C-1",
+    image: IMAGES.dashboard,
+    alt: "Marczelloo Dashboard overview: domains, incidents, deploys, host stats and the project list with container health",
+    caption: "the homelab, one screen",
+    back: ["Overview page: projects,", "containers, deploys and", "the Pi's own health."],
+    about:
+      "The dashboard's overview: domains, incidents and deploys this week, the Raspberry Pi's CPU, memory and temperature, and every project with its containers, uptime history and last deploy. A failing container can be restarted from the same row.",
+    width: 0.31,
+    position: [1.11, 0.07],
+    tilt: -1.5,
+  }),
   {
-    id: "atlashub",
-    kind: "polaroid",
-    title: "Exhibit D — AtlasHub",
-    position: [1.15, -0.5],
-    tilt: 6,
-    face: { heading: "EXHIBIT D", image: "/projects/atlashub.webp", caption: "AtlasHub" },
-    back: {
-      heading: "EXHIBIT D - ATLASHUB",
+    id: "dashboard-runbook",
+    kind: "index",
+    title: "Exhibit C-2 — How the dashboard runs",
+    position: [1.12, -0.38],
+    tilt: 2.5,
+    size: [0.33, 0.21],
+    face: {
+      heading: "C-2  HOW IT RUNS",
       lines: [
-        "Self-hosted Supabase alternative:",
-        "a PostgreSQL database and S3 storage",
-        "for every project, behind a Fastify",
-        "gateway and a Next.js admin panel.",
-        "",
-        "Stack: Fastify, Next.js, PostgreSQL",
+        "HOST:    Raspberry Pi at home",
+        "DEPLOY:  GitHub -> Docker Compose",
+        "         with preflight + job logs",
+        "CONTROL: Portainer API, live logs",
+        "WATCH:   uptime -> Discord, e-mail",
+        "ACCESS:  Cloudflare Tunnel + Access",
       ],
     },
-    transcript: exhibitTranscript("atlashub", "D"),
+    transcript: {
+      heading: "Exhibit C-2 — How the dashboard runs",
+      intro: "The dashboard runs on the same Raspberry Pi it manages, and only its owner can open it.",
+      sections: [
+        {
+          items: [
+            "Deploys pull a project from GitHub and run Docker Compose, with a preflight check and job logs that survive restarts",
+            "Containers are started, stopped and restarted through the Portainer API, with live logs",
+            "Uptime checks on every site, alerts on Discord and by e-mail",
+            "Served through Cloudflare Tunnel behind Cloudflare Access; a public demo shows the interface with sample data",
+          ],
+        },
+      ],
+      links: projectLinks("dashboard"),
+    },
   },
+
   {
     id: "method",
     kind: "index",
@@ -326,7 +443,7 @@ export const CARDS: readonly CaseCard[] = [
     id: "note",
     kind: "note",
     title: "Note",
-    position: [0.2, 0.6],
+    position: [-0.52, 0.6],
     tilt: -7,
     face: { heading: "Hiring?", lines: ["-> the CV is", "pinned below"] },
     transcript: {
@@ -340,7 +457,7 @@ export const CARDS: readonly CaseCard[] = [
     id: "cv",
     kind: "cv",
     title: "Curriculum vitae",
-    position: [0.33, 0.03],
+    position: [-0.555, 0.27],
     tilt: 2.5,
     face: {
       stamp: "ON FILE",
@@ -356,7 +473,7 @@ export const CARDS: readonly CaseCard[] = [
         "2024     RecodeIT - Full-Stack Intern",
         "2023     Hurtopony - Software Dev Intern",
         "# PROJECTS",
-        "Agent Pets, MewBit, Dashboard, AtlasHub",
+        "Agent Pets, MewBit, Marczelloo Dashboard",
         "# SKILLS",
         "TypeScript, React, Next.js, Node.js, SQL",
         "Docker, Linux / Raspberry Pi, Cloudflare",
@@ -367,7 +484,7 @@ export const CARDS: readonly CaseCard[] = [
     },
     back: {
       heading: "FOR THE RECRUITER",
-      lines: ["Full CV with contact details:", "marczelloo.dev/cv", "", "Projects: see exhibits A-D.", "Code: github.com/Marczelloo"],
+      lines: ["Full CV with contact details:", "marczelloo.dev/cv", "", "Projects: see exhibits A-C.", "Code: github.com/Marczelloo"],
     },
     transcript: {
       heading: "Curriculum vitae",
@@ -381,6 +498,10 @@ export const CARDS: readonly CaseCard[] = [
             "May 2024 · Full-Stack Intern · RecodeIT",
             "May 2023 · Software Development Intern · Hurtopony",
           ],
+        },
+        {
+          label: "Projects",
+          items: ["agent-pets", "mewbit", "dashboard", "atlashub", "agent-router-mcp"].map((slug) => `${project(slug).name}: ${project(slug).tagline}`),
         },
         {
           label: "Education",
@@ -412,10 +533,10 @@ export const CARDS: readonly CaseCard[] = [
 /** Red string connections between pinned cards (by id). */
 export const STRINGS: readonly (readonly [string, string])[] = [
   ["subject", "history"],
+  // The three reports hang on one line from the subject; the photos are tacked under their report.
   ["subject", "agent-pets"],
-  ["subject", "dashboard"],
   ["agent-pets", "mewbit"],
-  ["dashboard", "atlashub"],
+  ["mewbit", "dashboard"],
   ["subject", "method"],
   ["subject", "contact"],
   ["subject", "cv"],

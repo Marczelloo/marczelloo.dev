@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { CARDS } from "../content";
 import { caseStore } from "../store";
-import { CAMERA, CARD_SIZE, cardBoardPosition, exhibitFrames } from "./layout";
+import { CAMERA, cardBoardPosition, cardSize, exhibitFrames } from "./layout";
 
 const DEG = Math.PI / 180;
 
@@ -67,7 +67,7 @@ export function CameraRig() {
       let w: number, h: number;
       if (card) {
         cardBoardPosition(card, CARDS.indexOf(card), tmp.c);
-        [w, h] = CARD_SIZE[card.kind];
+        [w, h] = cardSize(card);
       } else {
         tmp.c.copy(exhibit!.center);
         ({ w, h } = exhibit!);

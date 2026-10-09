@@ -6,7 +6,7 @@ import { type RefObject, use, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { CARDS, STRINGS, type CaseCard } from "../content";
 import { caseActions, caseStore } from "../store";
-import { BOARD_FRONT_Z, CARD_SIZE, cardBoardPosition, cardPinPosition } from "./layout";
+import { BOARD_FRONT_Z, cardBoardPosition, cardPinPosition, cardSize } from "./layout";
 import { type CardFace, loadCardFaces } from "./cardTextures";
 
 const DEG = Math.PI / 180;
@@ -100,10 +100,10 @@ function Card({ card, index, face, normal, manilaNormal }: CardProps) {
   const hovered = useRef(false);
   const lift = useRef(0);
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
-  const [w, h] = CARD_SIZE[card.kind];
+  const [w, h] = cardSize(card);
 
   const curl = useMemo(() => {
-    const stiff = card.kind === "polaroid" ? 0.85 : card.kind === "manila" || card.kind === "index" ? 0.45 : 0.1;
+    const stiff = card.kind === "photo" ? 0.85 : card.kind === "manila" || card.kind === "index" ? 0.45 : 0.1;
     return paperCurl(index * 1.7 + 0.3, stiff);
   }, [card.kind, index]);
   const geometry = useMemo(() => curledPlane(w, h, curl), [w, h, curl]);
@@ -117,13 +117,13 @@ function Card({ card, index, face, normal, manilaNormal }: CardProps) {
     const common = {
       normalMap: n,
       normalScale: new THREE.Vector2(0.45, 0.45),
-      roughness: card.kind === "polaroid" ? 1 : 0.88,
+      roughness: card.kind === "photo" ? 1 : 0.88,
       alphaTest: card.kind === "note" ? 0.5 : 0,
       envMapIntensity: 0.6,
     };
     return {
       front: new THREE.MeshStandardMaterial({ ...common, map: face.map, roughnessMap: face.roughness ?? null }),
-      back: new THREE.MeshStandardMaterial({ ...common, map: face.back, side: THREE.BackSide, roughness: card.kind === "polaroid" ? 0.7 : 0.9 }),
+      back: new THREE.MeshStandardMaterial({ ...common, map: face.back, side: THREE.BackSide, roughness: card.kind === "photo" ? 0.7 : 0.9 }),
     };
   }, [card.kind, face, normal, manilaNormal, w, h]);
 
@@ -140,7 +140,7 @@ function Card({ card, index, face, normal, manilaNormal }: CardProps) {
     [],
   );
 
-  useFrame((_, dt) => {
+  useFrame(({ gl }, dt) => {
     const g = group.current;
     if (!g) return;
     dt = Math.min(dt, 1 / 20);
@@ -153,16 +153,19 @@ function Card({ card, index, face, normal, manilaNormal }: CardProps) {
       // card is scaled down and brought nearer instead; perspective makes the
       // two indistinguishable, and it can never end up behind the cork.
       const fov = camera.fov * DEG;
+      // The transcript panel (480px, right side) covers part of a wide view; fit the card into the rest.
+      const viewW = gl.domElement.clientWidth;
+      const panel = s.transcriptOpen && camera.aspect > 1.1 ? Math.min(480, viewW * 0.92) / viewW : 0;
       const fitH = h / (0.66 * 2 * Math.tan(fov / 2));
-      const fitW = w / (0.66 * 2 * Math.tan(fov / 2) * camera.aspect);
+      const fitW = w / ((panel ? 0.84 * (1 - panel) : 0.66) * 2 * Math.tan(fov / 2) * camera.aspect);
       const scale = HELD_DIST / Math.max(fitH, fitW);
       camera.getWorldDirection(tmp.f);
       tmp.p.copy(camera.position).addScaledVector(tmp.f, HELD_DIST * inspect.zoom);
-      // Slide over to the free side when the transcript panel covers the right.
-      if (s.transcriptOpen && camera.aspect > 1.1) {
+      // Slide over to the middle of the free side.
+      if (panel) {
         const halfW = HELD_DIST * inspect.zoom * Math.tan(fov / 2) * camera.aspect;
         tmp.f.set(1, 0, 0).applyQuaternion(camera.quaternion);
-        tmp.p.addScaledVector(tmp.f, -0.38 * halfW);
+        tmp.p.addScaledVector(tmp.f, -panel * halfW);
       }
       tmp.e.set(inspect.pitch, inspect.yaw + (s.flipped ? Math.PI : 0), 0, "YXZ");
       tmp.q.copy(camera.quaternion).multiply(tmp.lq.setFromEuler(tmp.e));
@@ -494,7 +497,7 @@ export function Cards() {
         const p = pins.get(card.id)!;
         return (
           <group key={card.id} position={p}>
-            <PinHead kind={card.kind === "polaroid" || card.kind === "note" ? "tack" : "pin"} />
+            <PinHead kind={card.kind === "photo" || card.kind === "note" ? "tack" : "pin"} />
           </group>
         );
       })}

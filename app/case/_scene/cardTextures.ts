@@ -1,10 +1,10 @@
 import * as THREE from "three";
-import { CARDS, CASE_NUMBER, type CaseCard } from "../content";
-import { CARD_SIZE } from "./layout";
+import { CARDS, CASE_NUMBER, PHOTO_BORDER, type CaseCard } from "../content";
+import { cardSize } from "./layout";
 
 // Card faces are painted on 2D canvases: scanned paper as the base, then ink
 // laid down character by character (typewriter strike jitter, uneven ribbon),
-// handwriting, a worn rubber stamp, clipped photos and polaroid prints.
+// handwriting, a worn rubber stamp, clipped photos and photo prints.
 
 export type CardFace = {
   map: THREE.CanvasTexture;
@@ -315,14 +315,6 @@ export function grain(ctx: Ctx, x: number, y: number, w: number, h: number, amou
   ctx.restore();
 }
 
-/** Draws an image cropped to cover the rectangle. */
-function cover(ctx: Ctx, img: HTMLImageElement, x: number, y: number, w: number, h: number, focusY = 0) {
-  const s = Math.max(w / img.width, h / img.height);
-  const sw = w / s;
-  const sh = h / s;
-  ctx.drawImage(img, (img.width - sw) / 2, (img.height - sh) * focusY, sw, sh, x, y, w, h);
-}
-
 /** A Gem clip: one steel wire bent into three nested loops. */
 export function paperclip(ctx: Ctx, x: number, y: number, len: number, angle: number) {
   const a = len * 0.14;
@@ -375,8 +367,9 @@ type Assets = {
 };
 
 function size(card: CaseCard) {
-  const [w, h] = CARD_SIZE[card.kind];
-  const long = card.kind === "polaroid" || card.kind === "note" ? 1024 : 1280;
+  const [w, h] = cardSize(card);
+  // Prints carry screenshots, so they get the sharpest texture.
+  const long = card.kind === "photo" ? 1600 : card.kind === "note" ? 1024 : 1280;
   const k = long / Math.max(w, h);
   return [Math.round(w * k), Math.round(h * k)] as const;
 }
@@ -508,63 +501,135 @@ function drawSheet(card: CaseCard, a: Assets, ctx: Ctx, w: number, h: number, r:
   ctx.restore();
 }
 
-function drawPolaroid(card: CaseCard, a: Assets, ctx: Ctx, w: number, h: number, r: Rng) {
+/** Greedy word wrap to a fixed number of monospace characters. */
+function wrap(text: string, chars: number) {
+  const out: string[] = [];
+  let line = "";
+  for (const word of text.split(" ")) {
+    if (line && line.length + 1 + word.length > chars) {
+      out.push(line);
+      line = word;
+    } else line = line ? `${line} ${word}` : word;
+  }
+  if (line) out.push(line);
+  return out;
+}
+
+/** A typed project report: name, tagline, findings as bullets, the stack and the live address. */
+function drawReport(card: CaseCard, a: Assets, ctx: Ctx, w: number, h: number, r: Rng) {
   const { fonts } = a;
-  paper(ctx, w, h, a.paper, "#f3eee2", r, 0.5);
-  const b = w * 0.062;
-  const ps = w - b * 2;
-  const img = card.face.image ? a.images.get(card.face.image) : undefined;
-  ctx.fillStyle = "#151412";
-  ctx.fillRect(b, b, ps, ps);
-  if (img) {
+  paper(ctx, w, h, a.paper, "#f2e9d6", r, 0.8);
+  crease(ctx, w, h * 0.5, r);
+  const m = w * 0.09;
+  typeHeading(ctx, CASE_NUMBER, m, h * 0.06, w * 0.03, fonts.type, r, "#4a3f35");
+  typeHeading(ctx, "PROJECT REPORT", m, h * 0.095, w * 0.03, fonts.type, r, "#4a3f35");
+  const heading = card.face.heading;
+  const hs = Math.min(w * 0.085, (w - m * 2) / (heading.length * 0.62));
+  typeHeading(ctx, heading, m, h * 0.17, hs, fonts.type, r);
+  ctx.fillStyle = "rgba(30,25,20,0.7)";
+  ctx.fillRect(m, h * 0.17 + hs * 0.35, w - m * 2, w * 0.004);
+
+  // Findings first, the stack as a last typed line; shrink the type until it all fits.
+  const all = card.face.lines ?? [];
+  const findings = all.filter((l) => !l.startsWith("STACK:"));
+  const stack = all.find((l) => l.startsWith("STACK:"));
+  ctx.font = `100px ${fonts.mono}`;
+  const adv = ctx.measureText("M").width / 100;
+  const top = h * 0.25;
+  const bottom = h * 0.86;
+  let fs = w * 0.034;
+  let rows: { text: string; indent: boolean; gap: number; tone?: string }[] = [];
+  for (let i = 0; i < 12; i++) {
+    const chars = Math.floor((w - m * 2) / (fs * adv));
+    rows = [];
+    if (card.face.subheading) wrap(card.face.subheading, chars).forEach((t) => rows.push({ text: t, indent: false, gap: 0, tone: "#3a332c" }));
+    rows.push({ text: "FINDINGS:", indent: false, gap: 0.7 });
+    for (const f of findings) wrap(f, chars - 2).forEach((t, j) => rows.push({ text: t, indent: true, gap: j ? 0 : 0.35 }));
+    if (stack) wrap(stack, chars).forEach((t, j) => rows.push({ text: t, indent: false, gap: j ? 0 : 0.7, tone: "#3a332c" }));
+    const height = rows.reduce((acc, row) => acc + fs * (1.45 + row.gap), 0);
+    if (height <= bottom - top) break;
+    fs *= 0.94;
+  }
+  let y = top;
+  for (const row of rows) {
+    y += fs * (1.45 + row.gap);
+    // A dash opens each finding; its wrapped lines hang under the text.
+    if (row.indent && row.gap > 0) typeLine(ctx, "-", m, y, fs, fonts.mono, r);
+    typeLine(ctx, row.text, row.indent ? m + fs * adv * 2 : m, y, fs, fonts.mono, r, row.tone ?? INK);
+  }
+
+  paperclip(ctx, w * 0.52, -h * 0.015, h * 0.12, -0.1);
+  if (card.face.stamp) stamp(ctx, card.face.stamp, w * 0.73, h * 0.085, w * 0.055, 0.12, fonts.type, r);
+  if (card.face.caption) {
+    const text = `live: ${card.face.caption}`;
+    const cs = Math.min(w * 0.058, (w - m * 2) / (text.length * 0.42));
+    const tw = handLine(ctx, text, m, h * 0.935, cs, fonts.hand, r, "#26335a", -0.025);
     ctx.save();
-    ctx.filter = "sepia(0.3) saturate(0.75) contrast(1.08) brightness(0.88)";
-    cover(ctx, img, b, b, ps, ps, 0);
-    ctx.filter = "none";
+    ctx.strokeStyle = "rgba(38,51,90,0.8)";
+    ctx.lineWidth = w * 0.0035;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(m, h * 0.955);
+    ctx.quadraticCurveTo(m + tw * 0.5, h * 0.948, m + tw, h * 0.94);
+    ctx.stroke();
     ctx.restore();
   }
-  // Chemistry: lifted blacks, warm cast, vignette, grain.
+}
+
+/** Pixel rectangle of the picture on a print: inside the white border, never cropped. */
+function photoRect(card: CaseCard, w: number, h: number) {
+  const [cw] = cardSize(card);
+  const k = w / cw;
+  const x = PHOTO_BORDER.side * k;
+  const y = PHOTO_BORDER.top * k;
+  return { x, y, w: w - x * 2, h: h - y - PHOTO_BORDER.bottom * k, k };
+}
+
+/** A photo print: the whole picture inside a white border, captioned in pen underneath. */
+function drawPhoto(card: CaseCard, a: Assets, ctx: Ctx, w: number, h: number, r: Rng) {
+  const { fonts } = a;
+  paper(ctx, w, h, a.paper, "#f4f0e6", r, 0.35);
+  const p = photoRect(card, w, h);
+  // Night backdrop for cut-outs like the MewBit character.
+  const bg = ctx.createLinearGradient(0, p.y, 0, p.y + p.h);
+  bg.addColorStop(0, "#1b1730");
+  bg.addColorStop(1, "#07060f");
+  ctx.fillStyle = bg;
+  ctx.fillRect(p.x, p.y, p.w, p.h);
+  const img = card.face.image ? a.images.get(card.face.image) : undefined;
+  if (img) {
+    // Contain-fit: the print is sized to the picture, so this fills it without cutting anything off.
+    const s = Math.min(p.w / img.width, p.h / img.height);
+    const iw = img.width * s;
+    const ih = img.height * s;
+    ctx.save();
+    ctx.filter = "saturate(0.92) contrast(1.03)";
+    ctx.drawImage(img, p.x + (p.w - iw) / 2, p.y + (p.h - ih) / 2, iw, ih);
+    ctx.restore();
+  }
+  // A faint warm cast and grain, light enough to keep screenshots legible.
   ctx.save();
-  ctx.globalCompositeOperation = "screen";
-  ctx.fillStyle = "rgba(40, 32, 30, 0.6)";
-  ctx.fillRect(b, b, ps, ps);
   ctx.globalCompositeOperation = "multiply";
-  const vg = ctx.createRadialGradient(w / 2, b + ps / 2, ps * 0.25, w / 2, b + ps / 2, ps * 0.78);
-  vg.addColorStop(0, "rgba(255,240,220,1)");
-  vg.addColorStop(1, "rgba(120,100,90,1)");
-  ctx.fillStyle = vg;
-  ctx.fillRect(b, b, ps, ps);
+  ctx.fillStyle = "rgb(252, 244, 230)";
+  ctx.fillRect(p.x, p.y, p.w, p.h);
   ctx.restore();
-  grain(ctx, b, b, ps, ps, 0.4, r);
-  ctx.strokeStyle = "rgba(0,0,0,0.35)";
-  ctx.lineWidth = w * 0.003;
-  ctx.strokeRect(b, b, ps, ps);
+  grain(ctx, p.x, p.y, p.w, p.h, 0.12, r);
+  ctx.strokeStyle = "rgba(0,0,0,0.3)";
+  ctx.lineWidth = w * 0.002;
+  ctx.strokeRect(p.x, p.y, p.w, p.h);
 
-  // Evidence label stuck on the corner of the print.
-  ctx.save();
-  ctx.translate(b + ps * 0.08, b + ps * 0.08);
-  ctx.rotate(-0.05 + (r() - 0.5) * 0.06);
-  const lw = ps * 0.42;
-  const lh = ps * 0.12;
-  ctx.shadowColor = "rgba(0,0,0,0.35)";
-  ctx.shadowBlur = w * 0.01;
-  ctx.fillStyle = "#e8d58a";
-  ctx.fillRect(0, 0, lw, lh);
-  ctx.shadowColor = "transparent";
-  ctx.strokeStyle = "rgba(60,40,20,0.5)";
-  ctx.lineWidth = w * 0.003;
-  ctx.strokeRect(lh * 0.12, lh * 0.12, lw - lh * 0.24, lh - lh * 0.24);
-  ctx.restore();
-  ctx.save();
-  ctx.translate(b + ps * 0.08, b + ps * 0.08);
-  ctx.rotate(-0.05);
-  typeHeading(ctx, card.face.heading, lw / 2, lh * 0.68, lh * 0.5, fonts.type, r, "#1c1a18", "center");
-  ctx.restore();
-
+  // Bottom margin: exhibit number typed on the right, the caption in pen on the left.
+  const band = h - p.y - p.h;
+  const base = p.y + p.h + band * 0.64;
+  const ls = band * 0.24;
+  ctx.font = `${ls}px ${fonts.type}`;
+  const lw = ctx.measureText(card.face.heading).width + card.face.heading.length * ls * 0.04;
+  typeHeading(ctx, card.face.heading, w - p.x - lw, base, ls, fonts.type, r, "#4a3f35");
   if (card.face.caption) {
-    const cy = b + ps + (h - b - ps) * 0.62;
-    const cs = Math.min(w * 0.11, (w * 0.86) / (card.face.caption.length * 0.42));
-    handLine(ctx, card.face.caption, w / 2, cy, cs, fonts.hand, r, "#1b1f2e", (r() - 0.5) * 0.05, "center");
+    const room = w - p.x * 2 - lw - band * 0.4;
+    ctx.font = `700 100px ${fonts.hand}`;
+    const cs = Math.min(band * 0.5, (room / ctx.measureText(card.face.caption).width) * 100);
+    handLine(ctx, card.face.caption, p.x * 1.4, base, cs, fonts.hand, r, "#1b1f2e", -0.015);
   }
 }
 
@@ -678,7 +743,8 @@ function drawCv(card: CaseCard, a: Assets, ctx: Ctx, w: number, h: number, r: Rn
 const DRAW = {
   dossier: drawDossier,
   sheet: drawSheet,
-  polaroid: drawPolaroid,
+  report: drawReport,
+  photo: drawPhoto,
   index: drawIndex,
   manila: drawManila,
   note: drawNote,
@@ -687,7 +753,7 @@ const DRAW = {
 
 function drawBack(card: CaseCard, a: Assets, front: HTMLCanvasElement, ctx: Ctx, w: number, h: number, r: Rng) {
   const { fonts } = a;
-  if (card.kind === "polaroid") {
+  if (card.kind === "photo") {
     ctx.fillStyle = "#24221f";
     ctx.fillRect(0, 0, w, h);
     grain(ctx, 0, 0, w, h, 0.25, r);
@@ -715,21 +781,22 @@ function drawBack(card: CaseCard, a: Assets, front: HTMLCanvasElement, ctx: Ctx,
   if (!card.back) return;
 
   const m = w * 0.1;
-  if (card.kind === "polaroid") {
-    // Typed sticker on the dark print back.
+  if (card.kind === "photo") {
+    // Typed sticker on the dark print back, sized to fit wide and tall prints alike.
     const lx = w * 0.08;
-    const ly = h * 0.12;
+    const ly = h * 0.1;
     const lw = w * 0.84;
-    const lh = h * 0.62;
+    const lh = h * 0.66;
     ctx.save();
     ctx.shadowColor = "rgba(0,0,0,0.5)";
     ctx.shadowBlur = w * 0.015;
     ctx.fillStyle = "#e9e1cc";
     ctx.fillRect(lx, ly, lw, lh);
     ctx.restore();
-    typeHeading(ctx, card.back.heading, lx + lw * 0.07, ly + lh * 0.14, lw * 0.055, fonts.type, r);
-    typeBlock(ctx, card.back.lines, lx + lw * 0.07, ly + lh * 0.32, lw * 0.86, lw * 0.045, 1.7, fonts, r);
-    handLine(ctx, "photo: M.M.", w * 0.55, h * 0.88, w * 0.08, fonts.hand, r, "#d8d2c4", -0.03);
+    const unit = Math.min(lw * 0.05, lh / (card.back.lines.length * 1.7 + 3));
+    typeHeading(ctx, card.back.heading, lx + lw * 0.07, ly + unit * 1.8, unit * 1.2, fonts.type, r);
+    typeBlock(ctx, card.back.lines, lx + lw * 0.07, ly + unit * 3.8, lw * 0.86, unit, 1.7, fonts, r);
+    handLine(ctx, "photo: M.M.", w * 0.55, h * 0.92, Math.min(w * 0.07, h * 0.1), fonts.hand, r, "#d8d2c4", -0.03);
     return;
   }
   typeHeading(ctx, card.back.heading, m, h * 0.12, w * 0.05, fonts.type, r);
@@ -740,13 +807,14 @@ function drawBack(card: CaseCard, a: Assets, front: HTMLCanvasElement, ctx: Ctx,
   );
 }
 
-function polaroidRoughness(w: number, h: number) {
+/** Matte paper border, glossy picture. */
+function photoRoughness(card: CaseCard, w: number, h: number) {
   const { c, ctx } = canvas(w / 4, h / 4);
   ctx.fillStyle = "rgb(225,225,225)";
   ctx.fillRect(0, 0, c.width, c.height);
-  const b = (w * 0.062) / 4;
+  const p = photoRect(card, w, h);
   ctx.fillStyle = "rgb(70,70,70)";
-  ctx.fillRect(b, b, c.width - b * 2, c.width - b * 2);
+  ctx.fillRect(p.x / 4, p.y / 4, p.w / 4, p.h / 4);
   return c;
 }
 
@@ -789,7 +857,7 @@ export function loadCardFaces(maxAnisotropy: number) {
       out.set(card.id, {
         map: tex(front.c),
         back: backTex,
-        roughness: card.kind === "polaroid" ? tex(polaroidRoughness(w, h), false) : undefined,
+        roughness: card.kind === "photo" ? tex(photoRoughness(card, w, h), false) : undefined,
       });
       // Yield between cards so painting doesn't freeze the loader animation.
       await new Promise((res) => setTimeout(res, 0));

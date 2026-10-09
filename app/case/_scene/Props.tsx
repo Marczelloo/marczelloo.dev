@@ -30,13 +30,13 @@ const onBoard = (at: readonly [number, number], z: number) => [BOARD.center.x + 
 const FRAMES: Record<string, { at: readonly [number, number]; size: readonly [number, number] }> = {
   newspaper: { at: [-0.55, -0.15], size: [0.27, 0.36] },
   map: { at: [-0.84, 0.64], size: [0.39, 0.29] },
-  stickyFriday: { at: [-0.37, 0.63], size: [0.14, 0.14] },
-  fingerprints: { at: [0.44, 0.68], size: [0.25, 0.17] },
+  stickyFriday: { at: [-0.2, 0.62], size: [0.14, 0.14] },
+  fingerprints: { at: [0.03, 0.63], size: [0.25, 0.17] },
   receipt: { at: [-0.6, -0.6], size: [0.12, 0.24] },
   stickyDns: { at: [0.87, -0.7], size: [0.14, 0.14] },
   matchbook: { at: [-0.43, -0.73], size: [0.1, 0.11] },
-  floppy: { at: [0.27, -0.56], size: [0.13, 0.13] },
-  key: { at: [1.145, 0.56], size: [0.14, 0.14] },
+  floppy: { at: [0.0, -0.3], size: [0.13, 0.13] },
+  key: { at: [1.13, -0.66], size: [0.14, 0.14] },
 };
 
 /** Makes its children one piece of evidence: hover lifts it a touch, a click zooms the camera in on it. */
@@ -362,12 +362,12 @@ export function Props() {
         />
       </Exhibit>
       <Exhibit id="stickyFriday">
-        <PaperProp name="stickyFriday" at={[-0.37, 0.63]} tilt={6} stiffness={0.25} {...common} />
+        <PaperProp name="stickyFriday" at={[-0.2, 0.62]} tilt={6} stiffness={0.25} {...common} />
       </Exhibit>
       <Exhibit id="fingerprints">
         <PaperProp
           name="fingerprints"
-          at={[0.44, 0.68]}
+          at={[0.03, 0.63]}
           tilt={-2}
           stiffness={0.6}
           roughness={0.85}
@@ -388,11 +388,11 @@ export function Props() {
         <Matchbook at={[-0.43, -0.73]} tilt={-12} cover={textures.matchbook} />
       </Exhibit>
       <Exhibit id="floppy">
-        <Floppy at={[0.27, -0.56]} tilt={9} label={textures.floppyLabel} tape={tape} />
+        <Floppy at={[0.0, -0.3]} tilt={9} label={textures.floppyLabel} tape={tape} />
       </Exhibit>
       <Exhibit id="key">
-        <PaperProp name="tag" at={[1.115, 0.548]} tilt={-16} stiffness={0.5} {...common} />
-        <Key at={[1.17, 0.6]} />
+        <PaperProp name="tag" at={[1.1, -0.672]} tilt={-16} stiffness={0.5} {...common} />
+        <Key at={[1.155, -0.62]} />
       </Exhibit>
       {LOOSE_PINS.map((p, i) => (
         <group key={i} position={onBoard(p.at, BOARD_FRONT_Z)} rotation={[p.rx, p.ry, 0]}>
