@@ -16,7 +16,7 @@ export default function Navbar() {
   const [active, setActive] = useState<string | null>(null);
   const [pastHero, setPastHero] = useState(false);
   const reduceMotion = useReducedMotion();
-  const isPortfolio = pathname === "/";
+  const isPortfolio = pathname === "/classic";
 
   useEffect(() => {
     if (!isPortfolio) return;

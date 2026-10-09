@@ -1,6 +1,8 @@
 // Single source of truth for the case board. The 3D scene renders card faces
 // from this data and the transcript overlay renders the same data as HTML.
 
+import { PROJECTS } from "../_data/projects";
+
 export type CardKind = "dossier" | "sheet" | "polaroid" | "index" | "manila" | "note" | "cv";
 
 export type TranscriptSection = {
@@ -46,11 +48,22 @@ export const CASE_NUMBER = "CASE Nº 0425-MM";
 
 export const LINKS = {
   cv: "/cv",
-  classic: "/",
+  classic: "/classic",
   github: "https://github.com/Marczelloo",
   linkedin: "https://linkedin.com/in/marczelloo",
   email: "mailto:moskwamarcel@gmail.com",
 } as const;
+
+/** Transcript for a project exhibit, built from the same data the classic portfolio uses. */
+function exhibitTranscript(slug: string, letter: string): CaseCard["transcript"] {
+  const p = PROJECTS.find((project) => project.slug === slug)!;
+  return {
+    heading: `Exhibit ${letter} — ${p.name}`,
+    intro: `${p.tagline} ${p.summary}`,
+    sections: [...(p.highlights ? [{ label: "Evidence", items: p.highlights }] : []), { label: "Stack", items: p.stack }],
+    links: [...(p.live ? [{ label: "Open it", href: p.live }] : []), ...(p.github ? [{ label: "GitHub", href: p.github }] : [])],
+  };
+}
 
 export const CARDS: readonly CaseCard[] = [
   {
@@ -67,43 +80,43 @@ export const CARDS: readonly CaseCard[] = [
       lines: [
         "Occupation: Full-stack developer",
         "Status: CS student, Univ. of Silesia",
-        "Known for: shipping web products",
-        "Method: supervised AI-agent workflow",
+        "Known for: building with AI agents",
+        "Also: the tools those agents run on",
         "Languages: Polish, English (C1)",
-        "Location: Silesia, Poland",
+        "Location: Sosnowiec, Poland",
       ],
     },
     back: {
       heading: "FIELD NOTES",
       lines: [
-        "Starts from the user flow and data model.",
-        "Works across UI, backend, DB and deploy.",
-        "Uses AI agents to plan, build, delegate",
-        "and verify - keeps the engineering call.",
-        "Prefers improving code over adding",
-        "complexity. Documents decisions.",
+        "Plans the work, writes every task down.",
+        "Hands the building to agents: Claude",
+        "Code subagents, Codex via his own MCP.",
+        "Review agents check the changes,",
+        "then he runs and tests it himself.",
+        "Ships to a Raspberry Pi at home.",
       ],
     },
     transcript: {
       heading: "Subject profile — Marcel Moskwa",
       intro:
-        "Computer science student and programming technician with two internships, a paid client project, and a growing set of independently shipped full-stack products.",
+        "Full-stack developer and Computer Science student from Sosnowiec, Poland. Builds with AI agents, and builds the tools they run on: two internships, a paid client project and self-hosted products shipped end to end.",
       sections: [
-        { label: "Occupation", body: "Junior full-stack developer — web products from interface to deployment." },
+        { label: "Occupation", body: "Full-stack developer: web products, desktop tools and the infrastructure they run on." },
         {
-          label: "Method",
+          label: "Known work",
           items: [
-            "Start from the user flow and data model, then choose the smallest reliable implementation.",
-            "Work across UI, backend logic, databases, and deployment instead of treating them as separate worlds.",
-            "Use AI agents for planning, implementation support, delegation, and verification while retaining engineering judgment.",
-            "Document decisions and improve existing code before adding unnecessary complexity.",
+            "Agent Pets: animated pets on the Windows taskbar that show what coding agents are doing",
+            "MewBit: a self-hosted Discord music bot with a shared player inside the voice channel",
+            "Marczelloo Dashboard: the control panel for a Raspberry Pi homelab",
+            "Agent Router MCP: the server that hands work from Claude to Codex, with guardrails",
           ],
         },
-        { label: "Record", items: ["2 software internships", "1 paid client project", "C1 English proficiency"] },
+        { label: "Record", items: ["2 software internships", "1 paid client project", "C1 English (University of Silesia exam, 2026)"] },
       ],
       links: [
-        { label: "Download CV", href: "/cv" },
-        { label: "GitHub", href: "https://github.com/Marczelloo" },
+        { label: "Open CV", href: LINKS.cv },
+        { label: "GitHub", href: LINKS.github },
       ],
     },
   },
@@ -137,15 +150,27 @@ export const CARDS: readonly CaseCard[] = [
         },
         {
           label: "Aug – Sep 2024 · Full-Stack Developer · RecodeIT / D9 Space (paid project)",
-          items: ["Worked on the booking interface and user flow", "Supported form logic and email-message integration", "Delivered assigned work through Git-based collaboration"],
+          items: [
+            "Contributed to a client booking module built with PHP and WordPress",
+            "Worked on the booking interface and user flow",
+            "Supported form logic and email-message integration",
+          ],
         },
         {
           label: "May 2024 · Full-Stack Intern · RecodeIT",
-          items: ["Built features with Next.js and TypeScript", "Worked with PostgreSQL data and schema changes", "Collaborated through pull requests and code review"],
+          items: [
+            "Developed an internal employee panel with Next.js and TypeScript",
+            "Worked with PostgreSQL data and schema changes",
+            "Collaborated through pull requests and code review",
+          ],
         },
         {
           label: "May 2023 · Software Development Intern · Hurtopony",
-          items: ["Created reporting tools with PHP and MySQL", "Analyzed and corrected existing scripts", "Prepared practical user documentation"],
+          items: [
+            "Created reports and calculators with PHP and MySQL on real company data",
+            "Analyzed and corrected existing scripts",
+            "Prepared practical user documentation",
+          ],
         },
         {
           label: "2020 – 2025 · Programming Technician · ZSEiI, Sosnowiec",
@@ -155,149 +180,124 @@ export const CARDS: readonly CaseCard[] = [
     },
   },
   {
-    id: "dashboard",
+    id: "agent-pets",
     kind: "polaroid",
-    title: "Exhibit A — Marczelloo Dashboard",
+    title: "Exhibit A — Agent Pets",
     position: [0.72, 0.42],
     tilt: 4,
-    face: { heading: "EXHIBIT A", image: "/projects/marczelloo_dashboard.png", caption: "Marczelloo Dashboard" },
+    face: { heading: "EXHIBIT A", image: "/projects/agent-pets-panel.webp", caption: "Agent Pets" },
     back: {
-      heading: "EXHIBIT A - DASHBOARD",
+      heading: "EXHIBIT A - AGENT PETS",
       lines: [
-        "Control center for projects, services,",
-        "deployments, GitHub activity and",
-        "Raspberry Pi infrastructure.",
+        "Every coding-agent session gets a pet",
+        "on the Windows 11 taskbar. It codes,",
+        "reads, waves when the agent needs you",
+        "and naps when it is idle.",
         "",
-        "Stack: Next.js, GitHub API, Docker",
+        "Stack: Rust, Tauri 2, TypeScript",
       ],
     },
-    transcript: {
-      heading: "Exhibit A — Marczelloo Dashboard",
-      intro: "A control center for projects, services, deployments, GitHub activity, and Raspberry Pi infrastructure.",
-      sections: [
-        { label: "Contribution", body: "Designed and built the responsive product interface, integrations, deployment flow, and monitoring views." },
-        { label: "Stack", items: ["Next.js", "GitHub API", "Docker"] },
-      ],
-      links: [
-        { label: "Live demo", href: "https://demo-dashboard.marczelloo.dev/projects" },
-        { label: "GitHub", href: "https://github.com/Marczelloo/Marczelloo-dashboard" },
+    transcript: exhibitTranscript("agent-pets", "A"),
+  },
+  {
+    id: "mewbit",
+    kind: "polaroid",
+    title: "Exhibit B — MewBit",
+    position: [1.12, 0.02],
+    tilt: -5,
+    face: { heading: "EXHIBIT B", image: "/projects/mewbit-character.webp", caption: "MewBit" },
+    back: {
+      heading: "EXHIBIT B - MEWBIT",
+      lines: [
+        "Self-hosted Discord music bot with a",
+        "shared player inside the voice channel,",
+        "a 15-band EQ, synced lyrics and an",
+        "AI DJ checked against real tracks.",
+        "",
+        "Stack: Node.js, Lavalink, React",
       ],
     },
+    transcript: exhibitTranscript("mewbit", "B"),
+  },
+  {
+    id: "dashboard",
+    kind: "polaroid",
+    title: "Exhibit C — Marczelloo Dashboard",
+    position: [0.62, -0.38],
+    tilt: -2,
+    face: { heading: "EXHIBIT C", image: "/projects/marczelloo_dashboard.webp", caption: "Dashboard" },
+    back: {
+      heading: "EXHIBIT C - DASHBOARD",
+      lines: [
+        "Control panel for a Raspberry Pi",
+        "homelab: deploys from GitHub, Docker",
+        "containers via Portainer, uptime",
+        "checks with Discord alerts.",
+        "",
+        "Stack: Next.js, Docker, Portainer",
+      ],
+    },
+    transcript: exhibitTranscript("dashboard", "C"),
   },
   {
     id: "atlashub",
     kind: "polaroid",
-    title: "Exhibit B — AtlasHub",
-    position: [1.12, 0.02],
-    tilt: -5,
-    face: { heading: "EXHIBIT B", image: "/projects/atlashub.png", caption: "AtlasHub" },
-    back: {
-      heading: "EXHIBIT B - ATLASHUB",
-      lines: [
-        "Central workspace for organizing",
-        "projects and resources through clear",
-        "sections, categories and navigation.",
-        "",
-        "Stack: Next.js, PostgreSQL, Tailwind",
-      ],
-    },
-    transcript: {
-      heading: "Exhibit B — AtlasHub",
-      intro: "A central workspace for organizing projects and resources through clear sections, categories, and navigation.",
-      sections: [
-        { label: "Contribution", body: "Built a component-driven frontend and structured the application state around a focused workspace flow." },
-        { label: "Stack", items: ["Next.js", "PostgreSQL", "Tailwind CSS"] },
-      ],
-      links: [
-        { label: "Live demo", href: "https://admin-atlashub.marczelloo.dev/landing" },
-        { label: "GitHub", href: "https://github.com/Marczelloo/atlashub" },
-      ],
-    },
-  },
-  {
-    id: "bookhaven",
-    kind: "polaroid",
-    title: "Exhibit C — BookHaven",
-    position: [0.62, -0.38],
-    tilt: -2,
-    face: { heading: "EXHIBIT C", image: "/projects/bookhaven.png", caption: "BookHaven" },
-    back: {
-      heading: "EXHIBIT C - BOOKHAVEN",
-      lines: [
-        "Deployed bookstore demo: browsing,",
-        "search, accounts, wishlists, cart.",
-        "",
-        "Stack: Node.js, Express, MongoDB",
-      ],
-    },
-    transcript: {
-      heading: "Exhibit C — BookHaven",
-      intro: "A deployed bookstore demo with browsing, search, user accounts, wishlists, and a shopping cart.",
-      sections: [
-        { label: "Contribution", body: "Created the full-stack application and organized its Node.js, Express, and MongoDB architecture for extension." },
-        { label: "Stack", items: ["Node.js", "Express", "MongoDB"] },
-      ],
-      links: [
-        { label: "Live demo", href: "https://bookhaven.marczelloo.dev/" },
-        { label: "GitHub", href: "https://github.com/Marczelloo/BookHaven" },
-      ],
-    },
-  },
-  {
-    id: "neobeat",
-    kind: "polaroid",
-    title: "Exhibit D — NeoBeat Buddy",
+    title: "Exhibit D — AtlasHub",
     position: [1.15, -0.5],
     tilt: 6,
-    face: { heading: "EXHIBIT D", image: "/projects/neobeatbuddy.png", caption: "NeoBeat Buddy" },
+    face: { heading: "EXHIBIT D", image: "/projects/atlashub.webp", caption: "AtlasHub" },
     back: {
-      heading: "EXHIBIT D - NEOBEAT BUDDY",
+      heading: "EXHIBIT D - ATLASHUB",
       lines: [
-        "Discord music bot: slash commands,",
-        "queue management, EQ presets,",
-        "Docker deployment.",
+        "Self-hosted Supabase alternative:",
+        "a PostgreSQL database and S3 storage",
+        "for every project, behind a Fastify",
+        "gateway and a Next.js admin panel.",
         "",
-        "Stack: Node.js, Discord.js, Docker",
+        "Stack: Fastify, Next.js, PostgreSQL",
       ],
     },
-    transcript: {
-      heading: "Exhibit D — NeoBeat Buddy",
-      intro: "A Discord music bot with slash commands, queue management, equalizer presets, and Docker deployment.",
-      sections: [
-        { label: "Contribution", body: "Developed the bot workflow, audio controls, deployment configuration, and maintainable command structure." },
-        { label: "Stack", items: ["Node.js", "Discord.js", "Docker"] },
-      ],
-      links: [
-        { label: "Discord", href: "https://discord.com/invite/szxrjutGBD" },
-        { label: "GitHub", href: "https://github.com/Marczelloo/NeoBeat-Buddy" },
-      ],
-    },
+    transcript: exhibitTranscript("atlashub", "D"),
   },
   {
-    id: "tools",
+    id: "method",
     kind: "index",
-    title: "Tools of the trade",
+    title: "Method of operation",
     position: [-0.92, -0.48],
     tilt: -3,
     face: {
-      heading: "TOOLS OF THE TRADE",
+      heading: "METHOD OF OPERATION",
       lines: [
-        "FRONT: TS, React, Next.js, Tailwind",
-        "BACK:  PHP, Node.js, SQL, REST APIs",
-        "DATA:  PostgreSQL, MySQL, MongoDB",
-        "SHIP:  Git, Docker, PRs, deployment",
-        "EDGE:  AI agents - plan, delegate,",
-        "       review, verify",
+        "1 PLAN:     task, files, definition",
+        "2 DELEGATE: subagents, Codex via MCP",
+        "3 REVIEW:   review agents, notes back",
+        "4 TEST:     runs and clicks it himself",
+        "5 SHIP:     Docker Compose on a Pi,",
+        "            Cloudflare Tunnel",
       ],
     },
     transcript: {
-      heading: "Tools of the trade",
+      heading: "Method of operation",
+      intro: "Agents write a lot of the code. The subject decides what gets built and checks what ships.",
       sections: [
-        { label: "Frontend", body: "HTML, CSS, JavaScript, TypeScript, React, Next.js, Tailwind CSS" },
-        { label: "Backend and data", body: "PHP, Node.js fundamentals, SQL, MySQL, PostgreSQL, MongoDB, Oracle SQL" },
-        { label: "Delivery", body: "Git, REST APIs, WordPress, Docker fundamentals, pull requests, deployment" },
-        { label: "Workflow", body: "AI agents for planning, implementation support, delegation and verification — with engineering judgment kept in the loop." },
+        {
+          label: "Plan",
+          body: "Works out what to build with Claude Code, makes the architecture calls and writes each task down with a goal, the files it touches and how to tell it's done.",
+        },
+        {
+          label: "Delegate",
+          body: "Implementation goes to Sonnet subagents or to Codex through Agent Router MCP, his own server that checks quota, picks the model and isolates risky work in git worktrees.",
+        },
+        {
+          label: "Review",
+          body: "Separate review agents go through the changes. He reads their findings and each agent's summary, and anything that looks off goes back with notes.",
+        },
+        {
+          label: "Test & ship",
+          body: "Runs it and clicks through it himself, then deploys with Docker Compose to a Raspberry Pi at home, served through Cloudflare Tunnel.",
+        },
       ],
+      links: [{ label: "Agent Router MCP on GitHub", href: "https://github.com/Marczelloo/agent-router-mcp" }],
     },
   },
   {
@@ -308,16 +308,16 @@ export const CARDS: readonly CaseCard[] = [
     tilt: 1.5,
     face: {
       heading: "IF FOUND, CONTACT:",
-      lines: ["moskwamarcel@gmail.com", "github.com/Marczelloo", "linkedin.com/in/marczelloo", "", "Open to junior roles,", "internships & freelance."],
+      lines: ["moskwamarcel@gmail.com", "github.com/Marczelloo", "linkedin.com/in/marczelloo", "", "Open to full-stack roles,", "internships & freelance."],
     },
     transcript: {
       heading: "Contact",
-      intro: "Open to junior roles, internships, and selected freelance projects. Send the context and I will reply directly.",
+      intro: "Open to full-stack roles, internships and freelance projects. Send the context and I will reply directly.",
       sections: [],
       links: [
-        { label: "moskwamarcel@gmail.com", href: "mailto:moskwamarcel@gmail.com" },
-        { label: "GitHub", href: "https://github.com/Marczelloo" },
-        { label: "LinkedIn", href: "https://linkedin.com/in/marczelloo" },
+        { label: "moskwamarcel@gmail.com", href: LINKS.email },
+        { label: "GitHub", href: LINKS.github },
+        { label: "LinkedIn", href: LINKS.linkedin },
       ],
     },
   },
@@ -332,7 +332,7 @@ export const CARDS: readonly CaseCard[] = [
       heading: "A note on the board",
       intro: "Hiring? The CV is pinned right below this note, and the full version is one click away.",
       sections: [],
-      links: [{ label: "Open CV", href: "/cv" }],
+      links: [{ label: "Open CV", href: LINKS.cv }],
     },
   },
   {
@@ -344,46 +344,35 @@ export const CARDS: readonly CaseCard[] = [
     face: {
       stamp: "ON FILE",
       heading: "MARCEL MOSKWA",
-      subheading: "Junior Web / Software Developer - CS student",
+      subheading: "Full-stack developer - works with AI agents",
       caption: "Sosnowiec, PL - moskwamarcel@gmail.com - marczelloo.dev",
       lines: [
         "# PROFILE",
-        "CS student, junior full-stack developer.",
+        "Full-stack developer and CS student.",
         "2 internships, 1 paid client project.",
         "# EXPERIENCE",
         "2024     RecodeIT / D9 Space - Full-Stack Dev",
         "2024     RecodeIT - Full-Stack Intern",
         "2023     Hurtopony - Software Dev Intern",
-        "# EDUCATION",
-        "2025-    Univ. of Silesia - Computer Science",
-        "2020-25  ZSEiI Sosnowiec - Prog. Technician",
+        "# PROJECTS",
+        "Agent Pets, MewBit, Dashboard, AtlasHub",
         "# SKILLS",
-        "TypeScript, React, Next.js, Tailwind",
-        "PHP, Node, MySQL, PostgreSQL, MongoDB",
-        "Git, REST, Docker, WordPress, Java",
+        "TypeScript, React, Next.js, Node.js, SQL",
+        "Docker, Linux / Raspberry Pi, Cloudflare",
+        "Claude Code, Codex, MCP: plan, review",
         "# LANGUAGES",
         "Polish (native), English (C1)",
       ],
     },
     back: {
       heading: "FOR THE RECRUITER",
-      lines: [
-        "Full CV with contact details:",
-        "marczelloo.dev/cv",
-        "",
-        "Projects: see exhibits A-D.",
-        "Code: github.com/Marczelloo",
-      ],
+      lines: ["Full CV with contact details:", "marczelloo.dev/cv", "", "Projects: see exhibits A-D.", "Code: github.com/Marczelloo"],
     },
     transcript: {
       heading: "Curriculum vitae",
       intro:
-        "Computer Science student and junior full-stack developer from Sosnowiec, Poland: two internships, a paid client project and a handful of products built and shipped end to end.",
+        "Full-stack developer and Computer Science student from Sosnowiec, Poland: two internships, a paid client project and self-hosted products built and shipped end to end, with AI agents in a supervised workflow.",
       sections: [
-        {
-          label: "Profile",
-          body: "Technical education in programming, hands-on work in JavaScript, TypeScript, PHP and SQL, and a growing interest in Java, automation and supervised AI-agent workflows.",
-        },
         {
           label: "Experience",
           items: [
@@ -402,9 +391,10 @@ export const CARDS: readonly CaseCard[] = [
         {
           label: "Skills",
           items: [
-            "Frontend: HTML, CSS, JavaScript, TypeScript, React, Next.js, Tailwind CSS",
-            "Backend & data: PHP, Node.js basics, SQL, MySQL, PostgreSQL, MongoDB, Oracle SQL",
-            "Tooling: Git, REST APIs, Docker basics, WordPress, Java basics",
+            "Core: TypeScript, JavaScript, React, Next.js, Node.js, SQL / PostgreSQL, Git",
+            "Used in projects: Tailwind CSS, Fastify, Express, PHP, MySQL, MongoDB, Rust (Tauri 2), REST APIs",
+            "Infrastructure: Docker, Docker Compose, Linux / Raspberry Pi, Cloudflare Tunnel, Portainer",
+            "Working with AI: Claude Code, Codex, opencode, MCP; planning, delegating, agent review and testing",
           ],
         },
         { label: "Languages", items: ["Polish: native", "English: C1 (University of Silesia exam, 2026)"] },
@@ -421,11 +411,11 @@ export const CARDS: readonly CaseCard[] = [
 /** Red string connections between pinned cards (by id). */
 export const STRINGS: readonly (readonly [string, string])[] = [
   ["subject", "history"],
+  ["subject", "agent-pets"],
   ["subject", "dashboard"],
-  ["subject", "bookhaven"],
+  ["agent-pets", "mewbit"],
   ["dashboard", "atlashub"],
-  ["bookhaven", "neobeat"],
-  ["subject", "tools"],
+  ["subject", "method"],
   ["subject", "contact"],
   ["subject", "cv"],
   ["note", "cv"],

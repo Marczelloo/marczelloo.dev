@@ -28,7 +28,7 @@ Visitors commonly arrive from a CV application, LinkedIn, or GitHub. They scan o
 
 ## Information Architecture
 
-Single page, natural scroll: Hero → Work (02) → Process (03) → Journey (04) → Contact (05). A fixed bottom pill nav appears after the hero. `/cv` is the printable CV; `/case` is a separate experimental 3D case board.
+`/` is the interactive 3D case board; its intro offers two ways in, the case file or the classic portfolio. `/classic` is the classic single page with natural scroll: Hero → Work (02) → Process (03) → Journey (04) → Contact (05), with a fixed bottom pill nav after the hero and links back to the case file in the hero and footer. `/cv` is the printable CV. The old `/case` URL redirects to `/`. Case-board cards are written to match the classic portfolio (same projects, process and CV facts); project exhibits read their transcripts from `app/_data/projects.ts`.
 
 Project tiers on the Work section:
 - **Flagship posters:** Agent Pets, MewBit, Marczelloo Dashboard.

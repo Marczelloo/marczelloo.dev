@@ -22,7 +22,6 @@ const PROFILE =
 const SKILLS = [
   ["Główne technologie", "TypeScript, JavaScript, React, Next.js, Node.js, SQL / PostgreSQL, Git"],
   ["Używane w projektach", "Tailwind CSS, Fastify, Express, PHP, MySQL, MongoDB, Rust (Tauri 2), REST API"],
-  ["Ze szkoły i studiów", "C++, C#, Java, Oracle SQL"],
   ["Infrastruktura", "Docker, Docker Compose, Linux / Raspberry Pi, Cloudflare Tunnel, Portainer"],
   ["Praca z AI", "Claude Code, Codex, opencode, MCP; planowanie zadań, delegowanie ich agentom, review przez agentów i testowanie wyników"],
 ] as const;

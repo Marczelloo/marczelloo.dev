@@ -15,7 +15,7 @@ const PERCH_URL = "/pets/perch.js";
 
 const SPOTS = [
   { agent: "codex", rest: "pf_perch", react: "pf_hi", at: 0.18 },
-  { agent: "other", name: "Marczelloo", rest: "pf_perchL", react: "pf_love", at: 0.5 },
+  { agent: "claude", rest: "pf_perchL", react: "pf_love", at: 0.5 },
   { agent: "opencode", rest: "pf_perch", react: "pf_cheer", at: 0.82 },
 ];
 

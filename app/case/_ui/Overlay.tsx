@@ -193,47 +193,53 @@ function Intro() {
           Full-stack developer · case file
         </p>
 
-        <div className="mt-14 flex h-24 w-full max-w-xs flex-col items-center justify-start">
-          {ready ? (
-            <button
-              ref={buttonRef}
-              type="button"
-              onClick={() => caseStore.set({ entered: true })}
-              className="border border-[#d8cfbf]/60 px-6 py-3 text-sm tracking-[0.25em] text-[#ece4d4] uppercase transition-colors duration-200 hover:border-[#d8cfbf] hover:bg-[#d8cfbf] hover:text-[#050506] motion-reduce:transition-none"
-            >
-              Open the case file
-            </button>
-          ) : (
-            <div className="w-full">
-              <div
-                role="progressbar"
-                aria-label="Loading the case file"
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-valuenow={pct}
-                className="h-px w-full bg-[#d8cfbf]/20"
+        {/* Two ways in: the 3D board, or the classic one-page portfolio for anyone who would rather scroll. */}
+        <div className="mt-14 flex w-full max-w-xs flex-col items-center">
+          <div className="flex h-16 w-full flex-col items-center justify-start">
+            {ready ? (
+              <button
+                ref={buttonRef}
+                type="button"
+                onClick={() => caseStore.set({ entered: true })}
+                className="border border-[#d8cfbf]/60 px-6 py-3 text-sm tracking-[0.25em] text-[#ece4d4] uppercase transition-colors duration-200 hover:border-[#d8cfbf] hover:bg-[#d8cfbf] hover:text-[#050506] motion-reduce:transition-none"
               >
+                Open the case file
+              </button>
+            ) : (
+              <div className="w-full">
                 <div
-                  className="h-full origin-left bg-[#a3352b] transition-transform duration-300 ease-out motion-reduce:transition-none"
-                  style={{ transform: `scaleX(${pct / 100})` }}
-                />
+                  role="progressbar"
+                  aria-label="Loading the case file"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={pct}
+                  className="h-px w-full bg-[#d8cfbf]/20"
+                >
+                  <div
+                    className="h-full origin-left bg-[#a3352b] transition-transform duration-300 ease-out motion-reduce:transition-none"
+                    style={{ transform: `scaleX(${pct / 100})` }}
+                  />
+                </div>
+                <p className="mt-3 text-[11px] tracking-[0.3em] text-[#d8cfbf]/55 uppercase tabular-nums">
+                  Gathering evidence · {pct}%
+                </p>
               </div>
-              <p className="mt-3 text-[11px] tracking-[0.3em] text-[#d8cfbf]/55 uppercase tabular-nums">
-                Gathering evidence · {pct}%
-              </p>
-            </div>
-          )}
+            )}
+          </div>
+          <p aria-hidden="true" className="mt-3 text-[11px] tracking-[0.3em] text-[#d8cfbf]/45 uppercase">
+            or
+          </p>
+          <TextLink
+            href={LINKS.classic}
+            className="mt-1 px-4 py-3 text-xs tracking-[0.25em] text-[#d8cfbf]/80 uppercase underline decoration-[#d8cfbf]/30 underline-offset-[6px] transition-colors hover:text-[#ece4d4] hover:decoration-[#ece4d4] motion-reduce:transition-none"
+          >
+            Read the classic portfolio →
+          </TextLink>
         </div>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-[11px] tracking-[0.15em] text-[#d8cfbf]/55">
         <p>Sound available — off by default</p>
-        <TextLink
-          href={LINKS.classic}
-          className="py-1 text-xs tracking-[0.1em] text-[#d8cfbf]/80 underline-offset-4 hover:text-[#ece4d4] hover:underline"
-        >
-          Prefer the classic portfolio →
-        </TextLink>
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ export default function PrivacyBanner() {
   const [visible, setVisible] = useState(false);
   const reduceMotion = useReducedMotion();
   // The case board is a full-screen scene with its own HUD; the notice waits for the regular pages.
-  const immersive = usePathname()?.startsWith("/case") ?? false;
+  const immersive = usePathname() === "/";
 
   useEffect(() => {
     if (immersive || localStorage.getItem(STORAGE_KEY)) return;

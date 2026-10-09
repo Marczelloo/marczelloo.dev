@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import {
   ArrowUpRight,
   CheckCircle,
@@ -200,6 +201,9 @@ export default function Contact() {
             <a href="/cv" className="inline-flex min-h-11 items-center underline decoration-paper/30 underline-offset-4 transition hover:text-paper hover:decoration-lime">
               CV
             </a>
+            <Link href="/" className="inline-flex min-h-11 items-center underline decoration-paper/30 underline-offset-4 transition hover:text-paper hover:decoration-lime">
+              Case file
+            </Link>
           </nav>
         </footer>
       </div>

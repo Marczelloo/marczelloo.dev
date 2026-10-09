@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDownRight, FileText } from "@phosphor-icons/react/dist/ssr";
+import { ArrowDownRight, Detective, FileText } from "@phosphor-icons/react/dist/ssr";
 import KineticWordmark from "./KineticWordmark";
 
 export default function Hero() {
@@ -37,6 +37,13 @@ export default function Hero() {
             >
               <FileText size={18} weight="bold" />
               CV
+            </Link>
+            <Link
+              href="/"
+              className="inline-flex min-h-12 items-center gap-2.5 rounded-full border border-paper/25 px-6 font-semibold transition hover:border-paper active:translate-y-px"
+            >
+              <Detective size={18} weight="bold" />
+              Case file version
             </Link>
           </div>
         </div>
