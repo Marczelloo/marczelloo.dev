@@ -8,6 +8,7 @@ colors:
   paper-mute: "#a7a2b4"
   violet: "#9b7bff"
   violet-hot: "#b49cff"
+  violet-ink: "#5b3fd1"
   lime: "#d7ff5f"
   error: "#ff9a9a"
   # Per-project colour worlds (only inside that project's poster or card)
@@ -23,7 +24,7 @@ colors:
   dashboard-green: "#4ade80"
   atlashub-blue: "#60a5fa"
   router-amber: "#fbbf24"
-  # Legacy tokens, still used by /cv, /privacy and /case
+  # Legacy tokens, still used by /privacy and /case
   bg-900: "#090912"
   surface-900: "#10101c"
   primary-400: "#b49cff"
@@ -118,6 +119,7 @@ It should feel creative, a little experimental and memorable, while every senten
 - **Paper** (#f3efe6) — headings and body on dark; also the primary pill fill.
 - **Paper mute** (#a7a2b4) — secondary copy and meta labels.
 - **Violet** (#9b7bff) — second lines of display headings, brand emphasis. **Violet hot** (#b49cff) — eyebrows ("02 / Work"), focus rings.
+- **Violet ink** (#5b3fd1) — violet dark enough for small text on paper; used on the CV sheet.
 - **Lime** (#d7ff5f) — signal only: live dots, the active nav item, primary-pill hover. Never large fills.
 
 ### Project colour worlds
@@ -152,6 +154,7 @@ Container `max-w-[96rem]` with 1rem/2rem gutters. Sections use `py-24 sm:py-32`.
 - **Poster** (`Work.tsx`) — `article[data-poster]`, rounded 2rem background layer that clips the visuals, plus an unclipped `escape` slot where characters break the frame.
 - **Pets perch** (`PetsPerch.tsx`) — a canvas drawn by the real Agent Pets renderer; three pets sit on the poster's top edge and stand up to wave, cheer or send hearts while the poster is hovered or focused. Loaded lazily, paused off-screen, static under reduced motion.
 - **MewBit escape** — the cut-out character overflows the top of her poster via `clip-path: inset(-30% 0 0 0 …)`.
+- **CV sheet** (`/cv`) — the CV as a paper sheet (rounded 1.5rem, deep shadow) on the grain ink desk. Display name with violet-ink surname, a lime highlighter under the role, mono meta and numbered sections. In print it becomes one white A4 page (`.cv-sheet` in `globals.css`), with the consent clause pinned to the bottom.
 - **Pills** — primary (paper → lime on hover) and secondary (outline); min height 44px.
 
 ## Motion

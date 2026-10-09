@@ -1,9 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "@phosphor-icons/react";
+import { ArrowUpRight, Plus } from "@phosphor-icons/react";
 
 const TIMELINE = [
+  {
+    id: "nadstrona",
+    period: "2026 - present",
+    title: "NAD STRONĄ",
+    place: "My own web studio",
+    type: "Own studio",
+    summary:
+      "A one-person studio I started for small and local businesses: simple websites, landing pages, redesigns and small web apps.",
+    details: [
+      "Defined the offer, the price tiers and how a project runs from brief to launch",
+      "Designed and built the studio site and its demos with AI agents, owning the requirements and the quality checks",
+      "Mobile-first pages, local SEO and booking integrations",
+    ],
+    stack: ["Websites", "Landing pages", "Local SEO"],
+    href: "https://nadstrona.pl",
+  },
   {
     id: "university",
     period: "Oct 2025 - present",
@@ -171,6 +187,17 @@ export default function Journey() {
                               </li>
                             ))}
                           </ul>
+                          {"href" in item && (
+                            <a
+                              href={item.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full border border-paper/25 px-5 text-sm font-semibold transition hover:border-paper"
+                            >
+                              {item.href.replace("https://", "")}
+                              <ArrowUpRight size={16} weight="bold" aria-hidden="true" />
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>

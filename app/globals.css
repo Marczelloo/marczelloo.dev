@@ -27,6 +27,8 @@
   --violet: #9b7bff;
   --violet-hot: #b49cff;
   --lime: #d7ff5f;
+  /* Violet dark enough for small text on paper (the CV sheet). */
+  --violet-ink: #5b3fd1;
 }
 
 @theme inline {
@@ -58,6 +60,7 @@
   --color-violet: var(--violet);
   --color-violet-hot: var(--violet-hot);
   --color-lime: var(--lime);
+  --color-violet-ink: var(--violet-ink);
   --radius-card: var(--radius-card);
 }
 

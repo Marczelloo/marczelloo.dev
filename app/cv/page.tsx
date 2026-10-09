@@ -58,66 +58,89 @@ const EXPERIENCE = [
   },
 ] as const;
 
-const CV_PROJECTS = ["agent-pets", "mewbit", "dashboard", "atlashub", "agent-router-mcp"].map((slug) => {
-  const project = ALL_PROJECTS.find((p) => p.slug === slug)!;
-  const href = project.live ?? project.github!;
-  return {
-    name: project.name,
-    href,
-    meta: `${href.replace(/^https:\/\//, "")} | ${project.stack.slice(0, 3).join(", ")}`,
-    description: project.summaryPl!,
-  };
-});
+const CV_PROJECTS = ["agent-pets", "mewbit", "dashboard", "atlashub", "agent-router-mcp"]
+  .map((slug) => {
+    const project = ALL_PROJECTS.find((p) => p.slug === slug)!;
+    const href = project.live ?? project.github!;
+    return {
+      name: project.name,
+      href,
+      meta: `${href.replace(/^https:\/\//, "")} | ${project.stack.slice(0, 3).join(", ")}`,
+      description: project.summaryPl!,
+    };
+  })
+  .concat({
+    name: "NAD STRONĄ",
+    href: "https://nadstrona.pl",
+    meta: "nadstrona.pl | własne studio stron",
+    description:
+      "Jednoosobowe studio, które założyłem dla małych i lokalnych firm: proste strony, landing page, redesigny i małe aplikacje webowe. Określiłem ofertę i proces realizacji, a stronę studia i dema zbudowałem z agentami AI, odpowiadając za wymagania i kontrolę jakości.",
+  });
 
 const CONSENT =
   "Wyrażam zgodę na przetwarzanie moich danych osobowych zawartych w CV na potrzeby obecnego oraz przyszłych procesów rekrutacyjnych zgodnie z obowiązującymi przepisami o ochronie danych osobowych.";
 
+/**
+ * The CV as a sheet of paper on the portfolio's dark desk. The sheet is the same on screen and in print,
+ * where it becomes a single white A4 page.
+ */
 export default function CVPage() {
   return (
-    <div className="min-h-[100dvh] bg-bg-900 text-text-base print:bg-white print:text-[#181818]">
-      <div className="sticky top-0 z-50 flex items-center justify-between border-b border-border-subtle bg-bg-900/92 px-4 py-3 backdrop-blur-md print:hidden sm:px-8">
+    <div className="grain min-h-[100dvh] bg-ink text-paper print:bg-white">
+      <div className="mx-auto flex w-full max-w-[62rem] items-center justify-between gap-4 px-4 pb-6 pt-5 print:hidden sm:px-6 sm:pt-8">
         <Link
           href="/"
-          className="flex min-h-11 items-center gap-2 text-sm font-semibold text-text-soft transition hover:text-primary-300"
+          className="flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-paper-mute transition hover:text-paper"
         >
-          <ArrowLeft size={18} weight="bold" aria-hidden="true" />
-          Wróć do portfolio
+          <ArrowLeft size={16} weight="bold" aria-hidden="true" />
+          Portfolio
         </Link>
         <button
           type="button"
           onClick={() => window.print()}
-          className="flex min-h-11 items-center gap-2 rounded-[10px] bg-primary-400 px-4 py-2 text-sm font-semibold text-[#15111f] transition hover:bg-primary-300 active:translate-y-px"
+          className="flex min-h-11 items-center gap-2 rounded-full bg-paper px-5 text-sm font-semibold text-ink transition hover:bg-lime active:translate-y-px"
         >
           <Printer size={18} weight="bold" aria-hidden="true" />
-          Drukuj / Zapisz PDF
+          Drukuj / PDF
         </button>
       </div>
 
-      <main className="px-3 py-6 print:p-0 sm:px-6 sm:py-10 lg:py-14">
+      <main className="px-3 pb-16 print:p-0 sm:px-6">
         <article
           lang="pl"
-          className="cv-sheet mx-auto w-full max-w-[1040px] overflow-hidden border border-border-subtle bg-surface-900 px-5 py-7 text-sm leading-[1.48] text-text-soft shadow-[0_30px_90px_-42px_rgba(0,0,0,0.7)] print:h-[297mm] print:w-[210mm] print:max-w-none print:border-0 print:bg-white print:px-[10mm] print:py-[8.5mm] print:text-[7.5pt] print:leading-[1.28] print:text-[#272727] print:shadow-none sm:px-9 sm:py-10 lg:px-12 lg:py-12"
+          className="cv-sheet mx-auto w-full print:flex print:flex-col max-w-[62rem] rounded-[1.5rem] bg-paper px-5 py-8 text-sm leading-[1.5] text-ink shadow-[0_40px_120px_-50px_rgba(0,0,0,0.95)] print:max-w-none print:rounded-none print:bg-white print:text-[7.4pt] print:leading-[1.3] print:shadow-none sm:px-10 sm:py-11 lg:px-14 lg:py-14"
         >
-          <header className="border-b border-border-strong pb-7 print:border-[#aeb4bc] print:pb-[3.5mm]">
-            <div className="mb-6 flex items-center justify-between text-xs font-bold uppercase tracking-[0.18em] text-text-mute print:mb-[2mm] print:text-[6.4pt] print:text-[#60666d]">
+          <header>
+            <div className="flex items-start justify-between gap-4 border-b border-ink/15 pb-3 font-mono text-xs uppercase tracking-[0.16em] text-ink/60 print:pb-[1.6mm] print:text-[6.3pt]">
               <span>Curriculum vitae</span>
-              <span>2026 / Polska</span>
+              <span>2026 · {PERSONAL.location}</span>
             </div>
-            <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-end print:grid-cols-[minmax(0,1fr)_auto] print:items-end print:gap-[4mm]">
+
+            <div className="mt-6 grid gap-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end print:mt-[3.4mm] print:grid-cols-[minmax(0,1fr)_auto] print:items-end print:gap-[4mm]">
               <div>
-                <h1 className="font-display text-[clamp(2.7rem,7vw,4.8rem)] font-semibold leading-[0.9] tracking-[-0.06em] text-text-base print:text-[24pt] print:leading-none print:text-black">
-                  {PERSONAL.name}
+                <h1
+                  className="font-display text-[clamp(3rem,9vw,5.75rem)] font-extrabold leading-[0.84] tracking-[-0.02em] print:text-[30pt]"
+                  style={{ fontVariationSettings: '"wght" 800, "wdth" 75' }}
+                >
+                  Marcel <span className="text-violet-ink">Moskwa</span>
                 </h1>
-                <p className="mt-3 text-base font-semibold text-primary-300 print:mt-[1.6mm] print:text-[10pt] print:text-[#5b438f]">
-                  {PERSONAL.role}
+                <p className="mt-4 font-display text-lg font-bold tracking-[-0.01em] print:mt-[2.2mm] print:text-[10.5pt]">
+                  {/* A highlighter stroke under the role; it simply disappears if a printer drops backgrounds. */}
+                  <span
+                    className="box-decoration-clone px-1"
+                    style={{ background: "linear-gradient(transparent 55%, var(--lime) 55%)" }}
+                  >
+                    {PERSONAL.role}
+                  </span>
                 </p>
               </div>
-              <p className="max-w-[24rem] text-sm leading-relaxed text-text-mute md:text-right print:max-w-[58mm] print:text-[7.2pt] print:leading-[1.3] print:text-[#50545a] print:text-right">
-                Aplikacje webowe, narzędzia dla agentów AI i self-hosting.
+              <p className="max-w-[17rem] text-ink/70 md:text-right print:max-w-[56mm] print:text-[7.2pt]">
+                Aplikacje webowe, narzędzia dla agentów AI i self-hosting na własnym sprzęcie.
               </p>
             </div>
-            <div className="mt-7 grid gap-x-5 gap-y-2 border-t border-border-subtle pt-5 text-xs text-text-soft sm:grid-cols-2 lg:grid-cols-3 print:mt-[3mm] print:grid-cols-3 print:gap-x-[3mm] print:gap-y-[0.8mm] print:border-[#d7d9dd] print:pt-[2.4mm] print:text-[6.8pt] print:text-[#303030]">
-              <span>{PERSONAL.phone} · {PERSONAL.location}</span>
+
+            <div className="mt-6 grid gap-x-6 gap-y-1.5 border-y border-ink/15 py-3 font-mono text-xs text-ink/80 sm:grid-cols-2 lg:grid-cols-3 print:mt-[3.4mm] print:grid-cols-3 print:gap-x-[3mm] print:gap-y-[0.6mm] print:py-[1.8mm] print:text-[6.4pt]">
+              <span>{PERSONAL.phone}</span>
               <ContactLink href={`mailto:${PERSONAL.email}`}>{PERSONAL.email}</ContactLink>
               <ContactLink href={`https://${PERSONAL.website}`}>{PERSONAL.website}</ContactLink>
               <ContactLink href={`https://${PERSONAL.github}`}>{PERSONAL.github}</ContactLink>
@@ -126,27 +149,23 @@ export default function CVPage() {
           </header>
 
           <CVSection number="01" title="Profil" className="mt-8 print:mt-[4mm]">
-            <p className="max-w-[58rem] text-base leading-[1.7] text-text-soft print:text-[7.7pt] print:leading-[1.36] print:text-[#2b2b2b]">
-              {PROFILE}
-            </p>
+            <p className="max-w-[54rem] text-base leading-[1.65] print:text-[8pt] print:leading-[1.38]">{PROFILE}</p>
           </CVSection>
 
-          <div className="mt-9 grid gap-10 lg:grid-cols-[minmax(0,1.62fr)_minmax(15rem,0.88fr)] print:mt-[4.2mm] print:grid-cols-[minmax(0,1.62fr)_minmax(0,0.88fr)] print:gap-[6mm]">
+          <div className="mt-9 grid gap-10 lg:grid-cols-[minmax(0,1.65fr)_minmax(15rem,0.85fr)] print:mt-[4.2mm] print:grid-cols-[minmax(0,1.65fr)_minmax(0,0.85fr)] print:gap-[6mm]">
             <div className="space-y-10 print:space-y-[4mm]">
               <CVSection number="02" title="Doświadczenie">
-                <div className="divide-y divide-border-subtle print:divide-[#d7d9dd]">
+                <div className="divide-y divide-ink/10">
                   {EXPERIENCE.map((job) => (
-                    <article key={`${job.company}-${job.period}`} className="py-5 first:pt-0 last:pb-0 print:py-[2.2mm]">
-                      <div className="grid gap-1 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline print:grid-cols-[minmax(0,1fr)_auto] print:items-baseline print:gap-[2mm]">
+                    <article key={`${job.company}-${job.period}`} className="py-5 first:pt-0 last:pb-0 print:py-[2mm]">
+                      <div className="grid gap-1 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-4 print:grid-cols-[minmax(0,1fr)_auto] print:items-baseline print:gap-[2mm]">
                         <div>
-                          <h3 className="font-display text-base font-semibold leading-snug text-text-base print:text-[8.4pt] print:text-black">
-                            {job.title}
-                          </h3>
-                          <p className="mt-0.5 text-xs font-bold uppercase tracking-[0.08em] text-primary-300 print:mt-[0.3mm] print:text-[6.5pt] print:text-[#5b438f]">
+                          <h3 className="font-display text-base font-bold leading-snug print:text-[8.6pt]">{job.title}</h3>
+                          <p className="mt-0.5 font-mono text-xs uppercase tracking-[0.12em] text-violet-ink print:mt-[0.3mm] print:text-[6.2pt]">
                             {job.company}
                           </p>
                         </div>
-                        <time className="text-xs font-semibold text-text-mute print:text-[6.5pt] print:text-[#555]">{job.period}</time>
+                        <time className="font-mono text-xs text-ink/60 print:text-[6.3pt]">{job.period}</time>
                       </div>
                       <BulletList items={job.bullets} />
                     </article>
@@ -155,45 +174,39 @@ export default function CVPage() {
               </CVSection>
 
               <CVSection number="03" title="Wybrane projekty">
-                <div className="divide-y divide-border-subtle print:divide-[#d7d9dd]">
+                <div className="divide-y divide-ink/10">
                   {CV_PROJECTS.map((project) => (
-                    <article key={project.name} className="py-4 first:pt-0 last:pb-0 print:py-[1.8mm]">
-                      <h3 className="font-display text-sm font-semibold text-text-base print:text-[8pt] print:text-black">
-                        {project.name}
-                      </h3>
-                      <a
-                        href={project.href}
-                        className="mt-0.5 block text-xs font-semibold text-primary-300 print:text-[6.1pt] print:text-[#5b438f]"
-                      >
-                        {project.meta}
-                      </a>
-                      <p className="mt-2 text-xs leading-[1.55] text-text-soft print:mt-[0.7mm] print:text-[6.7pt] print:leading-[1.3] print:text-[#333]">
-                        {project.description}
-                      </p>
+                    <article key={project.name} className="py-4 first:pt-0 last:pb-0 print:py-[1.6mm]">
+                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+                        <h3 className="font-display text-base font-bold print:text-[8.2pt]">{project.name}</h3>
+                        <a
+                          href={project.href}
+                          className="font-mono text-xs text-violet-ink underline-offset-2 hover:underline print:text-[6.3pt]"
+                        >
+                          {project.meta}
+                        </a>
+                      </div>
+                      <p className="mt-1.5 text-ink/80 print:mt-[0.6mm] print:text-[7.2pt] print:leading-[1.3]">{project.description}</p>
                     </article>
                   ))}
                 </div>
               </CVSection>
             </div>
 
-            <aside className="space-y-10 border-t border-border-strong pt-8 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 print:space-y-[4mm] print:border-l print:border-t-0 print:border-[#aeb4bc] print:pl-[4.5mm] print:pt-0">
+            <aside className="space-y-10 border-t border-ink/15 pt-8 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 print:space-y-[4mm] print:border-l print:border-t-0 print:pl-[4.5mm] print:pt-0">
               <CVSection number="04" title="Umiejętności">
-                <div className="space-y-5 print:space-y-[2.2mm]">
+                <div className="space-y-4 print:space-y-[2mm]">
                   {SKILLS.map(([label, value]) => (
                     <div key={label}>
-                      <h3 className="text-xs font-bold uppercase tracking-[0.08em] text-text-base print:text-[6.6pt] print:text-black">
-                        {label}
-                      </h3>
-                      <p className="mt-1 text-xs leading-[1.55] text-text-mute print:mt-[0.45mm] print:text-[6.7pt] print:leading-[1.32] print:text-[#3d3d3d]">
-                        {value}
-                      </p>
+                      <h3 className="font-mono text-xs uppercase tracking-[0.12em] text-ink/60 print:text-[6.3pt]">{label}</h3>
+                      <p className="mt-1 leading-[1.5] print:mt-[0.4mm] print:text-[7.2pt] print:leading-[1.32]">{value}</p>
                     </div>
                   ))}
                 </div>
               </CVSection>
 
               <CVSection number="05" title="Edukacja">
-                <div className="space-y-5 print:space-y-[2.3mm]">
+                <div className="space-y-5 print:space-y-[2.2mm]">
                   <EducationItem
                     school="Uniwersytet Śląski w Katowicach"
                     detail="Informatyka, studia inżynierskie"
@@ -208,24 +221,28 @@ export default function CVPage() {
               </CVSection>
 
               <CVSection number="06" title="Języki">
-                <dl className="space-y-3 text-xs print:space-y-[1mm] print:text-[6.8pt]">
+                <dl className="space-y-2 print:space-y-[1mm] print:text-[7.2pt]">
                   <div className="flex justify-between gap-4">
-                    <dt className="font-semibold text-text-base print:text-black">Polski</dt>
-                    <dd className="text-text-mute print:text-[#444]">ojczysty</dd>
+                    <dt className="font-semibold">Polski</dt>
+                    <dd className="text-ink/70">ojczysty</dd>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <dt className="font-semibold text-text-base print:text-black">Angielski</dt>
-                    <dd className="text-right text-text-mute print:text-[#444]">C1 · UŚ, 2026</dd>
+                    <dt className="font-semibold">Angielski</dt>
+                    <dd className="text-right text-ink/70">C1 · UŚ, 2026</dd>
                   </div>
                 </dl>
               </CVSection>
             </aside>
           </div>
 
-          <footer className="mt-9 border-t border-border-subtle pt-5 text-xs leading-relaxed text-text-mute print:mt-[3.5mm] print:border-[#d7d9dd] print:pt-[1.8mm] print:text-[5.6pt] print:leading-[1.22] print:text-[#575757]">
+          <footer className="mt-10 border-t border-ink/15 pt-4 text-xs leading-relaxed text-ink/60 print:mt-auto print:pt-[1.6mm] print:text-[5.6pt] print:leading-[1.22]">
             {CONSENT}
           </footer>
         </article>
+
+        <p className="mx-auto mt-5 max-w-[62rem] px-1 font-mono text-xs uppercase tracking-[0.16em] text-paper-mute print:hidden">
+          A4 · jedna strona · ten sam układ na ekranie i w druku
+        </p>
       </main>
     </div>
   );
@@ -244,12 +261,10 @@ function CVSection({
 }) {
   return (
     <section className={className}>
-      <div className="mb-5 flex items-center gap-3 print:mb-[2mm] print:gap-[1.8mm]">
-        <span className="text-xs font-bold tracking-[0.12em] text-primary-300 print:text-[6pt] print:text-[#5b438f]">{number}</span>
-        <h2 className="font-display text-xl font-semibold tracking-[-0.035em] text-text-base print:text-[9.4pt] print:text-black">
-          {title}
-        </h2>
-        <span className="h-px flex-1 bg-border-subtle print:bg-[#d7d9dd]" aria-hidden="true" />
+      <div className="mb-4 flex items-baseline gap-3 print:mb-[1.8mm] print:gap-[1.8mm]">
+        <span className="font-mono text-xs text-violet-ink print:text-[6.3pt]">{number}</span>
+        <h2 className="font-display text-xl font-extrabold tracking-[-0.03em] print:text-[10pt]">{title}</h2>
+        <span className="h-px flex-1 self-center bg-ink/15" aria-hidden="true" />
       </div>
       {children}
     </section>
@@ -258,9 +273,12 @@ function CVSection({
 
 function BulletList({ items }: { items: readonly string[] }) {
   return (
-    <ul className="mt-3 list-disc space-y-1 pl-4 text-xs leading-[1.55] text-text-soft marker:text-primary-300 print:mt-[1mm] print:space-y-[0.35mm] print:pl-[3mm] print:text-[6.7pt] print:leading-[1.3] print:text-[#333] print:marker:text-[#5b438f]">
+    <ul className="mt-2.5 space-y-1 text-ink/80 print:mt-[0.9mm] print:space-y-[0.3mm] print:text-[7.2pt] print:leading-[1.3]">
       {items.map((item) => (
-        <li key={item}>{item}</li>
+        <li key={item} className="flex gap-2.5">
+          <span className="mt-[0.7em] h-px w-3 shrink-0 bg-violet-ink" aria-hidden="true" />
+          {item}
+        </li>
       ))}
     </ul>
   );
@@ -269,16 +287,16 @@ function BulletList({ items }: { items: readonly string[] }) {
 function EducationItem({ school, detail, date }: { school: string; detail: string; date: string }) {
   return (
     <div>
-      <h3 className="font-display text-[0.9rem] font-semibold leading-snug text-text-base print:text-[7.5pt] print:text-black">{school}</h3>
-      <p className="mt-1 text-xs leading-[1.5] text-text-soft print:mt-[0.5mm] print:text-[6.6pt] print:leading-[1.3] print:text-[#333]">{detail}</p>
-      <p className="mt-1 text-xs font-semibold text-text-mute print:mt-[0.4mm] print:text-[6.1pt] print:text-[#555]">{date}</p>
+      <h3 className="font-display text-base font-bold leading-snug print:text-[7.8pt]">{school}</h3>
+      <p className="mt-1 print:mt-[0.4mm] print:text-[7.2pt]">{detail}</p>
+      <p className="mt-1 font-mono text-xs text-ink/60 print:mt-[0.4mm] print:text-[6.3pt]">{date}</p>
     </div>
   );
 }
 
 function ContactLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a href={href} className="transition hover:text-primary-300 print:text-[#303030]">
+    <a href={href} className="transition hover:text-violet-ink">
       {children}
     </a>
   );
