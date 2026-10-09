@@ -23,6 +23,9 @@ colors:
   dashboard-black: "#08120b"
   dashboard-green: "#4ade80"
   atlashub-blue: "#60a5fa"
+  atlashub-sky: "#2a5fa8"
+  atlashub-navy: "#12233f"
+  atlashub-deep: "#0b1424"
   router-amber: "#fbbf24"
   # Legacy tokens, still used by /privacy and /case
   bg-900: "#090912"
@@ -127,7 +130,7 @@ Each flagship or notable project may use its own palette **inside its own poster
 - **Agent Pets** — warm cream/peach paper (#fbf1e8, #f7d9c2, #f4e6d8) with clay (#d97757); the only light poster, ink text.
 - **MewBit** — near-black night (#07060f) over the stage art, pink accent (#f472b6).
 - **Marczelloo Dashboard** — forest greens (#163d24 → #0b1a10 → #08120b) with terminal green (#4ade80).
-- **AtlasHub** — blue (#60a5fa) media well. **Agent Router MCP** — amber (#fbbf24) media well.
+- **AtlasHub** — navy well (#2a5fa8 → #12233f → #0b1424) holding a browser-framed screenshot, blue (#60a5fa) accent. **Agent Router MCP** — amber (#fbbf24) media well.
 
 These colours are intentional and documented here; they must not leak into shared UI.
 

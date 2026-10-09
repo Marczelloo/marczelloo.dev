@@ -315,7 +315,7 @@ export default function Work() {
                   <span className="size-2 rounded-full bg-white/20" />
                   <span className="size-2 rounded-full bg-white/20" />
                   <span className="size-2 rounded-full bg-[#60a5fa]" />
-                  <span className="ml-2 truncate font-mono text-[0.65rem] text-white/50">admin-atlashub.marczelloo.dev</span>
+                  <span className="ml-2 truncate font-mono text-xs text-white/50">admin-atlashub.marczelloo.dev</span>
                 </div>
                 <Image
                   src="/projects/atlashub.webp"
