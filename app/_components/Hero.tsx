@@ -58,7 +58,7 @@ export default function Hero() {
               style={{ clipPath: "inset(-60% 4.55% 0 4.55% round 0 0 1.75rem 1.75rem)" }}
             >
               <Image
-                src="/avatar-cutout.png"
+                src="/avatar-hd.png"
                 alt="Illustrated avatar of Marcel: curly brown hair, a black hoodie with a heart and a small white duck on his head"
                 fill
                 priority
