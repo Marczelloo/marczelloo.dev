@@ -530,13 +530,24 @@ export const CARDS: readonly CaseCard[] = [
   },
 ] as const;
 
-/** Red string connections between pinned cards (by id). */
+/** Suffix for a string end tied to a second pin at the bottom of a card instead of the top one. */
+export const BOTTOM_PIN = ":bottom";
+const bottom = (id: string) => `${id}${BOTTOM_PIN}`;
+
+/** Red string connections between pinned cards: a card id, or `bottom(id)` for its bottom pin. */
 export const STRINGS: readonly (readonly [string, string])[] = [
   ["subject", "history"],
-  // The three reports hang on one line from the subject; the photos are tacked under their report.
+  // The three reports hang on one line from the subject; each report runs down to its own photos.
   ["subject", "agent-pets"],
   ["agent-pets", "mewbit"],
   ["mewbit", "dashboard"],
+  // From the bottom of a card down to the next, so the string never runs across a page.
+  [bottom("agent-pets"), "agent-pets-panel"],
+  [bottom("agent-pets-panel"), "agent-pets-settings"],
+  [bottom("mewbit"), "mewbit-character"],
+  [bottom("mewbit-character"), "mewbit-stage"],
+  [bottom("dashboard"), "dashboard-overview"],
+  [bottom("dashboard-overview"), "dashboard-runbook"],
   ["subject", "method"],
   ["subject", "contact"],
   ["subject", "cv"],

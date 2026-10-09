@@ -4,7 +4,7 @@ import { useTexture } from "@react-three/drei";
 import { type ThreeEvent, useFrame, useThree } from "@react-three/fiber";
 import { type RefObject, use, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { CARDS, STRINGS, type CaseCard } from "../content";
+import { BOTTOM_PIN, CARDS, STRINGS, type CaseCard } from "../content";
 import { caseActions, caseStore } from "../store";
 import { BOARD_FRONT_Z, cardBoardPosition, cardPinPosition, cardSize } from "./layout";
 import { type CardFace, loadCardFaces } from "./cardTextures";
@@ -475,34 +475,35 @@ export function Cards() {
     yarnPixel.value = (2 * Math.tan(fov / 2)) / Math.max(1, gl.domElement.height);
   });
 
-  // Pin heads sit on their own card, so stacked cards get taller pins.
-  const pins = useMemo(
-    () =>
-      new Map(
-        CARDS.map((c, i) => {
-          const p = cardPinPosition(c, i);
-          p.z = BOARD_FRONT_Z + 0.0035 + i * 0.0009;
-          return [c.id, p] as const;
-        }),
-      ),
-    [],
-  );
+  // Pin heads sit on their own card, so stacked cards get taller pins. Cards a string
+  // leaves from the bottom of get a second pin there.
+  const pins = useMemo(() => {
+    const map = new Map<string, { pos: THREE.Vector3; card: CaseCard }>();
+    const ends = new Set(STRINGS.flat());
+    CARDS.forEach((c, i) => {
+      for (const bottom of [false, true]) {
+        const id = bottom ? c.id + BOTTOM_PIN : c.id;
+        if (bottom && !ends.has(id)) continue;
+        const pos = cardPinPosition(c, i, undefined, bottom);
+        pos.z = BOARD_FRONT_Z + 0.0035 + i * 0.0009;
+        map.set(id, { pos, card: c });
+      }
+    });
+    return map;
+  }, []);
 
   return (
     <group>
       {CARDS.map((card, i) => (
         <Card key={card.id} card={card} index={i} face={faces.get(card.id)!} normal={normal} manilaNormal={manilaNormal} />
       ))}
-      {CARDS.map((card) => {
-        const p = pins.get(card.id)!;
-        return (
-          <group key={card.id} position={p}>
-            <PinHead kind={card.kind === "photo" || card.kind === "note" ? "tack" : "pin"} />
-          </group>
-        );
-      })}
+      {[...pins].map(([id, { pos, card }]) => (
+        <group key={id} position={pos}>
+          <PinHead kind={card.kind === "photo" || card.kind === "note" ? "tack" : "pin"} />
+        </group>
+      ))}
       {STRINGS.map(([from, to]) => (
-        <Yarn key={`${from}-${to}`} a={pins.get(from)!} b={pins.get(to)!} yarnBump={yarnBump} />
+        <Yarn key={`${from}-${to}`} a={pins.get(from)!.pos} b={pins.get(to)!.pos} yarnBump={yarnBump} />
       ))}
     </group>
   );

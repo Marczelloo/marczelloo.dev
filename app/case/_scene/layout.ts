@@ -125,12 +125,18 @@ export function cardBoardPosition(card: CaseCard, index: number, out = new THREE
   );
 }
 
-/** World position of the pin holding a card (top centre, rotated by tilt). */
-export function cardPinPosition(card: CaseCard, index: number, out = new THREE.Vector3()) {
+/**
+ * World position of the pin holding a card (top centre, rotated by tilt), or with
+ * `bottom` of the second pin a string leaves from at the bottom centre.
+ */
+export function cardPinPosition(card: CaseCard, index: number, out = new THREE.Vector3(), bottom = false) {
   const [, h] = cardSize(card);
-  const inset = card.kind === "note" ? 0.018 : card.kind === "photo" ? PHOTO_BORDER.top / 2 : 0.024;
+  // A photo's bottom pin goes near the edge, below its caption.
+  const inset = bottom
+    ? card.kind === "photo" ? 0.0075 : 0.024
+    : card.kind === "note" ? 0.018 : card.kind === "photo" ? PHOTO_BORDER.top / 2 : 0.024;
   const a = card.tilt * DEG;
-  const ly = h / 2 - inset;
+  const ly = bottom ? inset - h / 2 : h / 2 - inset;
   cardBoardPosition(card, index, out);
   out.x += -Math.sin(a) * ly;
   out.y += Math.cos(a) * ly;
